@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "DoctorLoan.Contents.WebUI": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:64477;http://localhost:64485"
+    }
+  }
+}

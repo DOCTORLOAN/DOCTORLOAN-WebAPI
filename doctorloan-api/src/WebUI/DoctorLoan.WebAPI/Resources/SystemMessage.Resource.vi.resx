@@ -1,0 +1,372 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Canceled" xml:space="preserve">
+    <value>Đã hủy yêu cầu thành công!</value>
+  </data>
+  <data name="CodeOTP" xml:space="preserve">
+    <value>Ma kich hoat Matxi Corp cua ban la {0}. Ma kich hoat chi co hieu luc trong 60 giay.</value>
+  </data>
+  <data name="CodeOTP2" xml:space="preserve">
+    <value>Ma kich hoat chi co hieu luc trong 60 giay.</value>
+  </data>
+  <data name="ContentOTP" xml:space="preserve">
+    <value>Xin chào {0}, &lt;br/&gt; Mã xác thực của bạn là: &lt;br/&gt; &lt;div style='font-size:18px; line-height:30px; text-align:left; color: rgb(240, 185, 11)'&gt; &lt;b&gt;{1}&lt;/b&gt; &lt;/div&gt; &lt;br/&gt; Mã xác minh sẽ có hiệu lực trong 60 giây. Vui lòng không chia sẻ mã này với bất kỳ ai.</value>
+  </data>
+  <data name="DateTimeFormatError" xml:space="preserve">
+    <value>Định dạng ngày không đúng. Định dạng ngày phải giống yyyy-MM-dd (2019-07-19)</value>
+  </data>
+  <data name="DefaultError" xml:space="preserve">
+    <value>Một ngoại lệ đã xảy ra.</value>
+  </data>
+  <data name="ForbiddenError" xml:space="preserve">
+    <value>Bạn không được phép gọi hành động này.</value>
+  </data>
+  <data name="Invalid_OTP" xml:space="preserve">
+    <value>OTP không chính xác, vui lòng thử lại</value>
+  </data>
+  <data name="Minute" xml:space="preserve">
+    <value> phút</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Không tìm thấy tài nguyên được chỉ định.</value>
+  </data>
+  <data name="OTPWaiting" xml:space="preserve">
+    <value>OTP không thể gửi đến số điện thoại {0} vui lòng thử lại sau {1}</value>
+  </data>
+  <data name="OTP_Expired" xml:space="preserve">
+    <value>Mã OTP hết hạn. Vui lòng yêu cầu mã mới.</value>
+  </data>
+  <data name="OTP_Waiting" xml:space="preserve">
+    <value>Không thể gửi OTP đến số điện thoại {0}, vui lòng thử lại sau {1}</value>
+  </data>
+  <data name="Parent_Not_Exist" xml:space="preserve">
+    <value>Người giới thiệu không tồn tại, vui lòng kiểm tra lại</value>
+  </data>
+  <data name="Password_Invalid" xml:space="preserve">
+    <value>Mật khẩu không hợp lệ</value>
+  </data>
+  <data name="ProductPrice_Not_Valid" xml:space="preserve">
+    <value>Giá của sản phẩm không hợp lệ.</value>
+  </data>
+  <data name="Product_Not_Found" xml:space="preserve">
+    <value>Sản phẩm bạn tìm không tồn tại.</value>
+  </data>
+  <data name="SearchAtLeastOneCharacter" xml:space="preserve">
+    <value>Tham số tìm kiếm phải có ít nhất một ký tự!</value>
+  </data>
+  <data name="Second" xml:space="preserve">
+    <value> giây</value>
+  </data>
+  <data name="ServiceProvider" xml:space="preserve">
+    <value>Nhà cung cấp dịch vụ không thể trả lại như mong đợi.</value>
+  </data>
+  <data name="ServiceProviderNotFound" xml:space="preserve">
+    <value>Nhà cung cấp dịch vụ có tên này không tồn tại.</value>
+  </data>
+  <data name="ShoppingCart_Product_Not_Availible" xml:space="preserve">
+    <value>Sản phẩm này không thể thêm vào giỏ hàng</value>
+  </data>
+  <data name="ShoppingCart_User_Not_Allow" xml:space="preserve">
+    <value>Tài khoản của bạn không thể thêm sản phẩm vào giỏ hàng</value>
+  </data>
+  <data name="SubjectOTP" xml:space="preserve">
+    <value>Mã xác thực tài khoản</value>
+  </data>
+  <data name="System_Temporarily_Interrupted" xml:space="preserve">
+    <value>Hệ thống tạm thời bị gián đoạn. Vui lòng thử lại sau</value>
+  </data>
+  <data name="The_Invalid_Code_In_Team" xml:space="preserve">
+    <value>Có một thành viên có định dạng ID nhân viên sai. Vui lòng thông báo cho bộ phận Chăm sóc khách hàng</value>
+  </data>
+  <data name="The_User_Code_Invalid" xml:space="preserve">
+    <value>Mã người dùng không hợp lệ</value>
+  </data>
+  <data name="The_User_Infor_Incorrect" xml:space="preserve">
+    <value>Thông tin không chính xác. Vui lòng thông báo cho bộ phận Chăm sóc khách hàng</value>
+  </data>
+  <data name="UserIdentityPending" xml:space="preserve">
+    <value>Danh tính người dùng đang được xử lý.</value>
+  </data>
+  <data name="UserIdentityVerified" xml:space="preserve">
+    <value>Danh tính người dùng đã được xác thực.</value>
+  </data>
+  <data name="UserExitedPinCode" xml:space="preserve">
+    <value>Người dùng đã có mã pin</value>
+  </data>
+  <data name="UserName_Or_Password_Invalid" xml:space="preserve">
+    <value>Tên người dùng hoặc mật khẩu được cung cấp trong yêu cầu không hợp lệ</value>
+  </data>
+  <data name="UserNotHavePinCode" xml:space="preserve">
+    <value>Người dùng chưa có mã pin. Bạn có thể vạo mã pin</value>
+  </data>
+  <data name="User_Email_Existed" xml:space="preserve">
+    <value>Người dùng có email này tồn tại</value>
+  </data>
+  <data name="User_Not_Found" xml:space="preserve">
+    <value>Người dùng có id này không tồn tại</value>
+  </data>
+  <data name="User_Not_Found_With_PhoneNo" xml:space="preserve">
+    <value>Người dùng có số điện thoại này không tồn tại</value>
+  </data>
+  <data name="User_Phone_Existed" xml:space="preserve">
+    <value>Người dùng có điện thoại này tồn tại</value>
+  </data>
+  <data name="User_Registered" xml:space="preserve">
+    <value>Người dùng đã đăng ký. Vui lòng xác minh tài khoản của bạn qua sms hoặc email.</value>
+  </data>
+  <data name="Validation" xml:space="preserve">
+    <value>Đã xảy ra một hoặc nhiều lỗi xác thực.</value>
+  </data>
+  <data name="ValidationFormat" xml:space="preserve">
+    <value>Định dạng đối tượng yêu cầu không đúng.</value>
+  </data>
+  <data name="CustomerExisted" xml:space="preserve">
+    <value>Khách hàng đã tồn tại</value>
+  </data>
+  <data name="CustomerBlocked" xml:space="preserve">
+    <value>Khách hàng này đã bị khóa.</value>
+  </data>
+  <data name="CustomerAddressFull" xml:space="preserve">
+    <value>Địa chỉ đầy đủ danh sách khách hàng. Vui lòng xóa các địa chỉ không sử dụng</value>
+  </data>
+  <data name="AddressExisted" xml:space="preserve">
+    <value>Địa chỉ đã tồn tại</value>
+  </data>
+  <data name="COD" xml:space="preserve">
+    <value>Tiền mặt (COD)</value>
+  </data>
+  <data name="COD_Desc" xml:space="preserve">
+    <value>Thanh toán khi nhận hàng</value>
+  </data>
+  <data name="Transfer" xml:space="preserve">
+    <value>Chuyển khoản</value>
+  </data>
+  <data name="Transfer_Desc" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Buy" xml:space="preserve">
+    <value>Mua</value>
+  </data>
+  <data name="Sell" xml:space="preserve">
+    <value>Bán</value>
+  </data>
+  <data name="ReferalCodeInvalidType" xml:space="preserve">
+    <value>Người giới thiệu có cấp thấp hơn vị trí hiện tại của bạn. Vui lòng chọn lại cấp độ.</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Công ty</value>
+  </data>
+  <data name="InventoryCompany" xml:space="preserve">
+    <value>Kho số ONE5</value>
+  </data>
+  <data name="UserWalletNotFound" xml:space="preserve">
+    <value>Ví của bạn không tồn tại.</value>
+  </data>
+  <data name="Forbidden" xml:space="preserve">
+    <value>Bạn bị cấm dùng chức năng này</value>
+  </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>Đã xảy ra lỗi. Vui lòng thử lại sau.</value>
+  </data>
+  <data name="PriceFrom" xml:space="preserve">
+    <value>Dưới</value>
+  </data>
+  <data name="PriceTo" xml:space="preserve">
+    <value>Trên</value>
+  </data>
+  <data name="OrderCanceled" xml:space="preserve">
+    <value>Đơn hàng của bạn đã bị hủy với lý do : </value>
+  </data>
+  <data name="OrderInputted" xml:space="preserve">
+    <value>Đơn hàng của bạn đã được nhập kho</value>
+  </data>
+  <data name="PaymentNote" xml:space="preserve">
+    <value>Vui lòng thanh toán trước</value>
+  </data>
+  <data name="Upload_COD_Not_Valid" xml:space="preserve">
+    <value>File COD của bạn không hợp lệ.</value>
+  </data>
+  <data name="Shipping_Provider_Not_Found" xml:space="preserve">
+    <value>Đơn vị vận chuyển mà bạn chọn không tồn tại hoặc chưa hỗ trợ.</value>
+  </data>
+  <data name="Export_Warehouse" xml:space="preserve">
+    <value>Xuất kho</value>
+  </data>
+  <data name="Import_Warehouse" xml:space="preserve">
+    <value>Nhập kho</value>
+  </data>
+  <data name="UserBlocked" xml:space="preserve">
+    <value>Tài khoản của bạn đã bị khóa</value>
+  </data>
+  <data name="TokenExpired" xml:space="preserve">
+    <value>Không được phép, mã thông báo đã hết hạn!</value>
+  </data>
+  <data name="Library_Not_Found" xml:space="preserve">
+    <value>Không tìm thấy thư viện này.</value>
+  </data>
+  <data name="Upload_StatementBank_Balance_NotValid" xml:space="preserve">
+    <value>Số dư khả dụng không hợp lệ.</value>
+  </data>
+  <data name="Upload_StatementBank_BankCode_NotValid" xml:space="preserve">
+    <value>Mã ngân hàng không hợp lệ.</value>
+  </data>
+  <data name="Upload_StatementBank_BankDescription_NotValid" xml:space="preserve">
+    <value>Nội dung chuyển khoản không hợp lệ.</value>
+  </data>
+  <data name="Upload_StatementBank_BankPrice_NotValid" xml:space="preserve">
+    <value>Tiền tệ và Ghi nợ không hợp lệ.</value>
+  </data>
+  <data name="Upload_StatementBank_CompanyAccountNo_NotValid" xml:space="preserve">
+    <value>Tài khoản công ty không hợp lệ.</value>
+  </data>
+  <data name="Upload_StatementBank_NotValid" xml:space="preserve">
+    <value>Dòng sao kê không hợp lệ.</value>
+  </data>
+  <data name="Upload_StatementBank_RefNo_Duplicate" xml:space="preserve">
+    <value>Mã giao dịch bị trùng lặp.</value>
+  </data>
+  <data name="Upload_StatementBank_RefNo_Duplicate_Database" xml:space="preserve">
+    <value>Mã giao dịch bị trùng lặp trong hệ thống.</value>
+  </data>
+  <data name="Upload_StatementBank_RefNo_NotValid" xml:space="preserve">
+    <value>Mã giao dịch không hợp lệ.</value>
+  </data>
+  <data name="Upload_StatementBank_TransactionDate_NotValid" xml:space="preserve">
+    <value>Ngày giao dịch không hợp lệ.</value>
+  </data>
+  <data name="InventoryTransfer_Succeed" xml:space="preserve">
+    <value>Đã chuyển hàng thành công cho {0}</value>
+  </data>
+  <data name="O5_Warehouse" xml:space="preserve">
+    <value>Kho số ONE5</value>
+  </data>
+  <data name="CodeExsited" xml:space="preserve">
+    <value>Mã đã tồn tại</value>
+  </data>
+  <data name="UnitExsited" xml:space="preserve">
+    <value>Bài học đã tồn tài</value>
+  </data>
+  <data name="Update_User_Profile_Failure" xml:space="preserve">
+    <value>Cập nhật người dùng thất bại.</value>
+  </data>
+  <data name="Invalid" xml:space="preserve">
+    <value>Thông tin không hợp lệ!</value>
+  </data>
+</root>

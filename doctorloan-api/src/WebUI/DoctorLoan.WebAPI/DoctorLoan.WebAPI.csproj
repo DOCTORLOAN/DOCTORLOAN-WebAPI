@@ -1,0 +1,119 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="wwwroot\DataFiles\**" />
+      <Content Remove="wwwroot\DataFiles\**" />
+      <EmbeddedResource Remove="wwwroot\DataFiles\**" />
+      <None Remove="wwwroot\DataFiles\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="Files\menus.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="12.0.1" />
+        <PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.4" />
+        <PackageReference Include="MailKit" Version="3.3.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="7.0.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.5" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="7.0.5" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
+        <PackageReference Include="MimeKit" Version="3.3.0" />
+        <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
+        <PackageReference Include="NSwag.AspNetCore" Version="13.18.2" />
+        <PackageReference Include="NSwag.MSBuild" Version="13.18.2">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Serilog" Version="2.12.0" />
+        <PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
+        <PackageReference Include="UAParser" Version="3.1.47" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Update="Resources\FieldName.Resource.en.resx">
+            <Generator></Generator>
+        </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="wwwroot\api\" />
+        <Folder Include="wwwroot\DataFiles\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="Files\menus.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Core\DoctorLoan.Application\DoctorLoan.Application.csproj" />
+        <ProjectReference Include="..\..\Core\DoctorLoan.Infrastructure\DoctorLoan.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\Modules\Authenticates\DoctorLoan.Authen.WebUI\DoctorLoan.Authen.WebUI.csproj" />
+        <ProjectReference Include="..\..\Modules\Bookings\DoctorLoan.Booking.WebUI\DoctorLoan.Booking.WebUI.csproj" />
+        <ProjectReference Include="..\..\Modules\Commons\DoctorLoan.Common.WebUI\DoctorLoan.Common.WebUI.csproj" />
+        <ProjectReference Include="..\..\Modules\Customers\DoctorLoan.Customer.WebUI\DoctorLoan.Customer.WebUI.csproj" />
+        <ProjectReference Include="..\..\Modules\Documents\DoctorLoan.Documents.WebUI\DoctorLoan.Contents.WebUI.csproj" />
+        <ProjectReference Include="..\..\Modules\News\DoctorLoan.News.WebUI\DoctorLoan.News.WebUI.csproj" />
+        <ProjectReference Include="..\..\Modules\Orders\DoctorLoan.Order.WebUI\DoctorLoan.Order.WebUI.csproj" />
+        <ProjectReference Include="..\..\Modules\Products\DoctorLoan.Products.WebUI\DoctorLoan.Products.WebUI.csproj" />
+        <ProjectReference Include="..\..\Modules\Users\DoctorLoan.User.WebUI\DoctorLoan.User.WebUI.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+
+        <Content Update="appsettings.Development.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="appsettings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="appsettings.Production.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Update="appsettings.Staging.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+    <PropertyGroup>
+        <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+        <UserSecretsId>2c36f2e8-480c-4306-b43a-5551e986abc3</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerfileContext>..\..\..</DockerfileContext>
+    </PropertyGroup>
+    <!--<Target Name="NSwag" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' == 'Debug' ">
+        <Exec WorkingDirectory="$(ProjectDir)" EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development" Command="$(NSwagExe_Net60) run nswag.json /variables:Configuration=$(Configuration)" />
+    </Target>-->
+    <Target Name="NSwag" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' == 'Debug' ">
+        <Exec ConsoleToMSBuild="true" ContinueOnError="true" WorkingDirectory="$(ProjectDir)" EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development" Command="$(NSwagExe_Net70) run /variables:Configuration=$(Configuration)">
+            <Output TaskParameter="ExitCode" PropertyName="NSwagExitCode" />
+            <Output TaskParameter="ConsoleOutput" PropertyName="NSwagOutput" />
+        </Exec>
+
+        <Message Text="$(NSwagOutput)" Condition="'$(NSwagExitCode)' == '0'" Importance="low" />
+        <!--<Error Text="$(NSwagOutput)" Condition="'$(NSwagExitCode)' != '0'" />-->
+    </Target>
+    <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+</Project>

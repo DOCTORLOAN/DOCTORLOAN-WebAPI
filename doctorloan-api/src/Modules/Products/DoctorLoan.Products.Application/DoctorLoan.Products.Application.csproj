@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\DoctorLoan.Application\DoctorLoan.Application.csproj" />
+    <ProjectReference Include="..\..\..\Core\DoctorLoan.Domain\DoctorLoan.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Commons\" />
+    <Folder Include="Features\Categories\Admin\Queries\GetParents\" />
+  </ItemGroup>
+
+</Project>

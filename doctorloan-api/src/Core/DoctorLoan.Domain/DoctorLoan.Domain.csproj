@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Remove="Const\Emails\**" />
+        <Compile Remove="Const\SMSs\**" />
+        <Compile Remove="Models\**" />
+        <EmbeddedResource Remove="Const\Emails\**" />
+        <EmbeddedResource Remove="Const\SMSs\**" />
+        <EmbeddedResource Remove="Models\**" />
+        <None Remove="Const\Emails\**" />
+        <None Remove="Const\SMSs\**" />
+        <None Remove="Models\**" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.4" />
+    </ItemGroup>
+</Project>

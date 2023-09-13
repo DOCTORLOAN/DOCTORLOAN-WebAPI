@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+    <ItemGroup>
+      <Compile Remove="Dtos\**" />
+      <EmbeddedResource Remove="Dtos\**" />
+      <None Remove="Dtos\**" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.3.4" />
+        <PackageReference Include="MediatR" Version="12.0.1" />
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.1.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="MimeKit" Version="3.3.0" />
+        <PackageReference Include="NSwag.Annotations" Version="13.18.2" />
+        <PackageReference Include="SkiaSharp" Version="2.80.2" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\DoctorLoan.Domain\DoctorLoan.Domain.csproj" />
+    </ItemGroup>
+</Project>

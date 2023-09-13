@@ -1,0 +1,59 @@
+[
+  {
+    "Name": "Bảng điều khiển",
+    "IconName": "bi-house",
+    "Url": "dashboard"
+  },
+  {
+    "Name": "Sản phẩm",
+    "IconName": "bi-box",
+    "Childs": [
+      {
+        "Name": "Quản lý danh mục",
+        "IconName": "bi-table",
+        "Url": "category/list"
+      },
+      {
+        "Name": "Quản lý sản phẩm",
+        "IconName": "bi-table",
+        "Url": "products/list"
+      }
+    ]
+  },
+  {
+    "Name": "Tin tức",
+    "IconName": "bi-newspaper",
+    "Childs": [
+      {
+        "Name": "Quản lý danh mục tin",
+        "IconName": "bi-table",
+        "Url": "news-category/list"
+      },
+      {
+        "Name": "Quản lý tin tức",
+        "IconName": "bi-table",
+        "Url": "news/list"
+      }
+    ]
+  },
+  {
+    "Name": "Khách hàng",
+    "IconName": "bi-file-earmark-person-fill",
+    "Url": "customers"
+  },
+  {
+    "Name": "Đặt lịch & Tư vấn",
+    "IconName": "bi-file-earmark-person-fill",
+    "Url": "bookings"
+  },
+  {
+    "Name": "Đơn hàng",
+    "IconName": "bi-card-checklist",
+    "Url": "orders"
+  },
+  {
+    "Name": "Nhân viên",
+    "IconName": "bi-people-fill",
+    "Url": "users"
+  }
+]

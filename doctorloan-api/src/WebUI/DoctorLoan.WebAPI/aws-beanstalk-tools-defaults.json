@@ -1,0 +1,22 @@
+
+{
+    "region" : "ap-southeast-1",
+    "configuration" : "Debug",
+    "framework"     : "net7.0",
+    "self-contained" : true,
+    "application"    : "doctorloan-api-test",
+    "environment"    : "Doctorloan-api-test-env",
+    "app-path"       : "/",
+    "iis-website"    : "Default Web Site",
+    "enable-xray"    : false,
+    "enhanced-health-type" : "enhanced",
+    "additional-options"   : "",
+    "solution-stack"       : "64bit Amazon Linux 2 v2.5.6 running .NET Core",
+    "environment-type"     : "SingleInstance",
+    "cname"                : "doctorloanwebapi-test",
+    "instance-type"        : "t3a.micro",
+    "key-pair"             : "key",
+    "instance-profile"     : "aws-elasticbeanstalk-ec2-role",
+    "service-role"         : "aws-elasticbeanstalk-service-role",
+    "proxy-server"         : "nginx"
+}

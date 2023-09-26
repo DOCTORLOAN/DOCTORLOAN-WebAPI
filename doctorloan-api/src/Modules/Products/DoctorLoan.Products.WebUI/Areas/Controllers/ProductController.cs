@@ -9,7 +9,7 @@ namespace DoctorLoan_Products.WebUI.Areas.Controllers;
 public class ProductController : ApiControllerBase
 {
     [HttpGet]
-    [Authorize(PermissionModuleEnum.Product, PermissionActionEnum.Read)]
+    //[Authorize(PermissionModuleEnum.Product, PermissionActionEnum.Read)]
     public async Task<IActionResult> FilterProducts([FromQuery] FilterProductQuery query)
     {
         return Ok(await Mediator.Send(query));

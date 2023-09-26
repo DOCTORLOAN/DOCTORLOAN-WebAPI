@@ -11,7 +11,7 @@ namespace DoctorLoan.Contents.WebUI.Areas.Controllers;
 public class ContentController : ApiControllerBase
 {
     #region Contents 
-    //[AllowAnonymous]
+    [AllowAnonymous]
     [HttpGet]
     [Route("filter")]
     [ProducesResponseType(typeof(Result<PaginatedList<ContentInfomationDto>>), (int)HttpStatusCode.OK)]

@@ -16,14 +16,14 @@ public class NewsItemController : ApiControllerBase
     }
 
     [HttpGet]
-    [Authorize(PermissionModuleEnum.News, PermissionActionEnum.Read)]
+    //[Authorize(PermissionModuleEnum.News, PermissionActionEnum.Read)]
     public async Task<IActionResult> FilterNews([FromQuery] FilterNewsItemsQuery query)
     {
         return Ok(await Mediator.Send(query));
     }
 
     [HttpGet]
-    [Authorize(PermissionModuleEnum.News, PermissionActionEnum.Read)]
+    //[Authorize(PermissionModuleEnum.News, PermissionActionEnum.Read)]
     public async Task<IActionResult> GetNewById(int id)
     {
         return Ok(await Mediator.Send(new GetNewsItemByIdQuery(id)));

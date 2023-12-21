@@ -9,9 +9,7 @@ public class AddUserCommand : IRequest<Result>
 {
     public string Code { get; set; }
     public string FirstName { get; set; }
-
     public string LastName { get; set; }
-
     public string Password { get; set; }
 
     private string _email;
@@ -34,7 +32,6 @@ public class AddUserCommand : IRequest<Result>
     public Gender Gender { get; set; }
     public int? Avatar { get; set; }
     public UserStatus? Status { get; set; }
-
     public DateTime? DOB { get; set; }
 
 }

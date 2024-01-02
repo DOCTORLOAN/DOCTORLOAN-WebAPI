@@ -136,7 +136,7 @@ public class AddOrderCommandHandler : ApplicationBaseService<AddOrderCommandHand
             {
                 var to = new List<ToInfo>() {
                     new ToInfo() { Mail = request.Email, Name = request.FullName }
-            };
+                };
                 
                 var content = $"<table height=\"100%\" width=\"100%\" style=\"border:0;\">\r\n" +
                                     $"<tbody>\r\n\t" +
@@ -173,7 +173,7 @@ public class AddOrderCommandHandler : ApplicationBaseService<AddOrderCommandHand
                                                                                                             $"</tr>\r\n" +
                                                                                                             $"<tr>\r\n\t" +
                                                                                                                 $"<td style=\"text-align:left; border:0;\">\r\n\t" +
-                                                                                                                    $"Thu Ngân: Thiên Nga\r\n" +
+                                                                                                                    $"Thu Ngân: Admin\r\n" +
                                                                                                                 $"</td>\r\n" +
                                                                                                                 $"<td style=\"text-align:right; border:0;\">\r\n\t" +
                                                                                                                     $"In lúc: {DateTime.Now.ToString("t")}\r\n" +
@@ -274,6 +274,22 @@ public class AddOrderCommandHandler : ApplicationBaseService<AddOrderCommandHand
                 };
 
                 _ = await _emailSender.SendEmail(message, logRequest, cancellationToken);
+
+                var _to = new List<ToInfo>() {
+                    new ToInfo() { Mail = "cskh@doctorloan.vn" }
+                };
+
+                var _content = $"Đơn hàng mới: {entity.OrderNo}";
+
+                var _message = new MessageEmail(_to, "[DOCTORLOAN] Đơn hàng", _content);
+                var _logRequest = new EmailRequest
+                {
+                    Code = _content,
+                    Email = string.Join(",", _to),
+                    Type = EmailType.None
+                };
+
+                var a = await _emailSender.SendEmail(_message, _logRequest, cancellationToken);
             }
         }
         catch

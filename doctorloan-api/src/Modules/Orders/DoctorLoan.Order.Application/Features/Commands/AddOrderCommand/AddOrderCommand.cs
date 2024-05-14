@@ -1,12 +1,13 @@
 ﻿using DoctorLoan.Application.Common.Extentions;
 using DoctorLoan.Application.Models.Commons;
+using DoctorLoan.Domain.Entities.Orders;
 using DoctorLoan.Domain.Enums.Orders;
 using DoctorLoan.Order.Application.Features.Dtos;
 using MediatR;
 
 namespace DoctorLoan.Order.Application.Features.Commands;
 
-public class AddOrderCommand : IRequest<Result<int>>
+public class AddOrderCommand : IRequest<Result<OrderInfo>>
 {
     public int? CustomerId { get; set; }
     public decimal SubTotal { get; set; }

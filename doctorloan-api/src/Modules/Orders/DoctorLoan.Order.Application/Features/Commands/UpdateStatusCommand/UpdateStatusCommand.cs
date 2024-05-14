@@ -12,6 +12,7 @@ public class UpdateStatusCommand : IRequest<Result<bool>>
 {
     public int Id { get; set; }
     public OrderStatus Status { get; set; }
+    public OrderStatusPayment OrderPayment { get; set; }
     public string? Remarks { get; set; }
 }
 
@@ -30,13 +31,15 @@ public class UpdateStatusCommandHandler : ApplicationBaseService<UpdateStatusCom
         var order = await _context.Orders.FindAsync(new object[] { request.Id }, cancellationToken);
         if (order is null) return Result.Failed<bool>(ServiceError.NotFound(_currentTranslateService));
 
-        if (order.Status == OrderStatus.Completed && request.Status != OrderStatus.Return)
+        if (order.Status == OrderStatus.Completed && request.Status != OrderStatus.Return && 
+            order.StatusPayment == OrderStatusPayment.Payment && order.StatusPayment == OrderStatusPayment.Cancel)
             return Result.Success(false);
 
-        if (request.Status <= order.Status)
+        if (request.Status <= order.Status && request.OrderPayment <= order.StatusPayment)
             return Result.Success(false);
 
         order.Status = request.Status;
+        order.StatusPayment = request.OrderPayment;
         order.Remarks = request.Remarks;
 
         await _context.SaveChangesAsync(cancellationToken);

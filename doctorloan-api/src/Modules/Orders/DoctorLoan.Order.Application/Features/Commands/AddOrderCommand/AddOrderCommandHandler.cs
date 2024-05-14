@@ -16,7 +16,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DoctorLoan.Order.Application.Features.Commands;
 
-public class AddOrderCommandHandler : ApplicationBaseService<AddOrderCommandHandler>, IRequestHandler<AddOrderCommand, Result<int>>
+public class AddOrderCommandHandler : ApplicationBaseService<AddOrderCommandHandler>, IRequestHandler<AddOrderCommand, Result<OrderInfo>>
 {
     private readonly IMapper _mapper;
     private readonly IEmailSenderService _emailSender;
@@ -33,7 +33,7 @@ public class AddOrderCommandHandler : ApplicationBaseService<AddOrderCommandHand
         _emailSender = emailSender;
     }
 
-    public async Task<Result<int>> Handle(AddOrderCommand request, CancellationToken cancellationToken)
+    public async Task<Result<OrderInfo>> Handle(AddOrderCommand request, CancellationToken cancellationToken)
     {
         var maxOrder = await _context.Orders.Select(s => s.Id).DefaultIfEmpty().MaxAsync(cancellationToken);
 
@@ -41,6 +41,7 @@ public class AddOrderCommandHandler : ApplicationBaseService<AddOrderCommandHand
 
         entity.OrderNo = "ODL" + DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + (maxOrder + 1).ToString("D4");
         entity.Status = OrderStatus.Pending;
+        entity.StatusPayment = OrderStatusPayment.Pending;
 
         var listProductId = request.ListItem.Select(s => s.ProductItemId);
         var listProductItem = _context.ProductItems.Where(s => listProductId.Contains(s.Id));
@@ -130,173 +131,177 @@ public class AddOrderCommandHandler : ApplicationBaseService<AddOrderCommandHand
         await _context.Orders.AddAsync(entity, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
-        try
+        //try
+        //{
+        //    if (string.IsNullOrEmpty(request.Email))
+        //    {
+        //        var to = new List<ToInfo>() {
+        //            new ToInfo() { Mail = request.Email, Name = request.FullName }
+        //        };
+
+        //        var content = $"<table height=\"100%\" width=\"100%\" style=\"border:0;\">\r\n" +
+        //                            $"<tbody>\r\n\t" +
+        //                                $"<tr>\r\n" +
+        //                                    $"<td align=\"center\" style=\"border: 0;\">\r\n\r\n\r\n\r\n" +
+        //                                        $"<table border=\"0\" width=\"600\" >\r\n" +
+        //                                            $"<tbody>\r\n" +
+        //                                                $"<tr>\r\n" +
+        //                                                    $"<td align=\"center\" style=\"border: 0;\">\r\n\t\t\t\t\t\r\n" +
+        //                                                        $"<div align=\"center\">\r\n" +
+        //                                                            $"<h2>phòng khám đức phúc doctorloan</h2>\r\n" +
+        //                                                            $"<p>đc: 9a, tôn thất tùng, p.phạm ngũ lão, quận 1, tp.hcm</p>\r\n" +
+        //                                                            $"<p>đt: 0899136868</p>\r\n" +
+        //                                                            $"<h1 align=\"center\">hoá đơn bán hàng</h1>\r\n" +
+        //                                                        $"</div>\r\n\r\n" +
+        //                                                        $"<table style=\"border: 0;\" width=\"600\">\r\n" +
+        //                                                            $"<tbody>\r\n\t" +
+        //                                                                $"<tr>\r\n\t" +
+        //                                                                    $"<td style=\"border: 0;\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n" +
+        //                                                                        $"<table style=\"border:0;\" width=\"100%\">\r\n" +
+        //                                                                            $"<tbody>\r\n" +
+        //                                                                                $"<tr>\r\n" +
+        //                                                                                    $"<td style=\"padding:48px 48px 32px; border: 0;\">\r\n" +
+        //                                                                                        $"<div style=\"color:#636363;font-size:14px;text-align:left\">\r\n\t\t\r\n" +
+        //                                                                                            $"<table style=\"width:100%;margin-bottom:40px;padding:0; border:0;\">\r\n" +
+        //                                                                                                $"<tbody>\r\n" +
+        //                                                                                                    $"<tr>\r\n" +
+        //                                                                                                        $"<td style=\"text-align:left; border:0;\">\r\n" +
+        //                                                                                                            $"ngày: {DateTime.Now.ToString("d")}\r\n" +
+        //                                                                                                        $"</td>\r\n" +
+        //                                                                                                        $"<td style=\"text-align:right; border:0;\">\r\n" +
+        //                                                                                                            $"số phiếu: {entity.OrderNo}\r\n" +
+        //                                                                                                        $"</td>\r\n\r\n" +
+        //                                                                                                    $"</tr>\r\n" +
+        //                                                                                                    $"<tr>\r\n\t" +
+        //                                                                                                        $"<td style=\"text-align:left; border:0;\">\r\n\t" +
+        //                                                                                                            $"thu ngân: admin\r\n" +
+        //                                                                                                        $"</td>\r\n" +
+        //                                                                                                        $"<td style=\"text-align:right; border:0;\">\r\n\t" +
+        //                                                                                                            $"in lúc: {DateTime.Now.ToString("t")}\r\n" +
+        //                                                                                                        $"</td>\r\n" +
+        //                                                                                                    $"</tr>\r\n" +
+        //                                                                                                    $"<tr>\r\n\t" +
+        //                                                                                                        $"<td style=\"text-align:left; border:0;\" colspan=\"2\">\r\n\t" +
+        //                                                                                                            $"khách hàng: {request.FullName}\r\n" +
+        //                                                                                                        $"</td>\r\n" +
+        //                                                                                                    $"</tr>\r\n" +
+        //                                                                                                    $"<tr>\r\n\t" +
+        //                                                                                                        $"<td style=\"text-align:left; border:0;\" colspan=\"2\">\r\n\t" +
+        //                                                                                                            $"điện thoại: {request.Phone}\r\n" +
+        //                                                                                                        $"</td>\r\n" +
+        //                                                                                                    $"</tr>\r\n" +
+        //                                                                                                    $"<tr>\r\n\t" +
+        //                                                                                                        $"<td style=\"text-align:left; border:0;\" colspan=\"2\">\r\n\t" +
+        //                                                                                                            $"địa chỉ: {request.AddressLine}\r\n" +
+        //                                                                                                        $"</td>\r\n" +
+        //                                                                                                    $"</tr>\r\n" +
+        //                                                                                                    $"<tr>\r\n\t" +
+        //                                                                                                        $"<td style=\"text-align:left; border:0;\" colspan=\"2\">\r\n\t" +
+        //                                                                                                            $"ghi chú: {request.Remarks}\r\n" +
+        //                                                                                                        $"</td>\r\n" +
+        //                                                                                                    $"</tr>\r\n" +
+        //                                                                                                $"</tbody>\r\n" +
+        //                                                                                            $"</table>\r\n\r\n\r\n" +
+        //                                                                                        $"<div style=\"margin-bottom:40px\">\r\n" +
+        //                                                                                        $"<table cellspacing=\"0\" cellpadding=\"6\" width=\"100%\" style=\"color:#636363;border:0 ;\">\r\n" +
+        //                                                                                            $"<thead>\r\n" +
+        //                                                                                                $"<tr>\r\n" +
+        //                                                                                                    $"<th scope=\"col\" style=\"color:#636363;border:1px solid #e5e5e5;padding:12px;\">mặt hàng</th>\r\n" +
+        //                                                                                                    $"<th scope=\"col\" style=\"color:#636363;border:1px solid #e5e5e5;padding:12px;\">sl</th>\r\n" +
+        //                                                                                                    $"<th scope=\"col\" style=\"color:#636363;border:1px solid #e5e5e5;padding:12px;\">đvt</th>\r\n" +
+        //                                                                                                    $"<th scope=\"col\" style=\"color:#636363;border:1px solid #e5e5e5;padding:12px;\">gía</th>\r\n" +
+        //                                                                                                    $"<th scope=\"col\" style=\"color:#636363;border:1px solid #e5e5e5;padding:12px;\">t tiền</th>\r\n" +
+        //                                                                                                $"</tr>\r\n" +
+        //                                                                                            $"</thead>\r\n" +
+        //                                                                                            $"<tbody>\r\n" +
+        //                                                                                                $"{_itemProduct}" +
+        //                                                                                            $"</tbody>\r\n" +
+        //                                                                                            $"<tfoot>\r\n" +
+        //                                                                                                $"<tr>\r\n" +
+        //                                                                                                    $"<th colspan=\"4\" style=\"border:0;\">\r\n\ttổng sl:\r\n</th>\r\n" +
+        //                                                                                                    $"<td colspan=\"2\" style=\"border: 0;\">\r\n\t" +
+        //                                                                                                        $"1\r\n" +
+        //                                                                                                    $"</td>\r\n" +
+        //                                                                                                $"</tr>\r\n" +
+        //                                                                                                $"<tr>\r\n<th colspan=\"4\" style=\"border: 0;\">\r\n\ttiền hàng:\r\n</th>\r\n" +
+        //                                                                                                    $"<td style=\"border: 0;\" colspan=\"2\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t" +
+        //                                                                                                        $"<span>{string.Format(info, "{0:c}", entity.TotalPrice)}</span>\r\n" +
+        //                                                                                                    $"</td>\r\n" +
+        //                                                                                                $"</tr>\r\n" +
+        //                                                                                                $"<tr>\r\n" +
+        //                                                                                                    $"<th colspan=\"4\" style=\"border:0;\">\r\n\tkhuyễn mãi:\r\n</th>\r\n" +
+        //                                                                                                    $"<td colspan=\"2\" style=\"border:0;\">\r\n\t\r\n</td>\r\n" +
+        //                                                                                                $"</tr>\r\n" +
+        //                                                                                                $"<tr>\r\n<th colspan=\"4\" style=\"border:0;\">\r\n\ttổng:\r\n</th>\r\n" +
+        //                                                                                                    $"<td style=\"border:0;\" colspan=\"2\">\r\n\t" +
+        //                                                                                                        $"<span>{string.Format(info, "{0:c}", entity.TotalPrice)}</span>\r\n" +
+        //                                                                                                    $"</td>\r\n" +
+        //                                                                                                $"</tr>\r\n" +
+        //                                                                                                $"<tr>\r\n<th colspan=\"4\" style=\"border:0;\">\r\n\tchuyển khoản:\r\n</th>\r\n" +
+        //                                                                                                    $"<td colspan=\"2\" style=\"border:0;\">\r\n\t" +
+        //                                                                                                        $"<span>{string.Format(info, "{0:c}", entity.TotalPrice)}</span>\r\n" +
+        //                                                                                                    $"</td>\r\n" +
+        //                                                                                                $"</tr>\r\n" +
+        //                                                                                            $"</tfoot>\r\n" +
+        //                                                                                        $"</table>\r\n" +
+        //                                                                                    $"</div>\r\n\r\n</div>\r\n\r\n" +
+        //                                                                                    $"<div align=\"center\">\r\n" +
+        //                                                                                        $"<a href=\"https://doctorloan.vn/\">\r\ndoctorloan.vn</a>\r\n" +
+        //                                                                                        $"<p>đây là email động được tạo từ danh sách đăng ký của chúng tôi. do đó, xin đừng trả lời email này.</p>\r\n" +
+        //                                                                                    $"</div>\r\n\r\n" +
+        //                                                                                $"</td>\r\n" +
+        //                                                                            $"</tr>\r\n" +
+        //                                                                        $"</tbody>\r\n" +
+        //                                                                    $"</table>\r\n\t\t\t\t\t\t\t\t\t\r\n" +
+        //                                                                $"</td>\r\n" +
+        //                                                            $"</tr>\r\n" +
+        //                                                        $"</tbody>\r\n" +
+        //                                                    $"</table>\r\n\t\t\t\t\t\t\t\t\t\r\n" +
+        //                                                $"</td>\r\n" +
+        //                                            $"</tr>\r\n" +
+        //                                        $"</tbody>\r\n" +
+        //                                    $"</table>\r\n" +
+        //                                $"</td>\r\n" +
+        //                            $"</tr>\r\n\r\n" +
+        //                        $"</tbody>\r\n" +
+        //                    $"</table>";
+
+        //        var message = new MessageEmail(to, "[doctorloan] đơn hàng", content);
+        //        var logrequest = new EmailRequest
+        //        {
+        //            Code = content,
+        //            Email = string.Join(",", to),
+        //            Type = EmailType.None
+        //        };
+
+        //        _ = await _emailSender.SendEmail(message, logrequest, cancellationToken);
+
+        //        var _to = new List<ToInfo>() {
+        //            new ToInfo() { Mail = "cskh@doctorloan.vn" }
+        //        };
+
+        //        var _content = $"đơn hàng mới: {entity.OrderNo}";
+
+        //        var _message = new MessageEmail(_to, "[doctorloan] đơn hàng", _content);
+        //        var _logrequest = new EmailRequest
+        //        {
+        //            Code = _content,
+        //            Email = string.Join(",", _to),
+        //            Type = EmailType.None
+        //        };
+
+        //        var a = await _emailSender.SendEmail(_message, _logrequest, cancellationToken);
+        //    }
+        //}
+        //catch
+        //{
+        //    _logger.LogError($"Send email order error: {entity.Id}");
+        //}
+        var orderInfo = new OrderInfo
         {
-            if (!string.IsNullOrEmpty(request.Email))
-            {
-                var to = new List<ToInfo>() {
-                    new ToInfo() { Mail = request.Email, Name = request.FullName }
-                };
-                
-                var content = $"<table height=\"100%\" width=\"100%\" style=\"border:0;\">\r\n" +
-                                    $"<tbody>\r\n\t" +
-                                        $"<tr>\r\n" +
-                                            $"<td align=\"center\" style=\"border: 0;\">\r\n\r\n\r\n\r\n" +
-                                                $"<table border=\"0\" width=\"600\" >\r\n" +
-                                                    $"<tbody>\r\n" +
-                                                        $"<tr>\r\n" +
-                                                            $"<td align=\"center\" style=\"border: 0;\">\r\n\t\t\t\t\t\r\n" +
-                                                                $"<div align=\"center\">\r\n" +
-                                                                    $"<h2>Phòng khám Đức Phúc DOCTORLOAN</h2>\r\n" +
-                                                                    $"<p>ĐC: 9A, Tôn Thất Tùng, P.Phạm Ngũ Lão, Quận 1, TP.HCM</p>\r\n" +
-                                                                    $"<p>ĐT: 0899136868</p>\r\n" +
-                                                                    $"<h1 align=\"center\">Hoá đơn bán hàng</h1>\r\n" +
-                                                                $"</div>\r\n\r\n" +
-                                                                $"<table style=\"border: 0;\" width=\"600\">\r\n" +
-                                                                    $"<tbody>\r\n\t" +
-                                                                        $"<tr>\r\n\t" +
-                                                                            $"<td style=\"border: 0;\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t\r\n" +
-                                                                                $"<table style=\"border:0;\" width=\"100%\">\r\n" +
-                                                                                    $"<tbody>\r\n" +
-                                                                                        $"<tr>\r\n" +
-                                                                                            $"<td style=\"padding:48px 48px 32px; border: 0;\">\r\n" +
-                                                                                                $"<div style=\"color:#636363;font-size:14px;text-align:left\">\r\n\t\t\r\n" +
-                                                                                                    $"<table style=\"width:100%;margin-bottom:40px;padding:0; border:0;\">\r\n" +
-                                                                                                        $"<tbody>\r\n" +
-                                                                                                            $"<tr>\r\n" +
-                                                                                                                $"<td style=\"text-align:left; border:0;\">\r\n" +
-                                                                                                                    $"Ngày: {DateTime.Now.ToString("d")}\r\n" +
-                                                                                                                $"</td>\r\n" +
-                                                                                                                $"<td style=\"text-align:right; border:0;\">\r\n" +
-                                                                                                                    $"Số phiếu: {entity.OrderNo}\r\n" +
-                                                                                                                $"</td>\r\n\r\n" +
-                                                                                                            $"</tr>\r\n" +
-                                                                                                            $"<tr>\r\n\t" +
-                                                                                                                $"<td style=\"text-align:left; border:0;\">\r\n\t" +
-                                                                                                                    $"Thu Ngân: Admin\r\n" +
-                                                                                                                $"</td>\r\n" +
-                                                                                                                $"<td style=\"text-align:right; border:0;\">\r\n\t" +
-                                                                                                                    $"In lúc: {DateTime.Now.ToString("t")}\r\n" +
-                                                                                                                $"</td>\r\n" +
-                                                                                                            $"</tr>\r\n" +
-                                                                                                            $"<tr>\r\n\t" +
-                                                                                                                $"<td style=\"text-align:left; border:0;\" colspan=\"2\">\r\n\t" +
-                                                                                                                    $"Khách hàng: {request.FullName}\r\n" +
-                                                                                                                $"</td>\r\n" +
-                                                                                                            $"</tr>\r\n" +
-                                                                                                            $"<tr>\r\n\t" +
-                                                                                                                $"<td style=\"text-align:left; border:0;\" colspan=\"2\">\r\n\t" +
-                                                                                                                    $"Điện thoại: {request.Phone}\r\n" +
-                                                                                                                $"</td>\r\n" +
-                                                                                                            $"</tr>\r\n" +
-                                                                                                            $"<tr>\r\n\t" +
-                                                                                                                $"<td style=\"text-align:left; border:0;\" colspan=\"2\">\r\n\t" +
-                                                                                                                    $"Địa chỉ: {request.AddressLine}\r\n" +
-                                                                                                                $"</td>\r\n" +
-                                                                                                            $"</tr>\r\n" +
-                                                                                                            $"<tr>\r\n\t" +
-                                                                                                                $"<td style=\"text-align:left; border:0;\" colspan=\"2\">\r\n\t" +
-                                                                                                                    $"Ghi chú: {request.Remarks}\r\n" +
-                                                                                                                $"</td>\r\n" +
-                                                                                                            $"</tr>\r\n" +
-                                                                                                        $"</tbody>\r\n" +
-                                                                                                    $"</table>\r\n\r\n\r\n" +
-                                                                                                $"<div style=\"margin-bottom:40px\">\r\n" +
-                                                                                                $"<table cellspacing=\"0\" cellpadding=\"6\" width=\"100%\" style=\"color:#636363;border:0 ;\">\r\n" +
-                                                                                                    $"<thead>\r\n" +
-                                                                                                        $"<tr>\r\n" +
-                                                                                                            $"<th scope=\"col\" style=\"color:#636363;border:1px solid #e5e5e5;padding:12px;\">Mặt hàng</th>\r\n" +
-                                                                                                            $"<th scope=\"col\" style=\"color:#636363;border:1px solid #e5e5e5;padding:12px;\">SL</th>\r\n" +
-                                                                                                            $"<th scope=\"col\" style=\"color:#636363;border:1px solid #e5e5e5;padding:12px;\">ĐVT</th>\r\n" +
-                                                                                                            $"<th scope=\"col\" style=\"color:#636363;border:1px solid #e5e5e5;padding:12px;\">Gía</th>\r\n" +
-                                                                                                            $"<th scope=\"col\" style=\"color:#636363;border:1px solid #e5e5e5;padding:12px;\">T tiền</th>\r\n" +
-                                                                                                        $"</tr>\r\n" +
-                                                                                                    $"</thead>\r\n" +
-                                                                                                    $"<tbody>\r\n" +
-                                                                                                        $"{_itemProduct}" + 
-                                                                                                    $"</tbody>\r\n" +
-                                                                                                    $"<tfoot>\r\n" +
-                                                                                                        $"<tr>\r\n" +
-                                                                                                            $"<th colspan=\"4\" style=\"border:0;\">\r\n\tTổng SL:\r\n</th>\r\n" +
-                                                                                                            $"<td colspan=\"2\" style=\"border: 0;\">\r\n\t" +
-                                                                                                                $"1\r\n" +
-                                                                                                            $"</td>\r\n" +
-                                                                                                        $"</tr>\r\n" +
-                                                                                                        $"<tr>\r\n<th colspan=\"4\" style=\"border: 0;\">\r\n\tTiền hàng:\r\n</th>\r\n" +
-                                                                                                            $"<td style=\"border: 0;\" colspan=\"2\">\r\n\t\t\t\t\t\t\t\t\t\t\t\t" +
-                                                                                                                $"<span>{String.Format(info, "{0:c}", entity.TotalPrice)}</span>\r\n" +
-                                                                                                            $"</td>\r\n" +
-                                                                                                        $"</tr>\r\n" +
-                                                                                                        $"<tr>\r\n" +
-                                                                                                            $"<th colspan=\"4\" style=\"border:0;\">\r\n\tKhuyễn mãi:\r\n</th>\r\n" +
-                                                                                                            $"<td colspan=\"2\" style=\"border:0;\">\r\n\t\r\n</td>\r\n" +
-                                                                                                        $"</tr>\r\n" +
-                                                                                                        $"<tr>\r\n<th colspan=\"4\" style=\"border:0;\">\r\n\tTổng:\r\n</th>\r\n" +
-                                                                                                            $"<td style=\"border:0;\" colspan=\"2\">\r\n\t" +
-                                                                                                                $"<span>{String.Format(info, "{0:c}", entity.TotalPrice)}</span>\r\n" +
-                                                                                                            $"</td>\r\n" +
-                                                                                                        $"</tr>\r\n" +
-                                                                                                        $"<tr>\r\n<th colspan=\"4\" style=\"border:0;\">\r\n\tChuyển khoản:\r\n</th>\r\n" +
-                                                                                                            $"<td colspan=\"2\" style=\"border:0;\">\r\n\t" +
-                                                                                                                $"<span>{String.Format(info, "{0:c}", entity.TotalPrice)}</span>\r\n" +
-                                                                                                            $"</td>\r\n" +
-                                                                                                        $"</tr>\r\n" +
-                                                                                                    $"</tfoot>\r\n" +
-                                                                                                $"</table>\r\n" +
-                                                                                            $"</div>\r\n\r\n</div>\r\n\r\n" +
-                                                                                            $"<div align=\"center\">\r\n" +
-                                                                                                $"<a href=\"https://doctorloan.vn/\">\r\ndoctorloan.vn</a>\r\n" +
-                                                                                                $"<p>Đây là email động được tạo từ danh sách đăng ký của chúng tôi. Do đó, xin đừng trả lời email này.</p>\r\n" +
-                                                                                            $"</div>\r\n\r\n" +
-                                                                                        $"</td>\r\n" +
-                                                                                    $"</tr>\r\n" +
-                                                                                $"</tbody>\r\n" +
-                                                                            $"</table>\r\n\t\t\t\t\t\t\t\t\t\r\n" +
-                                                                        $"</td>\r\n" +
-                                                                    $"</tr>\r\n" +
-                                                                $"</tbody>\r\n" +
-                                                            $"</table>\r\n\t\t\t\t\t\t\t\t\t\r\n" +
-                                                        $"</td>\r\n" +
-                                                    $"</tr>\r\n" +
-                                                $"</tbody>\r\n" +
-                                            $"</table>\r\n" +
-                                        $"</td>\r\n" +
-                                    $"</tr>\r\n\r\n" +
-                                $"</tbody>\r\n" +
-                            $"</table>";
-
-                var message = new MessageEmail(to, "[DOCTORLOAN] Đơn hàng", content);
-                var logRequest = new EmailRequest
-                {
-                    Code = content,
-                    Email = string.Join(",", to),
-                    Type = EmailType.None
-                };
-
-                _ = await _emailSender.SendEmail(message, logRequest, cancellationToken);
-
-                var _to = new List<ToInfo>() {
-                    new ToInfo() { Mail = "cskh@doctorloan.vn" }
-                };
-
-                var _content = $"Đơn hàng mới: {entity.OrderNo}";
-
-                var _message = new MessageEmail(_to, "[DOCTORLOAN] Đơn hàng", _content);
-                var _logRequest = new EmailRequest
-                {
-                    Code = _content,
-                    Email = string.Join(",", _to),
-                    Type = EmailType.None
-                };
-
-                var a = await _emailSender.SendEmail(_message, _logRequest, cancellationToken);
-            }
-        }
-        catch
-        {
-            _logger.LogError($"Send email order error: {entity.Id}");
-        }
-
-        return Result.Success(entity.Id);
+            OrderNo = entity.OrderNo,
+            TotalPrice = entity.TotalPrice
+        };
+        return Result.Success(orderInfo);
     }
 }

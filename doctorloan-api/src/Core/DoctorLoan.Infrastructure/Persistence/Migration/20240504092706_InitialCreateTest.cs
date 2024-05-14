@@ -1,19 +1,36 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DoctorLoan.Infrastructure.Persistence.Migrations
+namespace DoctorLoan.Infrastructure.Persistence.Migration
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialCreateTest : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
                 .Annotation("Npgsql:PostgresExtension:ltree", ",,");
+
+            migrationBuilder.CreateTable(
+                name: "AttributeGroups",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(70)", maxLength: 70, nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AttributeGroups", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Banks",
@@ -54,6 +71,49 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Brands",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(70)", maxLength: 70, nullable: false),
+                    Summary = table.Column<string>(type: "text", nullable: true),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Brands", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    Code = table.Column<string>(type: "text", nullable: true),
+                    ParentId = table.Column<string>(type: "ltree", nullable: false),
+                    MetaTitle = table.Column<string>(type: "text", nullable: true),
+                    Content = table.Column<string>(type: "text", nullable: true),
+                    Sort = table.Column<int>(type: "integer", nullable: false),
+                    Slug = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Countries",
                 columns: table => new
                 {
@@ -84,6 +144,32 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Countries", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UID = table.Column<Guid>(type: "uuid", nullable: false),
+                    FirstName = table.Column<string>(type: "text", nullable: true),
+                    LastName = table.Column<string>(type: "text", nullable: true),
+                    FullName = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    Phone = table.Column<string>(type: "text", nullable: true),
+                    Gender = table.Column<int>(type: "integer", nullable: false),
+                    DOB = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    PasswordHash = table.Column<string>(type: "text", nullable: true),
+                    IsDelete = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -151,6 +237,27 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EmailRequests", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EntityLanguages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    EntityId = table.Column<int>(type: "integer", nullable: false),
+                    EntityName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    PropertyName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: false),
+                    LanguageId = table.Column<int>(type: "integer", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EntityLanguages", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -238,6 +345,98 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "NewsCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ParentId = table.Column<int>(type: "integer", nullable: true),
+                    Name = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Slug = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Sort = table.Column<int>(type: "integer", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NewsCategories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NewsItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Slug = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NewsItems", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NewsTags",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NewsTags", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PermissionActions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ModuleId = table.Column<int>(type: "integer", nullable: false),
+                    ActionId = table.Column<int>(type: "integer", nullable: false),
+                    IsDelete = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PermissionActions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductOptionGroups",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(70)", maxLength: 70, nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductOptionGroups", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SettingApps",
                 columns: table => new
                 {
@@ -301,6 +500,31 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Attributes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(70)", maxLength: 70, nullable: false),
+                    GroupId = table.Column<int>(type: "integer", nullable: false),
+                    AttributeGroupId = table.Column<int>(type: "integer", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Attributes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Attributes_AttributeGroups_AttributeGroupId",
+                        column: x => x.AttributeGroupId,
+                        principalTable: "AttributeGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BankBranchs",
                 columns: table => new
                 {
@@ -333,6 +557,37 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
+                    Sku = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Slug = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    BrandId = table.Column<int>(type: "integer", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    PriceDiscount = table.Column<decimal>(type: "numeric", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: true),
+                    IsDelete = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_Brands_BrandId",
+                        column: x => x.BrandId,
+                        principalTable: "Brands",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Provinces",
                 columns: table => new
                 {
@@ -360,6 +615,40 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                         name: "FK_Provinces_Countries_CountryId",
                         column: x => x.CountryId,
                         principalTable: "Countries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OrderNo = table.Column<string>(type: "text", nullable: false),
+                    CustomerId = table.Column<int>(type: "integer", nullable: false),
+                    SubTotal = table.Column<decimal>(type: "numeric", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "numeric", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    PaymentMethod = table.Column<int>(type: "integer", nullable: false),
+                    StatusPayment = table.Column<int>(type: "integer", nullable: false),
+                    FullName = table.Column<string>(type: "text", nullable: true),
+                    Phone = table.Column<string>(type: "text", nullable: true),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    AddressLine = table.Column<string>(type: "text", nullable: true),
+                    Remarks = table.Column<string>(type: "text", nullable: true),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -421,6 +710,128 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "NewsCategoryMappings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    NewsItemId = table.Column<int>(type: "integer", nullable: false),
+                    NewsCategoryId = table.Column<int>(type: "integer", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NewsCategoryMappings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NewsCategoryMappings_NewsCategories_NewsCategoryId",
+                        column: x => x.NewsCategoryId,
+                        principalTable: "NewsCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_NewsCategoryMappings_NewsItems_NewsItemId",
+                        column: x => x.NewsItemId,
+                        principalTable: "NewsItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NewsItemDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    NewsId = table.Column<int>(type: "integer", nullable: false),
+                    LanguageId = table.Column<int>(type: "integer", nullable: false),
+                    Title = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    Short = table.Column<string>(type: "character varying(700)", maxLength: 700, nullable: true),
+                    Full = table.Column<string>(type: "text", nullable: true),
+                    MetaTitle = table.Column<string>(type: "text", nullable: true),
+                    MetaKeyword = table.Column<string>(type: "text", nullable: true),
+                    MetaDescription = table.Column<string>(type: "text", nullable: true),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NewsItemDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NewsItemDetails_NewsItems_NewsId",
+                        column: x => x.NewsId,
+                        principalTable: "NewsItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NewsMedias",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    IsThumb = table.Column<bool>(type: "boolean", nullable: false),
+                    NewsId = table.Column<int>(type: "integer", nullable: false),
+                    MediaId = table.Column<long>(type: "bigint", nullable: false),
+                    OrderBy = table.Column<int>(type: "integer", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NewsMedias", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NewsMedias_Medias_MediaId",
+                        column: x => x.MediaId,
+                        principalTable: "Medias",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_NewsMedias_NewsItems_NewsId",
+                        column: x => x.NewsId,
+                        principalTable: "NewsItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NewsTagsMappings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    NewsItemId = table.Column<int>(type: "integer", nullable: false),
+                    NewsTagId = table.Column<int>(type: "integer", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NewsTagsMappings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NewsTagsMappings_NewsItems_NewsItemId",
+                        column: x => x.NewsItemId,
+                        principalTable: "NewsItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_NewsTagsMappings_NewsTags_NewsTagId",
+                        column: x => x.NewsTagId,
+                        principalTable: "NewsTags",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SettingAppContents",
                 columns: table => new
                 {
@@ -445,6 +856,161 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                         principalTable: "SettingApps",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductAttributes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ProductId = table.Column<int>(type: "integer", nullable: false),
+                    AttributeId = table.Column<int>(type: "integer", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: true),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductAttributes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductAttributes_Attributes_AttributeId",
+                        column: x => x.AttributeId,
+                        principalTable: "Attributes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProductAttributes_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ProductId = table.Column<int>(type: "integer", nullable: false),
+                    CategoryId = table.Column<int>(type: "integer", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductCategories_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProductCategories_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ProductId = table.Column<int>(type: "integer", nullable: false),
+                    LanguageId = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Summary = table.Column<string>(type: "text", nullable: true),
+                    MetadataKeyword = table.Column<string>(type: "text", nullable: true),
+                    MetadataTitle = table.Column<string>(type: "text", nullable: true),
+                    MetadataDesc = table.Column<string>(type: "text", nullable: true),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductDetails_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ProductId = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
+                    Sku = table.Column<string>(type: "text", nullable: true),
+                    PriceDiscount = table.Column<decimal>(type: "numeric", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: false),
+                    Sold = table.Column<int>(type: "integer", nullable: false),
+                    Available = table.Column<int>(type: "integer", nullable: false),
+                    Defective = table.Column<int>(type: "integer", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductItems_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductMedias",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    MediaId = table.Column<long>(type: "bigint", nullable: false),
+                    ProductId = table.Column<int>(type: "integer", nullable: false),
+                    OrderBy = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    IsDelete = table.Column<bool>(type: "boolean", nullable: false),
+                    ProductItemId = table.Column<int>(type: "integer", nullable: true),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductMedias", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductMedias_Medias_MediaId",
+                        column: x => x.MediaId,
+                        principalTable: "Medias",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductMedias_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -485,18 +1051,16 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UUId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RoleId = table.Column<int>(type: "integer", nullable: false),
                     Code = table.Column<string>(type: "text", nullable: true),
+                    FirstName = table.Column<string>(type: "text", nullable: true),
+                    LastName = table.Column<string>(type: "text", nullable: true),
                     FullName = table.Column<string>(type: "text", nullable: false),
                     UserName = table.Column<string>(type: "text", nullable: true),
                     Email = table.Column<string>(type: "text", nullable: true),
                     Phone = table.Column<string>(type: "text", nullable: true),
-                    PhoneCode = table.Column<string>(type: "text", nullable: true),
                     ParentId = table.Column<int>(type: "integer", nullable: true),
                     ParentTreeId = table.Column<string>(type: "ltree", nullable: true),
-                    RoleId = table.Column<int>(type: "integer", nullable: false),
-                    AvatarId = table.Column<int>(type: "integer", nullable: true),
-                    ReferralCode = table.Column<string>(type: "text", nullable: true),
-                    Type = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     LanguageId = table.Column<int>(type: "integer", nullable: false),
                     Gender = table.Column<int>(type: "integer", nullable: false),
@@ -523,22 +1087,76 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Users_Users_CreatedBy",
-                        column: x => x.CreatedBy,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Users_Users_LastModifiedBy",
-                        column: x => x.LastModifiedBy,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_Users_Users_ParentUserId",
                         column: x => x.ParentUserId,
                         principalTable: "Users",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OrderId = table.Column<int>(type: "integer", nullable: false),
+                    ProductItemId = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "numeric", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_ProductItems_ProductItemId",
+                        column: x => x.ProductItemId,
+                        principalTable: "ProductItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductOptions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ProductItemId = table.Column<int>(type: "integer", nullable: false),
+                    OptionGroupId = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "character varying(70)", maxLength: 70, nullable: false),
+                    DisplayValue = table.Column<string>(type: "character varying(70)", maxLength: 70, nullable: true),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductOptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductOptions_ProductItems_ProductItemId",
+                        column: x => x.ProductItemId,
+                        principalTable: "ProductItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductOptions_ProductOptionGroups_OptionGroupId",
+                        column: x => x.OptionGroupId,
+                        principalTable: "ProductOptionGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -596,6 +1214,31 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserActivities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    ActivityType = table.Column<int>(type: "integer", nullable: false),
+                    IsDelete = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserActivities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserActivities_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -734,6 +1377,36 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserPermissions",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    PermissionActionId = table.Column<int>(type: "integer", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserPermissions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserPermissions_PermissionActions_PermissionActionId",
+                        column: x => x.PermissionActionId,
+                        principalTable: "PermissionActions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserPermissions_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Addresses",
                 columns: table => new
                 {
@@ -741,9 +1414,10 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     AddressLine = table.Column<string>(type: "text", nullable: false),
                     CountryId = table.Column<int>(type: "integer", nullable: false),
-                    ProvinceId = table.Column<int>(type: "integer", nullable: false),
-                    DistrictId = table.Column<int>(type: "integer", nullable: false),
-                    WardId = table.Column<int>(type: "integer", nullable: false),
+                    ProvinceId = table.Column<int>(type: "integer", nullable: true),
+                    DistrictId = table.Column<int>(type: "integer", nullable: true),
+                    WardId = table.Column<int>(type: "integer", nullable: true),
+                    TotalRelated = table.Column<int>(type: "integer", nullable: true),
                     Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     CreatedBy = table.Column<int>(type: "integer", nullable: false),
                     LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
@@ -876,6 +1550,42 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CustomerAddresses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CustomerId = table.Column<int>(type: "integer", nullable: false),
+                    AddressId = table.Column<int>(type: "integer", nullable: false),
+                    Type = table.Column<int>(type: "integer", nullable: false),
+                    FullName = table.Column<string>(type: "text", nullable: true),
+                    Phone = table.Column<string>(type: "text", nullable: true),
+                    Remarks = table.Column<string>(type: "text", nullable: true),
+                    IsDefault = table.Column<bool>(type: "boolean", nullable: false),
+                    IsDelete = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerAddresses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CustomerAddresses_Addresses_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Addresses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CustomerAddresses_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserAddresses",
                 columns: table => new
                 {
@@ -912,6 +1622,43 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Bookings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Type = table.Column<int>(type: "integer", nullable: false),
+                    CustomerId = table.Column<int>(type: "integer", nullable: false),
+                    CustomerAddressId = table.Column<int>(type: "integer", nullable: true),
+                    BookingTimes = table.Column<int>(type: "integer", nullable: false),
+                    BookingDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    BookingStartTime = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
+                    BookingEndTime = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Noted = table.Column<string>(type: "text", nullable: true),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    CreatedBy = table.Column<int>(type: "integer", nullable: false),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true, defaultValueSql: "now()"),
+                    LastModifiedBy = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bookings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bookings_CustomerAddresses_CustomerAddressId",
+                        column: x => x.CustomerAddressId,
+                        principalTable: "CustomerAddresses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_CountryId",
                 table: "Addresses",
@@ -933,6 +1680,11 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                 column: "WardId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Attributes_AttributeGroupId",
+                table: "Attributes",
+                column: "AttributeGroupId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BankBranchs_BankId_BranchId",
                 table: "BankBranchs",
                 columns: new[] { "BankId", "BranchId" },
@@ -942,6 +1694,18 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                 name: "IX_BankBranchs_BranchId",
                 table: "BankBranchs",
                 column: "BranchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_CustomerAddressId",
+                table: "Bookings",
+                column: "CustomerAddressId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_CustomerId",
+                table: "Bookings",
+                column: "CustomerId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contents_Code",
@@ -963,6 +1727,23 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_CustomerAddresses_AddressId",
+                table: "CustomerAddresses",
+                column: "AddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CustomerAddresses_CustomerId_AddressId",
+                table: "CustomerAddresses",
+                columns: new[] { "CustomerId", "AddressId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Customers_UID",
+                table: "Customers",
+                column: "UID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Districts_Code",
                 table: "Districts",
                 column: "Code",
@@ -972,6 +1753,123 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                 name: "IX_Districts_ProvinceId",
                 table: "Districts",
                 column: "ProvinceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NewsCategoryMappings_NewsCategoryId",
+                table: "NewsCategoryMappings",
+                column: "NewsCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NewsCategoryMappings_NewsItemId",
+                table: "NewsCategoryMappings",
+                column: "NewsItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NewsItemDetails_NewsId",
+                table: "NewsItemDetails",
+                column: "NewsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NewsMedias_MediaId",
+                table: "NewsMedias",
+                column: "MediaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NewsMedias_NewsId",
+                table: "NewsMedias",
+                column: "NewsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NewsTagsMappings_NewsItemId",
+                table: "NewsTagsMappings",
+                column: "NewsItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NewsTagsMappings_NewsTagId",
+                table: "NewsTagsMappings",
+                column: "NewsTagId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_ProductItemId",
+                table: "OrderItems",
+                column: "ProductItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_CustomerId",
+                table: "Orders",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_OrderNo",
+                table: "Orders",
+                column: "OrderNo",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PermissionActions_ModuleId_ActionId",
+                table: "PermissionActions",
+                columns: new[] { "ModuleId", "ActionId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductAttributes_AttributeId",
+                table: "ProductAttributes",
+                column: "AttributeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductAttributes_ProductId",
+                table: "ProductAttributes",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductCategories_CategoryId",
+                table: "ProductCategories",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductCategories_ProductId",
+                table: "ProductCategories",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductDetails_ProductId",
+                table: "ProductDetails",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductItems_ProductId",
+                table: "ProductItems",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductMedias_MediaId",
+                table: "ProductMedias",
+                column: "MediaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductMedias_ProductId",
+                table: "ProductMedias",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductOptions_OptionGroupId",
+                table: "ProductOptions",
+                column: "OptionGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductOptions_ProductItemId",
+                table: "ProductOptions",
+                column: "ProductItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_BrandId",
+                table: "Products",
+                column: "BrandId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Provinces_CountryId",
@@ -1002,6 +1900,11 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_SettingUsers_UserId",
                 table: "SettingUsers",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserActivities_UserId",
+                table: "UserActivities",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -1079,31 +1982,26 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                 column: "UserIdentityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_Code",
-                table: "Users",
-                column: "Code",
+                name: "IX_UserPermissions_PermissionActionId",
+                table: "UserPermissions",
+                column: "PermissionActionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserPermissions_UserId_PermissionActionId",
+                table: "UserPermissions",
+                columns: new[] { "UserId", "PermissionActionId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_CreatedBy",
+                name: "IX_Users_Code_Phone",
                 table: "Users",
-                column: "CreatedBy");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_LastModifiedBy",
-                table: "Users",
-                column: "LastModifiedBy");
+                columns: new[] { "Code", "Phone" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_ParentUserId",
                 table: "Users",
                 column: "ParentUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_PhoneCode_Phone",
-                table: "Users",
-                columns: new[] { "PhoneCode", "Phone" },
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
@@ -1120,16 +2018,52 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Bookings");
+
+            migrationBuilder.DropTable(
                 name: "Contents");
 
             migrationBuilder.DropTable(
                 name: "EmailRequests");
 
             migrationBuilder.DropTable(
+                name: "EntityLanguages");
+
+            migrationBuilder.DropTable(
                 name: "Languages");
 
             migrationBuilder.DropTable(
                 name: "LocalizedProperties");
+
+            migrationBuilder.DropTable(
+                name: "NewsCategoryMappings");
+
+            migrationBuilder.DropTable(
+                name: "NewsItemDetails");
+
+            migrationBuilder.DropTable(
+                name: "NewsMedias");
+
+            migrationBuilder.DropTable(
+                name: "NewsTagsMappings");
+
+            migrationBuilder.DropTable(
+                name: "OrderItems");
+
+            migrationBuilder.DropTable(
+                name: "ProductAttributes");
+
+            migrationBuilder.DropTable(
+                name: "ProductCategories");
+
+            migrationBuilder.DropTable(
+                name: "ProductDetails");
+
+            migrationBuilder.DropTable(
+                name: "ProductMedias");
+
+            migrationBuilder.DropTable(
+                name: "ProductOptions");
 
             migrationBuilder.DropTable(
                 name: "SettingAppContents");
@@ -1139,6 +2073,9 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "SettingUserLogs");
+
+            migrationBuilder.DropTable(
+                name: "UserActivities");
 
             migrationBuilder.DropTable(
                 name: "UserAddresses");
@@ -1159,16 +2096,43 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                 name: "UserMedias");
 
             migrationBuilder.DropTable(
+                name: "UserPermissions");
+
+            migrationBuilder.DropTable(
                 name: "UserSources");
+
+            migrationBuilder.DropTable(
+                name: "CustomerAddresses");
+
+            migrationBuilder.DropTable(
+                name: "NewsCategories");
+
+            migrationBuilder.DropTable(
+                name: "NewsItems");
+
+            migrationBuilder.DropTable(
+                name: "NewsTags");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "Attributes");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "ProductItems");
+
+            migrationBuilder.DropTable(
+                name: "ProductOptionGroups");
 
             migrationBuilder.DropTable(
                 name: "SettingApps");
 
             migrationBuilder.DropTable(
                 name: "SettingUsers");
-
-            migrationBuilder.DropTable(
-                name: "Addresses");
 
             migrationBuilder.DropTable(
                 name: "BankBranchs");
@@ -1186,7 +2150,19 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                 name: "UserIdentities");
 
             migrationBuilder.DropTable(
-                name: "Wards");
+                name: "PermissionActions");
+
+            migrationBuilder.DropTable(
+                name: "Addresses");
+
+            migrationBuilder.DropTable(
+                name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "AttributeGroups");
+
+            migrationBuilder.DropTable(
+                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "Banks");
@@ -1198,16 +2174,22 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Districts");
+                name: "Wards");
+
+            migrationBuilder.DropTable(
+                name: "Brands");
 
             migrationBuilder.DropTable(
                 name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "Provinces");
+                name: "Districts");
 
             migrationBuilder.DropTable(
                 name: "Departments");
+
+            migrationBuilder.DropTable(
+                name: "Provinces");
 
             migrationBuilder.DropTable(
                 name: "Countries");

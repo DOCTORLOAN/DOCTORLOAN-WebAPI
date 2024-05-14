@@ -3,20 +3,17 @@ using System;
 using DoctorLoan.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DoctorLoan.Infrastructure.Persistence.Migrations
+namespace DoctorLoan.Infrastructure.Persistence.Migration
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230730074133_add-customer-table")]
-    partial class addcustomertable
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +46,7 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                     b.Property<int>("CreatedBy")
                         .HasColumnType("integer");
 
-                    b.Property<int>("DistrictId")
+                    b.Property<int?>("DistrictId")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset?>("LastModified")
@@ -60,13 +57,13 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                     b.Property<int?>("LastModifiedBy")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ProvinceId")
+                    b.Property<int?>("ProvinceId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TotalRelated")
+                    b.Property<int?>("TotalRelated")
                         .HasColumnType("integer");
 
-                    b.Property<int>("WardId")
+                    b.Property<int?>("WardId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -562,6 +559,68 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                     b.ToTable("Branchs");
                 });
 
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.Bookings.Booking", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateOnly>("BookingDate")
+                        .HasColumnType("date");
+
+                    b.Property<TimeOnly>("BookingEndTime")
+                        .HasColumnType("time without time zone");
+
+                    b.Property<TimeOnly>("BookingStartTime")
+                        .HasColumnType("time without time zone");
+
+                    b.Property<int>("BookingTimes")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("CustomerAddressId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("LastModified")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int?>("LastModifiedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Noted")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerAddressId")
+                        .IsUnique();
+
+                    b.HasIndex("CustomerId")
+                        .IsUnique();
+
+                    b.ToTable("Bookings");
+                });
+
             modelBuilder.Entity("DoctorLoan.Domain.Entities.Commons.Job", b =>
                 {
                     b.Property<int>("Id")
@@ -757,13 +816,13 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                     b.Property<int>("CreatedBy")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime?>("DOB")
+                    b.Property<DateTimeOffset?>("DOB")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
-                    b.Property<string>("FirstNae")
+                    b.Property<string>("FirstName")
                         .HasColumnType("text");
 
                     b.Property<string>("FullName")
@@ -785,6 +844,9 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PasswordHash")
                         .HasColumnType("text");
 
                     b.Property<string>("Phone")
@@ -1011,6 +1073,446 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                     b.ToTable("Medias");
                 });
 
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.News.NewsCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("LastModified")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int?>("LastModifiedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(250)");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<int>("Sort")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NewsCategories");
+                });
+
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.News.NewsCategoryMapping", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("LastModified")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int?>("LastModifiedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("NewsCategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("NewsItemId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NewsCategoryId");
+
+                    b.HasIndex("NewsItemId");
+
+                    b.ToTable("NewsCategoryMappings");
+                });
+
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.News.NewsItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("LastModified")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int?>("LastModifiedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NewsItems");
+                });
+
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.News.NewsItemDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Full")
+                        .HasColumnType("text");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("LastModified")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int?>("LastModifiedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MetaDescription")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MetaKeyword")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MetaTitle")
+                        .HasColumnType("text");
+
+                    b.Property<int>("NewsId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Short")
+                        .HasMaxLength(700)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(700)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NewsId");
+
+                    b.ToTable("NewsItemDetails");
+                });
+
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.News.NewsMedia", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsThumb")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("LastModified")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int?>("LastModifiedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("MediaId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("NewsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("OrderBy")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MediaId");
+
+                    b.HasIndex("NewsId");
+
+                    b.ToTable("NewsMedias");
+                });
+
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.News.NewsTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("LastModified")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int?>("LastModifiedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NewsTags");
+                });
+
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.News.NewsTagsMapping", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("LastModified")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int?>("LastModifiedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("NewsItemId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("NewsTagId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NewsItemId");
+
+                    b.HasIndex("NewsTagId");
+
+                    b.ToTable("NewsTagsMappings");
+                });
+
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.Orders.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AddressLine")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("LastModified")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int?>("LastModifiedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("OrderNo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StatusPayment")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("SubTotal")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("OrderNo")
+                        .IsUnique();
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.Orders.OrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("LastModified")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int?>("LastModifiedBy")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("ProductItemId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductItemId");
+
+                    b.ToTable("OrderItems");
+                });
+
             modelBuilder.Entity("DoctorLoan.Domain.Entities.Products.Attribute", b =>
                 {
                     b.Property<int>("Id")
@@ -1135,6 +1637,9 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Code")
+                        .HasColumnType("text");
+
                     b.Property<string>("Content")
                         .HasColumnType("text");
 
@@ -1145,6 +1650,9 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
 
                     b.Property<int>("CreatedBy")
                         .HasColumnType("integer");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset?>("LastModified")
                         .ValueGeneratedOnAdd()
@@ -1173,6 +1681,9 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(255)");
 
                     b.Property<int>("Sort")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -1271,6 +1782,9 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                     b.Property<decimal>("PriceDiscount")
                         .HasColumnType("numeric");
 
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Sku")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -1285,6 +1799,8 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
 
                     b.ToTable("Products");
                 });
@@ -1413,9 +1929,8 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Summary")
-                        .HasMaxLength(250)
                         .IsUnicode(true)
-                        .HasColumnType("character varying(250)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -1519,6 +2034,9 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                         .HasColumnType("integer");
 
                     b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ProductItemId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Status")
@@ -1952,9 +2470,6 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AvatarId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Code")
                         .HasColumnType("text");
 
@@ -2019,9 +2534,6 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("text");
 
-                    b.Property<string>("ReferralCode")
-                        .HasColumnType("text");
-
                     b.Property<string>("Remarks")
                         .HasColumnType("text");
 
@@ -2047,8 +2559,7 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ParentUserId");
 
-                    b.HasIndex("RoleId")
-                        .IsUnique();
+                    b.HasIndex("RoleId");
 
                     b.HasIndex("Code", "Phone")
                         .IsUnique();
@@ -2641,6 +3152,24 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                     b.Navigation("Branch");
                 });
 
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.Bookings.Booking", b =>
+                {
+                    b.HasOne("DoctorLoan.Domain.Entities.Customers.CustomerAddress", "CustomerAddresses")
+                        .WithOne()
+                        .HasForeignKey("DoctorLoan.Domain.Entities.Bookings.Booking", "CustomerAddressId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("DoctorLoan.Domain.Entities.Customers.Customer", "Customer")
+                        .WithOne()
+                        .HasForeignKey("DoctorLoan.Domain.Entities.Bookings.Booking", "CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("CustomerAddresses");
+                });
+
             modelBuilder.Entity("DoctorLoan.Domain.Entities.Contents.Content", b =>
                 {
                     b.HasOne("DoctorLoan.Domain.Entities.Medias.Media", "Media")
@@ -2668,6 +3197,102 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                     b.Navigation("Customer");
                 });
 
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.News.NewsCategoryMapping", b =>
+                {
+                    b.HasOne("DoctorLoan.Domain.Entities.News.NewsCategory", "NewsCategory")
+                        .WithMany()
+                        .HasForeignKey("NewsCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DoctorLoan.Domain.Entities.News.NewsItem", "NewsItem")
+                        .WithMany("NewsCategories")
+                        .HasForeignKey("NewsItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("NewsCategory");
+
+                    b.Navigation("NewsItem");
+                });
+
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.News.NewsItemDetail", b =>
+                {
+                    b.HasOne("DoctorLoan.Domain.Entities.News.NewsItem", "NewsItem")
+                        .WithMany("NewsItemDetails")
+                        .HasForeignKey("NewsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("NewsItem");
+                });
+
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.News.NewsMedia", b =>
+                {
+                    b.HasOne("DoctorLoan.Domain.Entities.Medias.Media", "Media")
+                        .WithMany()
+                        .HasForeignKey("MediaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DoctorLoan.Domain.Entities.News.NewsItem", "NewsItem")
+                        .WithMany("NewsMedias")
+                        .HasForeignKey("NewsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Media");
+
+                    b.Navigation("NewsItem");
+                });
+
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.News.NewsTagsMapping", b =>
+                {
+                    b.HasOne("DoctorLoan.Domain.Entities.News.NewsItem", "NewsItem")
+                        .WithMany("NewsTags")
+                        .HasForeignKey("NewsItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DoctorLoan.Domain.Entities.News.NewsTag", "NewsTag")
+                        .WithMany()
+                        .HasForeignKey("NewsTagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("NewsItem");
+
+                    b.Navigation("NewsTag");
+                });
+
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.Orders.Order", b =>
+                {
+                    b.HasOne("DoctorLoan.Domain.Entities.Customers.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.Orders.OrderItem", b =>
+                {
+                    b.HasOne("DoctorLoan.Domain.Entities.Orders.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("DoctorLoan.Domain.Entities.Products.ProductItem", "ProductItem")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("ProductItemId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Order");
+
+                    b.Navigation("ProductItem");
+                });
+
             modelBuilder.Entity("DoctorLoan.Domain.Entities.Products.Attribute", b =>
                 {
                     b.HasOne("DoctorLoan.Domain.Entities.Products.AttributeGroup", "AttributeGroup")
@@ -2677,6 +3302,17 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("AttributeGroup");
+                });
+
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.Products.Product", b =>
+                {
+                    b.HasOne("DoctorLoan.Domain.Entities.Products.Brand", "Brand")
+                        .WithMany()
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
                 });
 
             modelBuilder.Entity("DoctorLoan.Domain.Entities.Products.ProductAttribute", b =>
@@ -2701,7 +3337,7 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("DoctorLoan.Domain.Entities.Products.ProductCategory", b =>
                 {
                     b.HasOne("DoctorLoan.Domain.Entities.Products.Category", "Category")
-                        .WithMany()
+                        .WithMany("ProductCategories")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -2826,8 +3462,8 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                         .HasForeignKey("ParentUserId");
 
                     b.HasOne("DoctorLoan.Domain.Entities.Roles.Role", "Role")
-                        .WithOne("User")
-                        .HasForeignKey("DoctorLoan.Domain.Entities.Users.User", "RoleId")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("ParentUser");
@@ -3022,9 +3658,30 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
                     b.Navigation("DepartmentRoles");
                 });
 
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.News.NewsItem", b =>
+                {
+                    b.Navigation("NewsCategories");
+
+                    b.Navigation("NewsItemDetails");
+
+                    b.Navigation("NewsMedias");
+
+                    b.Navigation("NewsTags");
+                });
+
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.Orders.Order", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
             modelBuilder.Entity("DoctorLoan.Domain.Entities.Products.AttributeGroup", b =>
                 {
                     b.Navigation("Attributes");
+                });
+
+            modelBuilder.Entity("DoctorLoan.Domain.Entities.Products.Category", b =>
+                {
+                    b.Navigation("ProductCategories");
                 });
 
             modelBuilder.Entity("DoctorLoan.Domain.Entities.Products.Product", b =>
@@ -3042,12 +3699,14 @@ namespace DoctorLoan.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("DoctorLoan.Domain.Entities.Products.ProductItem", b =>
                 {
+                    b.Navigation("OrderItems");
+
                     b.Navigation("ProductOptions");
                 });
 
             modelBuilder.Entity("DoctorLoan.Domain.Entities.Roles.Role", b =>
                 {
-                    b.Navigation("User");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("DoctorLoan.Domain.Entities.Settings.SettingApp", b =>

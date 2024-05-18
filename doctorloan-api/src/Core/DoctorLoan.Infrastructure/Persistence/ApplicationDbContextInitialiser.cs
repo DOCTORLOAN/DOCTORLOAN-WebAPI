@@ -69,6 +69,8 @@ public class ApplicationDbContextInitialiser
                 department.DepartmentRoles.AddRange(listRoles);
                 await _context.Departments.AddAsync(department);
                 await _context.SaveChangesAsync();
+            }
+        }
 
         var adminRoleId = await _context.Roles.Include(s => s.Users).Where(s => s.Code == "admin" || s.Code == "leader" || s.Code == "user").ToListAsync();
         var hasAdmin = await _context.Users.AnyAsync(s => s.UserName == "admin");

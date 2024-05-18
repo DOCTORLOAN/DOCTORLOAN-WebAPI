@@ -3,9 +3,11 @@ using DoctorLoan.Application.Common.Security;
 using DoctorLoan.Application.Models.Commons;
 using DoctorLoan.Domain.Enums.Authorizations;
 using DoctorLoan.Order.Application.Features.Commands;
+using DoctorLoan.Order.Application.Features.Commands.CallBackPayooCommand;
 using DoctorLoan.Order.Application.Features.Dtos;
 using DoctorLoan.Order.Application.Features.Queries;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace DoctorLoan.Order.WebUI.Areas;
 public class OrderController : ApiControllerBase
@@ -47,5 +49,17 @@ public class OrderController : ApiControllerBase
     {
         return Ok(await Mediator.Send(command, cancellationToken));
     }
+    #endregion
+
+    #region Call Back Payoo
+
+    [HttpPost]
+    [Route("callback-payoo")]
+    [ProducesResponseType(typeof(Result<bool>), (int)HttpStatusCode.OK)]
+    public async Task<IActionResult> PayooCallBack([FromBody] CallBackPayooCommand command, CancellationToken cancellationToken)
+    {
+        return Ok(await Mediator.Send(command, cancellationToken));
+    }
+
     #endregion
 }

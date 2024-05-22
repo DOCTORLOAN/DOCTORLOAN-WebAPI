@@ -26,9 +26,3 @@ public enum OrderStatus
     Return = 60,
     ReturnCompleted = 70
 }
-public enum OrderStatusPayment
-{
-    Pending = 10,
-    Payment = 20,
-    Cancel = 30,
-}

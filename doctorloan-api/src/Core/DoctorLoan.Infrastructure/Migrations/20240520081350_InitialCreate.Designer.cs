@@ -9,11 +9,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DoctorLoan.Infrastructure.Persistence.Migration
+namespace DoctorLoan.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240504092706_InitialCreateTest")]
-    partial class InitialCreateTest
+    [Migration("20240520081350_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1444,9 +1444,6 @@ namespace DoctorLoan.Infrastructure.Persistence.Migration
                         .HasColumnType("text");
 
                     b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("StatusPayment")
                         .HasColumnType("integer");
 
                     b.Property<decimal>("SubTotal")

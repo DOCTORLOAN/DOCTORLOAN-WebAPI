@@ -6,7 +6,6 @@ using DoctorLoan.Application.Interfaces.Commons;
 using DoctorLoan.Application.Interfaces.Data;
 using DoctorLoan.Application.Models.Commons;
 using DoctorLoan.Domain.Enums.Commons;
-using DoctorLoan.Domain.Enums.Orders;
 using DoctorLoan.Order.Application.Commons.Expressions;
 using DoctorLoan.Order.Application.Features.Dtos;
 using MediatR;

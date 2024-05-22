@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DoctorLoan.Infrastructure.Persistence.Migration
+namespace DoctorLoan.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -1441,9 +1441,6 @@ namespace DoctorLoan.Infrastructure.Persistence.Migration
                         .HasColumnType("text");
 
                     b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("StatusPayment")
                         .HasColumnType("integer");
 
                     b.Property<decimal>("SubTotal")

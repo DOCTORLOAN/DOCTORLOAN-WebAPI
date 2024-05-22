@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using BCrypt.Net;
 using DoctorLoan.Application;
-using DoctorLoan.Application.Features.Email;
 using DoctorLoan.Application.Interfaces.Commons;
 using DoctorLoan.Application.Interfaces.Data;
 using DoctorLoan.Application.Models.Commons;
 using DoctorLoan.Customer.Application.Commons.Expressions;
-using DoctorLoan.Domain.Entities.Emails;
 using DoctorLoan.Domain.Entities.Orders;
 using DoctorLoan.Domain.Enums.Commons;
 using DoctorLoan.Domain.Enums.Emails;
@@ -41,7 +39,7 @@ public class AddOrderCommandHandler : ApplicationBaseService<AddOrderCommandHand
 
         entity.OrderNo = "ODL" + DateTime.Now.ToString("yy") + DateTime.Now.ToString("MM") + (maxOrder + 1).ToString("D4");
         entity.Status = OrderStatus.Pending;
-        entity.StatusPayment = OrderStatusPayment.Pending;
+        entity.PaymentMethod = PaymentMethod.Payoo;
 
         var listProductId = request.ListItem.Select(s => s.ProductItemId);
         var listProductItem = _context.ProductItems.Where(s => listProductId.Contains(s.Id));

@@ -2,7 +2,6 @@
 using DoctorLoan.Customer.Application.Features.Customers;
 using DoctorLoan.Domain.Entities.Orders;
 using DoctorLoan.Domain.Enums.Commons;
-using DoctorLoan.Domain.Enums.Orders;
 using Newtonsoft.Json;
 
 namespace DoctorLoan.Order.Application.Features.Dtos;

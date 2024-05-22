@@ -1,7 +1,7 @@
 ﻿using DoctorLoan.Application.Common.Extentions;
 using DoctorLoan.Application.Models.Commons;
 using DoctorLoan.Domain.Entities.Orders;
-using DoctorLoan.Domain.Enums.Orders;
+using DoctorLoan.Domain.Enums.Commons;
 using DoctorLoan.Order.Application.Features.Dtos;
 using MediatR;
 
@@ -13,7 +13,6 @@ public class AddOrderCommand : IRequest<Result<OrderInfo>>
     public decimal SubTotal { get; set; }
     public decimal TotalPrice { get; set; }
     public PaymentMethod PaymentMethod { get; set; }
-
     public string FullName { get; set; }
     private string _phone;
     public string Phone

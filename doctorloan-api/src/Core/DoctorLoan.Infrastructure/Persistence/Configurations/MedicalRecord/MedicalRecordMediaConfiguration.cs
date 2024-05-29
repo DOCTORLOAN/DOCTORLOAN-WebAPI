@@ -1,0 +1,23 @@
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore;
+using DoctorLoan.Domain.Entities.MedicalRecord;
+
+namespace DoctorLoan.Infrastructure.Persistence.Configurations.MedicalRecord;
+public class MedicalRecordMediaConfiguration : IEntityTypeConfiguration<MedicalRecordMedia>
+{
+    public void Configure(EntityTypeBuilder<MedicalRecordMedia> builder)
+    {
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).ValueGeneratedOnAdd().IsRequired();
+        builder.ConfigurateBaseAudit<MedicalRecordMedia, int>();
+
+        builder.HasOne(x => x.Media)
+            .WithMany()
+            .HasForeignKey(x => x.MediaId)
+            .IsRequired();
+        builder.HasOne(x => x.MedicalRecord)
+           .WithMany(x => x.MedicalRecordMedias)
+           .HasForeignKey(x => x.MedicalRecordId)
+           .IsRequired();
+    }
+}

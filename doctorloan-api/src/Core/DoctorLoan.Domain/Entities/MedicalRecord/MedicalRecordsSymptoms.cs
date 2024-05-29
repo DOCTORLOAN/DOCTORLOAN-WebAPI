@@ -1,0 +1,13 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace DoctorLoan.Domain.Entities.MedicalRecord;
+
+[Table("MedicalRecordsSymptoms")]
+public class MedicalRecordsSymptoms:BaseEntityAudit<int>
+{
+    public int? MedicalRecordId { get; set; }
+    public int? SymptomId { get; set; }
+    public string Value { get; set; }
+    public virtual MedicalRecord MedicalRecord { get; set; }
+    public virtual Symptoms Symptom { get; set; }
+}

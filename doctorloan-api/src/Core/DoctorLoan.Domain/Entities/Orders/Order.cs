@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using DoctorLoan.Domain.Entities.Customers;
 using DoctorLoan.Domain.Enums.Commons;
-using DoctorLoan.Domain.Enums.Orders;
 
 namespace DoctorLoan.Domain.Entities.Orders;
 

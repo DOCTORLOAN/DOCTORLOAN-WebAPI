@@ -26,7 +26,6 @@ public class EngineContext
     }
     public static T GetService<T>(IServiceProvider provider) where T : class
     {
-
         if (provider == null)
             return null;
         return (T)provider.GetService(typeof(T));
@@ -45,6 +44,4 @@ public class EngineContext
             return null;
         return sp.GetServices(typeof(T)) as IEnumerable<T>;
     }
-
-
 }

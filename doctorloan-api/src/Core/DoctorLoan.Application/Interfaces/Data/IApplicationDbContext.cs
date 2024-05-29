@@ -8,6 +8,7 @@ using DoctorLoan.Domain.Entities.Customers;
 using DoctorLoan.Domain.Entities.Departments;
 using DoctorLoan.Domain.Entities.Emails;
 using DoctorLoan.Domain.Entities.Medias;
+using DoctorLoan.Domain.Entities.MedicalRecord;
 using DoctorLoan.Domain.Entities.News;
 using DoctorLoan.Domain.Entities.Orders;
 using DoctorLoan.Domain.Entities.Products;
@@ -115,6 +116,13 @@ public interface IApplicationDbContext
     #region Customers
     DbSet<Customer> Customers { get; }
     DbSet<CustomerAddress> CustomerAddresses { get; }
+    DbSet<MedicalRecord> MedicalRecords { get; }
+    DbSet<MedicalRecordMedia> MedicalRecordMedias { get; }
+    DbSet<MedicalRecordsCategory> MedicalRecordsCategories { get; }
+    DbSet<MedicalRecordsCategoryMapping> MedicalRecordsCategoryMappings { get; }
+    DbSet<MedicalRecordsSymptoms> MedicalRecordsSymptoms { get; }
+    DbSet<SymptomGroups> SymptomGroups { get; }
+    DbSet<Symptoms> Symptoms { get; }
     #endregion
 
     #region Bookings
@@ -125,4 +133,5 @@ public interface IApplicationDbContext
     DbSet<Order> Orders { get; }
     DbSet<OrderItem> OrderItems { get; }
     #endregion
+
 }

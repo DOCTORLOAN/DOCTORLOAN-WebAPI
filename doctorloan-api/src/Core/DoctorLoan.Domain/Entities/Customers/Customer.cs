@@ -18,6 +18,7 @@ public class Customer : BaseEntityAudit<int>, ISoftDeleteEntity
     public string PasswordHash { get; set; }
 
     public bool IsDelete { get; set; }
+    public virtual ICollection<DoctorLoan.Domain.Entities.MedicalRecord.MedicalRecord> MedicalRecords { get; set; } = new List<DoctorLoan.Domain.Entities.MedicalRecord.MedicalRecord>();
 
     public virtual ICollection<CustomerAddress> CustomerAddresses { get; set; } = new List<CustomerAddress>();
 

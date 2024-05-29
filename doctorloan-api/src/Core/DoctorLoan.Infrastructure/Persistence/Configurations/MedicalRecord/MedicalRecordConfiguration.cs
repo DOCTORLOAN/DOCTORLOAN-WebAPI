@@ -1,0 +1,45 @@
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore;
+
+namespace DoctorLoan.Infrastructure.Persistence.Configurations.MedicalRecord;
+public class MedicalRecordConfiguration : IEntityTypeConfiguration<DoctorLoan.Domain.Entities.MedicalRecord.MedicalRecord>
+{
+    public void Configure(EntityTypeBuilder<DoctorLoan.Domain.Entities.MedicalRecord.MedicalRecord> builder)
+    {
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).ValueGeneratedOnAdd().IsRequired();
+        builder.ConfigurateBaseAudit<DoctorLoan.Domain.Entities.MedicalRecord.MedicalRecord, int>();
+        builder.Property(x => x.MedicalRecordNo).HasMaxLength(20).IsRequired();
+        builder.Property(x => x.CustomerId).IsRequired();
+        builder.Property(x => x.DateCreated).IsRequired();
+        builder.Property(x => x.Status).IsRequired();
+        builder.Property(x => x.OtherMedicalHistory).HasMaxLength(500);
+        builder.Property(x => x.ParentId).IsRequired();
+        builder.Property(x => x.IsDelete).IsRequired();
+        builder.HasQueryFilter(x => !x.IsDelete);
+
+        builder.HasOne(x => x.Customers)
+            .WithMany(x => x.MedicalRecords)
+            .HasForeignKey(x => x.CustomerId)
+            .IsRequired();
+
+        builder.HasMany(x => x.MedicalRecordsCategoryMapping)
+            .WithOne(x => x.MedicalRecord)
+            .HasForeignKey(x => x.MedicalRecordId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(x => x.MedicalRecordMedias)
+            .WithOne(x => x.MedicalRecord)
+            .HasForeignKey(x => x.MedicalRecordId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(x => x.MedicalRecordsSymptoms)
+            .WithOne(x => x.MedicalRecord)
+            .HasForeignKey(x => x.MedicalRecordId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasIndex(x => x.MedicalRecordNo).IsUnique();
+
+        builder.ToTable("MedicalRecord");
+    }
+}

@@ -7,6 +7,7 @@ using DoctorLoan.Domain.Entities.Bookings;
 using DoctorLoan.Domain.Entities.Commons;
 using DoctorLoan.Domain.Entities.Contents;
 using DoctorLoan.Domain.Entities.Customers;
+using DoctorLoan.Domain.Entities.MedicalRecord;
 using DoctorLoan.Domain.Entities.Departments;
 using DoctorLoan.Domain.Entities.Emails;
 using DoctorLoan.Domain.Entities.Medias;
@@ -180,6 +181,13 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     #region Customers
     public DbSet<Customer> Customers => Set<Customer>();
     public DbSet<CustomerAddress> CustomerAddresses => Set<CustomerAddress>();
+    public DbSet<MedicalRecord> MedicalRecords => Set<MedicalRecord>();
+    public DbSet<MedicalRecordMedia> MedicalRecordMedias => Set<MedicalRecordMedia>();
+    public DbSet<MedicalRecordsCategory> MedicalRecordsCategories => Set<MedicalRecordsCategory>();
+    public DbSet<MedicalRecordsCategoryMapping> MedicalRecordsCategoryMappings => Set<MedicalRecordsCategoryMapping>();
+    public DbSet<MedicalRecordsSymptoms> MedicalRecordsSymptoms => Set<MedicalRecordsSymptoms>();
+    public DbSet<SymptomGroups> SymptomGroups => Set<SymptomGroups>();
+    public DbSet<Symptoms> Symptoms => Set<Symptoms>();
     #endregion
 
     #region Bookings
@@ -192,4 +200,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     #endregion
 
     #endregion
+
+    //cách tạo controller chức năng crud MedicalRecord
 }

@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using DoctorLoan.Domain.Enums.Commons;
 
-namespace DoctorLoan.Domain.Entities.Products;
+namespace DoctorLoan.Domain.Entities.MedicalRecord;
 
-[Table("Categories")]
-public class Category : BaseEntityAudit<int>
+[Table("MedicalRecordsCategory")]
+public class MedicalRecordsCategory : BaseEntityAudit<int>
 {
     public string Name { get; set; }
     public string Code { get; set; }
@@ -15,5 +15,5 @@ public class Category : BaseEntityAudit<int>
     public string Slug { get; set; }
     public StatusEnum Status { get; set; } = StatusEnum.Draft;
     public bool IsDeleted { get; set; }
-    public ICollection<ProductCategory> ProductCategories { get; set; }
+    public ICollection<MedicalRecordsCategoryMapping> MedicalRecordsCategoryMappings { get; set; }
 }

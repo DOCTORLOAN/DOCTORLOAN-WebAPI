@@ -1,6 +1,7 @@
 ﻿using BCrypt.Net;
 using DoctorLoan.Application.Common.Extentions;
 using DoctorLoan.Domain.Entities.Departments;
+using DoctorLoan.Domain.Entities.MedicalRecord;
 using DoctorLoan.Domain.Entities.Products;
 using DoctorLoan.Domain.Entities.Roles;
 using DoctorLoan.Domain.Entities.Users;
@@ -53,6 +54,97 @@ public class ApplicationDbContextInitialiser
 
     public async Task TrySeedAsync()
     {
+        if (!_context.SymptomGroups.Any())
+        {
+            var listSymptomGroups = new List<SymptomGroups> 
+            {
+                new SymptomGroups { Id = 1, Name = "Cột sống cổ - Đầu và mặt" },
+                new SymptomGroups { Id = 2, Name = "Cột sống cổ - Cổ" },
+                new SymptomGroups { Id = 3, Name = "Cột sống cổ - Tay" },
+                new SymptomGroups { Id = 4, Name = "Cột sống ngực" },
+                new SymptomGroups { Id = 5, Name = "Cột sống lưng" },
+            };
+            await _context.AddRangeAsync();
+            await _context.SaveChangesAsync();
+
+            if (!_context.Symptoms.Any())
+            {
+                var listSymptom = new List<Symptoms>
+                {
+                    new Symptoms { Id = 1, Name = "U tai - nghe kém", SymptomGroupId = 1 },
+                    new Symptoms { Id = 2, Name = "Khó nói", SymptomGroupId = 1 },
+                    new Symptoms { Id = 3, Name = "Đau đầu - đau nửa đầu", SymptomGroupId = 1 },
+                    new Symptoms { Id = 4, Name = "Hay quên", SymptomGroupId = 1 },
+                    new Symptoms { Id = 5, Name = "Chóng mặt - rối loạn tiền đình - choáng váng", SymptomGroupId = 1 },
+                    new Symptoms { Id = 6, Name = "Giam khả năng tập trung", SymptomGroupId = 1 },
+                    new Symptoms { Id = 7, Name = "Nhìn mờ - mù thoáng qua", SymptomGroupId = 1 },
+                    new Symptoms { Id = 8, Name = "Mất ngủ - khó ngủ", SymptomGroupId = 1 },
+
+                    new Symptoms { Id = 9, Name = "Đau cổ", SymptomGroupId = 2 },
+                    new Symptoms { Id = 10, Name = "Mỏi cổ", SymptomGroupId = 2 },
+                    new Symptoms { Id = 11, Name = "Khó cử động", SymptomGroupId = 2 },
+                    new Symptoms { Id = 12, Name = "Đau khi cử động cổ", SymptomGroupId = 2 },
+
+                    new Symptoms { Id = 13, Name = "Cẳng tay", SymptomGroupId = 3 },
+                    new Symptoms { Id = 14, Name = "Đau/tê/buốt", parentId = 13,  SymptomGroupId = 3 },
+                    new Symptoms { Id = 15, Name = "Nhức mỏi", parentId = 13, SymptomGroupId = 3 },
+                    new Symptoms { Id = 16, Name = "Khó cử động", parentId = 13, SymptomGroupId = 3 },
+                    new Symptoms { Id = 17, Name = "Xuội/liệt", parentId = 13, SymptomGroupId = 3 },
+                    new Symptoms { Id = 18, Name = "Lạnh/nóng", parentId = 13, SymptomGroupId = 3 },
+                    new Symptoms { Id = 19, Name = "Bị teo", parentId = 13, SymptomGroupId = 3 },
+                    new Symptoms { Id = 20, Name = "Xưng/nóng/đỏ", parentId = 13, SymptomGroupId = 3 },
+
+                    new Symptoms { Id = 21, Name = "Vai", SymptomGroupId = 3 },
+                    new Symptoms { Id = 22, Name = "Đau/tê/buốt", parentId = 21,  SymptomGroupId = 3 },
+                    new Symptoms { Id = 23, Name = "Nhức mỏi", parentId = 21, SymptomGroupId = 3 },
+                    new Symptoms { Id = 24, Name = "Khó cử động", parentId = 21, SymptomGroupId = 3 },
+                    new Symptoms { Id = 25, Name = "Xuội/liệt", parentId = 21, SymptomGroupId = 3 },
+                    new Symptoms { Id = 26, Name = "Lạnh/nóng", parentId = 21, SymptomGroupId = 3 },
+                    new Symptoms { Id = 27, Name = "Bị teo", parentId = 21, SymptomGroupId = 3 },
+                    new Symptoms { Id = 28, Name = "Xưng/nóng/đỏ", parentId = 21, SymptomGroupId = 3 },
+
+                    new Symptoms { Id = 29, Name = "Cánh tay", SymptomGroupId = 3 },
+                    new Symptoms { Id = 30, Name = "Đau/tê/buốt", parentId = 29,  SymptomGroupId = 3 },
+                    new Symptoms { Id = 31, Name = "Nhức mỏi", parentId = 29, SymptomGroupId = 3 },
+                    new Symptoms { Id = 32, Name = "Khó cử động", parentId = 29, SymptomGroupId = 3 },
+                    new Symptoms { Id = 33, Name = "Xuội/liệt", parentId = 29, SymptomGroupId = 3 },
+                    new Symptoms { Id = 34, Name = "Lạnh/nóng", parentId = 29, SymptomGroupId = 3 },
+                    new Symptoms { Id = 35, Name = "Bị teo", parentId = 29, SymptomGroupId = 3 },
+                    new Symptoms { Id = 36, Name = "Xưng/nóng/đỏ", parentId = 29, SymptomGroupId = 3 },
+
+                    new Symptoms { Id = 37, Name = "Cánh tay", SymptomGroupId = 3 },
+                    new Symptoms { Id = 38, Name = "Đau/tê/buốt", parentId = 37,  SymptomGroupId = 3 },
+                    new Symptoms { Id = 39, Name = "Nhức mỏi", parentId = 37, SymptomGroupId = 3 },
+                    new Symptoms { Id = 40, Name = "Khó cử động", parentId = 37, SymptomGroupId = 3 },
+                    new Symptoms { Id = 41, Name = "Xuội/liệt", parentId = 37, SymptomGroupId = 3 },
+                    new Symptoms { Id = 42, Name = "Lạnh/nóng", parentId = 37, SymptomGroupId = 3 },
+                    new Symptoms { Id = 43, Name = "Bị teo", parentId = 37, SymptomGroupId = 3 },
+                    new Symptoms { Id = 44, Name = "Xưng/nóng/đỏ", parentId = 37, SymptomGroupId = 3 },
+
+                    new Symptoms { Id = 45, Name = "Đau thắt lưng/liên sườn", SymptomGroupId = 4 },
+                    new Symptoms { Id = 46, Name = "Khó thở", SymptomGroupId = 4 },
+                    new Symptoms { Id = 47, Name = "Ho", SymptomGroupId = 4 },
+                    new Symptoms { Id = 48, Name = "Thở ngắt quãng", SymptomGroupId = 4 },
+                    new Symptoms { Id = 49, Name = "Rối loại nhịp tim", SymptomGroupId = 4 },
+                    new Symptoms { Id = 50, Name = "Trào ngược dạ dày", SymptomGroupId = 4 },
+
+                    new Symptoms { Id = 51, Name = "Đau/tê/mỏi Lưng", SymptomGroupId = 5 },
+                    new Symptoms { Id = 52, Name = "Đau/tê/mỏi Mông", SymptomGroupId = 5 },
+                    new Symptoms { Id = 53, Name = "Đau thần kinh tọa", SymptomGroupId = 5 },
+                    new Symptoms { Id = 54, Name = "Đau/mỏi/tê Khớp háng", SymptomGroupId = 5 },
+                    new Symptoms { Id = 55, Name = "Đau đùi", SymptomGroupId = 5 },
+                    new Symptoms { Id = 56, Name = "Đau đầu gối", SymptomGroupId = 5 },
+                    new Symptoms { Id = 57, Name = "Đau cẳng chân", SymptomGroupId = 5 },
+                    new Symptoms { Id = 58, Name = "Đau cổ chân", SymptomGroupId = 5 },
+                    new Symptoms { Id = 59, Name = "Đau gang bàn chân", SymptomGroupId = 5 },
+                    new Symptoms { Id = 60, Name = "Đau gót chân", SymptomGroupId = 5 },
+                    new Symptoms { Id = 61, Name = "Yếu/liệt chân", SymptomGroupId = 5 },
+                };
+                await _context.AddRangeAsync(listSymptom);
+                await _context.SaveChangesAsync();
+            }
+        }
+
         if (!_context.Departments.Any())
         {
             var department = new Department() { Code = "DOCTORLOAN", Name = "DOCTORLOAN Office", OrderBy = 1 };
@@ -223,7 +315,7 @@ public class ApplicationDbContextInitialiser
             _context.ProductOptionGroups.AddRange(new List<ProductOptionGroup>
             {
                 new ProductOptionGroup{Name="Màu sắc"},
-                 new ProductOptionGroup{Name="Kích cỡ"},
+                new ProductOptionGroup{Name="Kích cỡ"},
             });
         }
         if (!_context.Brands.Any())

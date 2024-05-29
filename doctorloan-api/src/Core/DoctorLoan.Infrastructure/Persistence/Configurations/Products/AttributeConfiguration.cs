@@ -1,5 +1,4 @@
-﻿using DoctorLoan.Domain.Entities.Products;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DoctorLoan.Infrastructure.Persistence.Configurations.Products;
@@ -19,6 +18,5 @@ public class AttributeConfiguration : IEntityTypeConfiguration<Domain.Entities.P
             .WithMany(x => x.Attributes)
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
-
     }
 }

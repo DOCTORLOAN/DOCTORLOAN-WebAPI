@@ -19,9 +19,5 @@ public class ProductMediaConfiguration : IEntityTypeConfiguration<ProductMedia>
            .WithMany(x=>x.ProductMedias)
            .HasForeignKey(x => x.ProductId)
            .IsRequired();
-
-
-
-
     }
 }

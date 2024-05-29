@@ -1,0 +1,23 @@
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore;
+using DoctorLoan.Domain.Entities.MedicalRecord;
+
+namespace DoctorLoan.Infrastructure.Persistence.Configurations.MedicalRecord;
+public class MedicalRecordsCategoryConfigurationcs : IEntityTypeConfiguration<MedicalRecordsCategory>
+{
+    public void Configure(EntityTypeBuilder<MedicalRecordsCategory> builder)
+    {
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).ValueGeneratedOnAdd().IsRequired();
+        builder.ConfigurateBaseAudit<MedicalRecordsCategory, int>();
+        builder.Property(x => x.ParentId).HasColumnType("ltree");
+        builder.HasQueryFilter(x => !x.IsDeleted);
+        builder.Property(x => x.Name)
+            .IsRequired()
+            .HasMaxLength(150)
+            .IsUnicode();
+        builder.Property(x => x.Slug)
+        .IsRequired()
+        .HasMaxLength(255);
+    }
+}

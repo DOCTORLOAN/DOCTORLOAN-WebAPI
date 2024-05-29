@@ -29,7 +29,5 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
          .WithMany()
          .HasForeignKey(x => x.BrandId)
          .IsRequired();
-        
-        
     }
 }

@@ -73,12 +73,6 @@ public class InsertProductCommandHandler : ApplicationBaseService<InsertProductC
                     continue;
                 product.ProductMedias.Add(new ProductMedia {ProductItemId= productItem?.Id, MediaId = media.Id, OrderBy = item.OrderBy, Status = Domain.Enums.Commons.StatusEnum.Publish });            
             }
-                
-            
-
-
-
-
         }
     }
 }

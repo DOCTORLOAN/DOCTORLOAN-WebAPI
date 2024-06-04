@@ -200,6 +200,4 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     #endregion
 
     #endregion
-
-    //cách tạo controller chức năng crud MedicalRecord
 }

@@ -58,91 +58,304 @@ public class ApplicationDbContextInitialiser
         {
             var listSymptomGroups = new List<SymptomGroups> 
             {
-                new SymptomGroups { Id = 1, Name = "Cột sống cổ - Đầu và mặt" },
-                new SymptomGroups { Id = 2, Name = "Cột sống cổ - Cổ" },
-                new SymptomGroups { Id = 3, Name = "Cột sống cổ - Tay" },
-                new SymptomGroups { Id = 4, Name = "Cột sống ngực" },
-                new SymptomGroups { Id = 5, Name = "Cột sống lưng" },
+                new SymptomGroups { Name = "Cột sống cổ - Đầu và mặt" },
+                new SymptomGroups { Name = "Cột sống cổ - Cổ" },
+                new SymptomGroups { Name = "Cột sống cổ - Tay" },
+                new SymptomGroups { Name = "Cột sống ngực" },
+                new SymptomGroups { Name = "Cột sống lưng" },
             };
             await _context.AddRangeAsync();
             await _context.SaveChangesAsync();
+        }
 
-            if (!_context.Symptoms.Any())
-            {
-                var listSymptom = new List<Symptoms>
+        var _symptomGroupId = await _context.SymptomGroups.Include(s => s.Symptoms).Where(s => s.Name == "Cột sống cổ - Đầu và mặt" || s.Name == "Cột sống cổ - Cổ" || s.Name == "Cột sống cổ - Tay" || s.Name == "Cột sống ngực" || s.Name == "Cột sống lưng").ToListAsync();
+
+        if (_symptomGroupId.Any() && !_context.Symptoms.Any())
+        {
+            var listSymptom = new List<Symptoms>
                 {
-                    new Symptoms { Id = 1, Name = "U tai - nghe kém", SymptomGroupId = 1 },
-                    new Symptoms { Id = 2, Name = "Khó nói", SymptomGroupId = 1 },
-                    new Symptoms { Id = 3, Name = "Đau đầu - đau nửa đầu", SymptomGroupId = 1 },
-                    new Symptoms { Id = 4, Name = "Hay quên", SymptomGroupId = 1 },
-                    new Symptoms { Id = 5, Name = "Chóng mặt - rối loạn tiền đình - choáng váng", SymptomGroupId = 1 },
-                    new Symptoms { Id = 6, Name = "Giam khả năng tập trung", SymptomGroupId = 1 },
-                    new Symptoms { Id = 7, Name = "Nhìn mờ - mù thoáng qua", SymptomGroupId = 1 },
-                    new Symptoms { Id = 8, Name = "Mất ngủ - khó ngủ", SymptomGroupId = 1 },
+                    new Symptoms {
+                        Name = "U tai - nghe kém",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Đầu và mặt" )?.Id ?? 1
+                    },
+                    new Symptoms {
+                        Name = "Khó nói",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Đầu và mặt" )?.Id ?? 1
+                    },
+                    new Symptoms {
+                        Name = "Đau đầu - đau nửa đầu",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Đầu và mặt" )?.Id ?? 1
+                    },
+                    new Symptoms {
+                        Name = "Hay quên",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Đầu và mặt" )?.Id ?? 1
+                    },
+                    new Symptoms {
+                        Name = "Chóng mặt - rối loạn tiền đình - choáng váng",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Đầu và mặt" )?.Id ?? 1
+                    },
+                    new Symptoms {
+                        Name = "Giam khả năng tập trung",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Đầu và mặt" )?.Id ?? 1
+                    },
+                    new Symptoms {
+                        Name = "Nhìn mờ - mù thoáng qua",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Đầu và mặt" )?.Id ?? 1
+                    },
+                    new Symptoms {
+                        Name = "Mất ngủ - khó ngủ",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Đầu và mặt" )?.Id ?? 1
+                    },
 
-                    new Symptoms { Id = 9, Name = "Đau cổ", SymptomGroupId = 2 },
-                    new Symptoms { Id = 10, Name = "Mỏi cổ", SymptomGroupId = 2 },
-                    new Symptoms { Id = 11, Name = "Khó cử động", SymptomGroupId = 2 },
-                    new Symptoms { Id = 12, Name = "Đau khi cử động cổ", SymptomGroupId = 2 },
+                    new Symptoms {
+                        Name = "Đau cổ",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Cổ" )?.Id ?? 2
+                    },
+                    new Symptoms {
+                        Name = "Mỏi cổ",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Cổ" )?.Id ?? 2
+                    },
+                    new Symptoms {
+                        Name = "Khó cử động",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Cổ" )?.Id ?? 2
+                    },
+                    new Symptoms {
+                        Name = "Đau khi cử động cổ",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Cổ" )?.Id ?? 2
+                    },
 
-                    new Symptoms { Id = 13, Name = "Cẳng tay", SymptomGroupId = 3 },
-                    new Symptoms { Id = 14, Name = "Đau/tê/buốt", parentId = 13,  SymptomGroupId = 3 },
-                    new Symptoms { Id = 15, Name = "Nhức mỏi", parentId = 13, SymptomGroupId = 3 },
-                    new Symptoms { Id = 16, Name = "Khó cử động", parentId = 13, SymptomGroupId = 3 },
-                    new Symptoms { Id = 17, Name = "Xuội/liệt", parentId = 13, SymptomGroupId = 3 },
-                    new Symptoms { Id = 18, Name = "Lạnh/nóng", parentId = 13, SymptomGroupId = 3 },
-                    new Symptoms { Id = 19, Name = "Bị teo", parentId = 13, SymptomGroupId = 3 },
-                    new Symptoms { Id = 20, Name = "Xưng/nóng/đỏ", parentId = 13, SymptomGroupId = 3 },
+                    new Symptoms {
+                        Name = "Cẳng tay",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Đau/tê/buốt",
+                        parentId = 13,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Nhức mỏi",
+                        parentId = 13,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Khó cử động",
+                        parentId = 13,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Xuội/liệt",
+                        parentId = 13,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Lạnh/nóng",
+                        parentId = 13,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Bị teo",
+                        parentId = 13,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Xưng/nóng/đỏ",
+                        parentId = 13,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
 
-                    new Symptoms { Id = 21, Name = "Vai", SymptomGroupId = 3 },
-                    new Symptoms { Id = 22, Name = "Đau/tê/buốt", parentId = 21,  SymptomGroupId = 3 },
-                    new Symptoms { Id = 23, Name = "Nhức mỏi", parentId = 21, SymptomGroupId = 3 },
-                    new Symptoms { Id = 24, Name = "Khó cử động", parentId = 21, SymptomGroupId = 3 },
-                    new Symptoms { Id = 25, Name = "Xuội/liệt", parentId = 21, SymptomGroupId = 3 },
-                    new Symptoms { Id = 26, Name = "Lạnh/nóng", parentId = 21, SymptomGroupId = 3 },
-                    new Symptoms { Id = 27, Name = "Bị teo", parentId = 21, SymptomGroupId = 3 },
-                    new Symptoms { Id = 28, Name = "Xưng/nóng/đỏ", parentId = 21, SymptomGroupId = 3 },
+                    new Symptoms {
+                        Name = "Vai",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Đau/tê/buốt",
+                        parentId = 21,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Nhức mỏi",
+                        parentId = 21,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Khó cử động",
+                        parentId = 21,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Xuội/liệt",
+                        parentId = 21,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Lạnh/nóng",
+                        parentId = 21,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Bị teo",
+                        parentId = 21,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Xưng/nóng/đỏ",
+                        parentId = 21,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
 
-                    new Symptoms { Id = 29, Name = "Cánh tay", SymptomGroupId = 3 },
-                    new Symptoms { Id = 30, Name = "Đau/tê/buốt", parentId = 29,  SymptomGroupId = 3 },
-                    new Symptoms { Id = 31, Name = "Nhức mỏi", parentId = 29, SymptomGroupId = 3 },
-                    new Symptoms { Id = 32, Name = "Khó cử động", parentId = 29, SymptomGroupId = 3 },
-                    new Symptoms { Id = 33, Name = "Xuội/liệt", parentId = 29, SymptomGroupId = 3 },
-                    new Symptoms { Id = 34, Name = "Lạnh/nóng", parentId = 29, SymptomGroupId = 3 },
-                    new Symptoms { Id = 35, Name = "Bị teo", parentId = 29, SymptomGroupId = 3 },
-                    new Symptoms { Id = 36, Name = "Xưng/nóng/đỏ", parentId = 29, SymptomGroupId = 3 },
+                    new Symptoms {
+                        Name = "Cánh tay",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Đau/tê/buốt",
+                        parentId = 29,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Nhức mỏi",
+                        parentId = 29,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Khó cử động",
+                        parentId = 29,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Xuội/liệt",
+                        parentId = 29,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Lạnh/nóng",
+                        parentId = 29,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Bị teo",
+                        parentId = 29,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Xưng/nóng/đỏ",
+                        parentId = 29,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
 
-                    new Symptoms { Id = 37, Name = "Cánh tay", SymptomGroupId = 3 },
-                    new Symptoms { Id = 38, Name = "Đau/tê/buốt", parentId = 37,  SymptomGroupId = 3 },
-                    new Symptoms { Id = 39, Name = "Nhức mỏi", parentId = 37, SymptomGroupId = 3 },
-                    new Symptoms { Id = 40, Name = "Khó cử động", parentId = 37, SymptomGroupId = 3 },
-                    new Symptoms { Id = 41, Name = "Xuội/liệt", parentId = 37, SymptomGroupId = 3 },
-                    new Symptoms { Id = 42, Name = "Lạnh/nóng", parentId = 37, SymptomGroupId = 3 },
-                    new Symptoms { Id = 43, Name = "Bị teo", parentId = 37, SymptomGroupId = 3 },
-                    new Symptoms { Id = 44, Name = "Xưng/nóng/đỏ", parentId = 37, SymptomGroupId = 3 },
+                    new Symptoms {
+                        Name = "Cánh tay",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Đau/tê/buốt",
+                        parentId = 37,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Nhức mỏi",
+                        parentId = 37,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Khó cử động",
+                        parentId = 37,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Xuội/liệt",
+                        parentId = 37,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Lạnh/nóng",
+                        parentId = 37,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Bị teo",
+                        parentId = 37,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
+                    new Symptoms {
+                        Name = "Xưng/nóng/đỏ",
+                        parentId = 37,
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống cổ - Tay" )?.Id ?? 3
+                    },
 
-                    new Symptoms { Id = 45, Name = "Đau thắt lưng/liên sườn", SymptomGroupId = 4 },
-                    new Symptoms { Id = 46, Name = "Khó thở", SymptomGroupId = 4 },
-                    new Symptoms { Id = 47, Name = "Ho", SymptomGroupId = 4 },
-                    new Symptoms { Id = 48, Name = "Thở ngắt quãng", SymptomGroupId = 4 },
-                    new Symptoms { Id = 49, Name = "Rối loại nhịp tim", SymptomGroupId = 4 },
-                    new Symptoms { Id = 50, Name = "Trào ngược dạ dày", SymptomGroupId = 4 },
+                    new Symptoms {
+                        Name = "Đau thắt lưng/liên sườn",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống ngực" )?.Id ?? 4
+                    },
+                    new Symptoms {
+                        Name = "Khó thở",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống ngực" )?.Id ?? 4
+                    },
+                    new Symptoms {
+                        Name = "Ho",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống ngực" )?.Id ?? 4
+                    },
+                    new Symptoms {
+                        Name = "Thở ngắt quãng",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống ngực" )?.Id ?? 4
+                    },
+                    new Symptoms {
+                        Name = "Rối loại nhịp tim",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống ngực" )?.Id ?? 4
+                    },
+                    new Symptoms {
+                        Name = "Trào ngược dạ dày",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống ngực" )?.Id ?? 4
+                    },
 
-                    new Symptoms { Id = 51, Name = "Đau/tê/mỏi Lưng", SymptomGroupId = 5 },
-                    new Symptoms { Id = 52, Name = "Đau/tê/mỏi Mông", SymptomGroupId = 5 },
-                    new Symptoms { Id = 53, Name = "Đau thần kinh tọa", SymptomGroupId = 5 },
-                    new Symptoms { Id = 54, Name = "Đau/mỏi/tê Khớp háng", SymptomGroupId = 5 },
-                    new Symptoms { Id = 55, Name = "Đau đùi", SymptomGroupId = 5 },
-                    new Symptoms { Id = 56, Name = "Đau đầu gối", SymptomGroupId = 5 },
-                    new Symptoms { Id = 57, Name = "Đau cẳng chân", SymptomGroupId = 5 },
-                    new Symptoms { Id = 58, Name = "Đau cổ chân", SymptomGroupId = 5 },
-                    new Symptoms { Id = 59, Name = "Đau gang bàn chân", SymptomGroupId = 5 },
-                    new Symptoms { Id = 60, Name = "Đau gót chân", SymptomGroupId = 5 },
-                    new Symptoms { Id = 61, Name = "Yếu/liệt chân", SymptomGroupId = 5 },
+                    new Symptoms {
+                        Name = "Đau/tê/mỏi Lưng",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống lưng" )?.Id ?? 5
+                    },
+                    new Symptoms {
+                        Name = "Đau/tê/mỏi Mông",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống lưng" )?.Id ?? 5
+                    },
+                    new Symptoms {
+                        Name = "Đau thần kinh tọa",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống lưng" )?.Id ?? 5
+                    },
+                    new Symptoms {
+                        Name = "Đau/mỏi/tê Khớp háng",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống lưng" )?.Id ?? 5
+                    },
+                    new Symptoms {
+                        Name = "Đau đùi",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống lưng" )?.Id ?? 5
+                    },
+                    new Symptoms {
+                        Name = "Đau đầu gối",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống lưng" )?.Id ?? 5
+                    },
+                    new Symptoms {
+                        Name = "Đau cẳng chân",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống lưng" )?.Id ?? 5
+                    },
+                    new Symptoms {
+                        Name = "Đau cổ chân",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống lưng" )?.Id ?? 5
+                    },
+                    new Symptoms {
+                        Name = "Đau gang bàn chân",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống lưng" )?.Id ?? 5
+                    },
+                    new Symptoms {
+                        Name = "Đau gót chân",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống lưng" )?.Id ?? 5
+                    },
+                    new Symptoms {
+                        Name = "Yếu/liệt chân",
+                        SymptomGroupId = _symptomGroupId.Find(s=>s.Name =="Cột sống lưng" )?.Id ?? 5
+                    },
                 };
-                await _context.AddRangeAsync(listSymptom);
-                await _context.SaveChangesAsync();
-            }
+            await _context.AddRangeAsync(listSymptom);
+            await _context.SaveChangesAsync();
         }
 
         if (!_context.Departments.Any())
@@ -284,32 +497,63 @@ public class ApplicationDbContextInitialiser
         if (!_context.Categories.Any())
             await _context.Categories.AddAsync(new Domain.Entities.Products.Category{ Name = "Sản phẩm DOCTORLOAN",Slug = "sanpham-doctorloan",Status = StatusEnum.Publish,Sort = 0 });
         await _context.SaveChangesAsync();
-        if (!_context.AttributeGroups.Any())
-        {
-            await _context.AttributeGroups.AddAsync(new AttributeGroup
-            {
-                Name = "Kích thước ghế",
-                Attributes = new List<Domain.Entities.Products.Attribute> {
-                new Domain.Entities.Products.Attribute{Name="Kích thước"},
-                new Domain.Entities.Products.Attribute{Name="Khối lượng"},
-            }
-            });
-            await _context.AttributeGroups.AddAsync(new AttributeGroup
-            {
-                Name = "Thông tin tổng thể",
-                Attributes = new List<Domain.Entities.Products.Attribute> {
-                new Domain.Entities.Products.Attribute{Name="Kiểu dáng"},
-                new Domain.Entities.Products.Attribute{Name="Chất liệu lõi"},
-                new Domain.Entities.Products.Attribute{Name="Chất liệu bọc"},
-                new Domain.Entities.Products.Attribute{Name="Công nghệ sản xuất"},
-                new Domain.Entities.Products.Attribute{Name="Hiệu quả sử dụng"},
-                new Domain.Entities.Products.Attribute{Name="Hướng dẫn sử dụng"},
-                new Domain.Entities.Products.Attribute{Name="Bảo hành"},
-                new Domain.Entities.Products.Attribute{Name="Năm sản xuất"},
-                new Domain.Entities.Products.Attribute{Name="Sản xuất tại"},
-            }
-            });
-        }
+
+        //if (!_context.AttributeGroups.Any())
+        //{
+        //    var attributeGroup = new List<Domain.Entities.Products.AttributeGroup>
+        //    {
+        //        new Domain.Entities.Products.AttributeGroup
+        //        {
+        //            Name = "Kích thước ghế",
+        //            Attributes = new List<Domain.Entities.Products.Attribute>
+        //            {
+        //                new Domain.Entities.Products.Attribute { Name = "Kích thước" },
+        //                new Domain.Entities.Products.Attribute { Name = "Khối lượng" }
+        //            }
+        //        },
+        //        new Domain.Entities.Products.AttributeGroup
+        //        {
+        //            Name = "Thông tin tổng thể",
+        //            Attributes = new List < Domain.Entities.Products.Attribute > 
+        //            {
+        //                new Domain.Entities.Products.Attribute { Name = "Kiểu dáng" },
+        //                new Domain.Entities.Products.Attribute { Name = "Chất liệu lõi" },
+        //                new Domain.Entities.Products.Attribute { Name = "Chất liệu bọc" },
+        //                new Domain.Entities.Products.Attribute { Name = "Công nghệ sản xuất" },
+        //                new Domain.Entities.Products.Attribute { Name = "Hiệu quả sử dụng" },
+        //                new Domain.Entities.Products.Attribute { Name = "Hướng dẫn sử dụng" },
+        //                new Domain.Entities.Products.Attribute { Name = "Bảo hành" },
+        //                new Domain.Entities.Products.Attribute { Name = "Năm sản xuất" },
+        //                new Domain.Entities.Products.Attribute { Name = "Sản xuất tại" }
+        //            }
+        //        }
+        //    };
+
+        //    await _context.AttributeGroups.AddRangeAsync(attributeGroup);
+        //    await _context.SaveChangesAsync();
+        //}
+
+        //var _attributeGroupIds = await _context.AttributeGroups.Include(s => s.Attributes).Where(s => s.Name == "Kích thước ghế" || s.Name == "Thông tin tổng thể").ToListAsync();
+
+        //    if (_attributeGroupIds.Any() && !_context.Attributes.Any())
+        //    {
+        //        var listAttribute = new List<Domain.Entities.Products.Attribute> 
+        //        {
+        //            new Domain.Entities.Products.Attribute { Name = "Kích thước", AttributeGroup = _attributeGroupIds.Find(s => s.Name == "Kích thước ghế")?.Id ?? 1 },
+        //            new Domain.Entities.Products.Attribute { Name = "Khối lượng", AttributeGroupId = _attributeGroupIds.Find(s => s.Name == "Kích thước ghế")?.Id ?? 1 },
+        //            new Domain.Entities.Products.Attribute { Name = "Kiểu dáng", AttributeGroupId = _attributeGroupIds.Find(s => s.Name == "Thông tin tổng thể")?.Id ?? 2 },
+        //            new Attribute { Name = "Chất liệu lõi", AttributeGroupId = _attributeGroupIds.Find(s => s.Name == "Thông tin tổng thể")?.Id ?? 2 },
+        //            new Attribute { Name = "Chất liệu bọc", AttributeGroupId = _attributeGroupIds.Find(s => s.Name == "Thông tin tổng thể")?.Id ?? 2 },
+        //            new Attribute { Name = "Công nghệ sản xuất", AttributeGroupId = _attributeGroupIds.Find(s => s.Name == "Thông tin tổng thể")?.Id ?? 2 },
+        //            new Attribute { Name = "Hiệu quả sử dụng", AttributeGroupId = _attributeGroupIds.Find(s => s.Name == "Thông tin tổng thể")?.Id ?? 2 },
+        //            new Attribute { Name = "Hướng dẫn sử dụng", AttributeGroupId = _attributeGroupIds.Find(s => s.Name == "Thông tin tổng thể")?.Id ?? 2 },
+        //            new Attribute { Name = "Bảo hành", AttributeGroupId = _attributeGroupIds.Find(s => s.Name == "Thông tin tổng thể")?.Id ?? 2 },
+        //            new Attribute { Name = "Năm sản xuất", AttributeGroupId = _attributeGroupIds.Find(s => s.Name == "Thông tin tổng thể")?.Id ?? 2 },
+        //            new Attribute { Name = "Sản xuất tại", AttributeGroupId = _attributeGroupIds.Find(s => s.Name == "Thông tin tổng thể")?.Id ?? 2 },
+        //        };
+
+        //    }
+
         if (!_context.ProductOptionGroups.Any())
         {
             _context.ProductOptionGroups.AddRange(new List<ProductOptionGroup>
@@ -317,43 +561,94 @@ public class ApplicationDbContextInitialiser
                 new ProductOptionGroup{Name="Màu sắc"},
                 new ProductOptionGroup{Name="Kích cỡ"},
             });
+            await _context.SaveChangesAsync();
         }
+
         if (!_context.Brands.Any())
         {
             _context.Brands.AddRange(new List<Brand>
             {
                 new Brand{Name="DOCTORLOAN"}
             });
+            await _context.SaveChangesAsync();
         }
 
-        //if (!_context.products.any())
+        //var _attribute = await _context.Attributes.Include(s => s.Name).Where(s => s.Name == "Kích thước" || 
+        //                                                                            s.Name == "Khối lượng" ||
+        //                                                                            s.Name == "Kiểu dáng" ||
+        //                                                                            s.Name == "Chất liệu lõi" ||
+        //                                                                            s.Name == "Công nghệ sản xuất" ||
+        //                                                                            s.Name == "Hiệu quả sử dụng" ||
+        //                                                                            s.Name == "Hướng dẫn sử dụng" ||
+        //                                                                            s.Name == "Bảo hành" ||
+        //                                                                            s.Name == "Năm sản xuất" ||
+        //                                                                            s.Name == "Sản xuất tại").ToListAsync();
+        // var _attributegroups = await _context.Attributes.Include(s => s.Name).Where(s => s.Name == "Kích thước ghế" || 
+        //                                                                            s.Name == "Thông tin tổng thể").ToListAsync();
+
+        //var _productCategories = await _context.Categories.Include(s => s.Slug).Where(s => s.Slug == "sanpham-doctorloan").ToListAsync();
+
+
+        //if (_productCategories.Any() && _attributegroups.Any() && !_context.Products.Any())
         //{
-        //    var products = new list<product>
+        //    var products = new List<Product>
         //    {
-        //        new product
+        //        new Product
         //        {
-        //           name = "ghế sáng chế doctorloan 135",
-        //           slug = "lc35les",
-        //           status = statusenum.publish,
-        //           categoryid = _context.categories.firstordefault().id,
-        //           brandid = _context.brands.firstordefault().id,
-        //           price = 37400000,
-        //           productdetails = new productdetail
+        //           Name = "Ghế sáng chế DOCTORLOAN 135",
+        //           Slug = "LC35LESY",
+        //           Status = StatusEnum.Publish,
+        //           ProductCategories = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1,
+        //           BrandId = _context.Brands.FirstOrDefault().Id,
+        //           Price = 37400000,
+        //           ProductItems = new ProductItem 
         //           {
-        //               description = "ghế văn phòng",
+        //               Name = "Ghế sáng chế DOCTORLOAN 135",
+        //               Sku = "LC35LESY",
+        //               ProductOptions = new List<ProductOptionGroup>
+        //               {
+        //                   new ProductOption{ProductOptionGroupId = _context.ProductOptionGroups.FirstOrDefault().Id,Name="Màu nâu"},
+        //               },
+        //           },
+        //           ProductAttributes = new List<ProductAttribute>
+        //           {
+        //               new Attribute 
+        //               {
+        //                   AttributeId = _attribute.Find(s => s.Name == "Kích thước")?.Id ?? 1,
+        //                   Value = "Kích thước 135" 
+        //               },
+        //               new Attribute
+        //               {
+        //                    AttributeId = _attribute.Find(s => s.Name == "Khối lượng")?.Id ?? 2,
+        //                    Value = "10kg"
+        //                  },
+        //               new Attribute
+        //               {
+        //                    AttributeId = _attribute.Find(s => s.Name == "Kiểu dáng")?.Id ?? 3,
+        //                    Value = "Ghế nằm"
+        //               },
+        //               new Attribute
+        //               {
+        //                   AttributeId = _attribute.Find(s => s.Name == "Chất liệu lõi")?.Id ?? 4,
+        //                   Value = "Gỗ tự nhiên"
+        //               }
+        //           },
+        //           ProductDetails = new ProductDetail
+        //           {
+        //               Description = "ghế văn phòng",
         //               shortdescription = "ghế văn phòng",
         //               metatitle = "ghế văn phòng",
         //               metadescription = "ghế văn phòng",
         //               metakeywords = "ghế văn phòng",
-        //               attributevalues = new list<attributevalue>
+        //               att = new List<Attribute>
         //               {
-        //                   new attributevalue{attributeid = _context.attributegroups.firstordefault().attributes.firstordefault().id,value="kích thước 135"},
-        //                   new attributevalue{attributeid = _context.attributegroups.firstordefault().attributes.last().id,value="10kg"},
-        //                   new attributevalue{attributeid = _context.attributegroups.last().attributes.firstordefault().id,value="kiểu dáng"},
-        //                   new attributevalue{attributeid = _context.attributegroups.last().attributes.skip(1).firstordefault().id,value="chất liệu lõi"},
-        //                   new attributevalue{attributeid = _context.attributegroups.last().attributes.skip(2).firstordefault().id,value="chất liệu bọc"},
-        //                   new attributevalue{attributeid = _context.attributegroups.last().attributes.skip(3).firstordefault().id,value="công nghệ sản xuất"},
-        //                   new attributevalue{attributeid = _context.attributegroups.last().attributes.skip(4).firstordefault().id,value="hiệu quả sử dụng"},
+        //                   new Attribute{attributeid = _context.AttributeGroups.FirstOrDefault().Attributes.FirstOrDefault().Id,value=""},
+        //                   new Attribute{attributeid = _context.AttributeGroups.FirstOrDefault().Attributes.FirstOrDefault().Id,value="10kg"},
+        //                   new Attribute{attributeid = _context.AttributeGroups.FirstOrDefault().Attributes.FirstOrDefault().Id,value="kiểu dáng"},
+        //                   new Attribute{attributeid = _context.AttributeGroups.FirstOrDefault().Attributes.FirstOrDefault().Id,value="chất liệu lõi"},
+        //                   new Attribute{attributeid = _context.AttributeGroups.FirstOrDefault().Attributes.FirstOrDefault().Id,value="chất liệu bọc"},
+        //                   new Attribute{ attributeid = _context.AttributeGroups.FirstOrDefault().Attributes.FirstOrDefault().Id, value = "công nghệ sản xuất" },
+        //                   new Attribute{ attributeid = _context.AttributeGroups.FirstOrDefault().Attributes.FirstOrDefault().Id, value = "hiệu quả sử dụng" },
         //                   new attributevalue{attributeid = _context.attributegroups.last().attributes.skip(5).firstordefault().id,value="hướng dẫn sử dụng"},
         //                   new attributevalue{attributeid = _context.attributegroups.last().attributes.skip(6).firstordefault().id,value="bảo hành"},
         //                   new attributevalue{attributeid = _context.attributegroups.last().attributes.skip(7).firstordefault().id,value="2023"},
@@ -380,7 +675,5 @@ public class ApplicationDbContextInitialiser
         //    });
         //    await _context.savechangesasync();
         //}
-
-        await _context.SaveChangesAsync();
     }
 }

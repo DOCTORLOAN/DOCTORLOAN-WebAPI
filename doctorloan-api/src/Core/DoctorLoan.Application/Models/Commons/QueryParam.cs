@@ -6,7 +6,7 @@ public class QueryParam
     public QueryParam()
     {
         Page = 1;
-        Take = 10;
+        Take = 50;
         SortBy = string.Empty;
     }
     private int _page;

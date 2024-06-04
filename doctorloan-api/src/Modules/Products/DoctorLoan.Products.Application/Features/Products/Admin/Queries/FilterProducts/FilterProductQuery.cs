@@ -30,12 +30,13 @@ public class FilterProductQueryHandle : ApplicationBaseService<FilterProductQuer
         var condition = PredicateBuilder.True<Product>();
         if (request.Keyword != null)
             condition = condition.And(x => x.Sku.ToLower().Contains(request.Keyword.ToLower()) || x.Name.ToLower().Contains(request.Keyword.ToLower()));
+
         if (request.Status.HasValue)
-        {
             condition = condition.And(x => x.Status == request.Status);
-        }
+        
         if (request.CategoryId.HasValue)
             condition = condition.And(x => x.ProductCategories.Any(c => c.CategoryId == request.CategoryId));
+
         var query = _context.Products.Where(condition)
                                     .OrderByDescending(x => x.Status)
                                         .ThenByDescending(s => s.LastModified);

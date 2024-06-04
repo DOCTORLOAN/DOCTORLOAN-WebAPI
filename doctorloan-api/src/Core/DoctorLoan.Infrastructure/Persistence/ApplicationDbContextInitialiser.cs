@@ -498,7 +498,21 @@ public class ApplicationDbContextInitialiser
     {
         if (!_context.Categories.Any())
         {
-            await _context.Categories.AddAsync(new Domain.Entities.Products.Category { Name = "Sản phẩm DOCTORLOAN", Slug = "sanpham-doctorloan", Status = StatusEnum.Publish, Sort = 0 });
+            var listCategories = new List<Category>
+            {
+                new Category { Name = "Sản phẩm DOCTORLOAN", Slug = "sanpham-doctorloan", Status = StatusEnum.Publish, Sort = 0 },
+                new Category { Name = "Sản phẩm BestSaller", Slug = "bestsaller-doctorloan", Status = StatusEnum.Publish, Sort = 1 },
+                new Category { Name = "Ghế nằm sáng chế DOCTORLOAN", Slug = "ghe-nam-doctorloan", Status = StatusEnum.Publish, ParentId = 2, Sort = 0 },
+                new Category { Name = "Ghế ngồi sáng chế DOCTORLOAN 95 ", Slug = "ghe-ngoi-95-doctorloan", Status = StatusEnum.Publish, ParentId = 2, Sort = 1 },
+                new Category { Name = "Ghế ngồi sáng chế DOCTORLOAN 90D ", Slug = "ghe-ngoi-90d-doctorloan", Status = StatusEnum.Publish, ParentId = 2, Sort = 2 },
+                new Category { Name = "Ghế ngồi sáng chế DOCTORLOAN 90T ", Slug = "ghe-ngoi-90t-doctorloan", Status = StatusEnum.Publish, ParentId = 2, Sort = 3 },
+                new Category { Name = "Ghế ngồi sáng chế DOCTORLOAN N85 ", Slug = "ghe-ngoi-n85-doctorloan", Status = StatusEnum.Publish, ParentId = 2, Sort = 4 },
+                new Category { Name = "Gối cổ sáng chế DOCTORLOAN ", Slug = "goi-co-doctorloan", Status = StatusEnum.Publish, ParentId = 2, Sort = 5 },
+                new Category { Name = "Gối lưng sáng chế DOCTORLOAN ", Slug = "goi-lung-doctorloan", Status = StatusEnum.Publish, ParentId = 2, Sort = 6 },
+                new Category { Name = "Đệm thiền sáng chế DOCTORLOAN ", Slug = "dem-thien-doctorloan", Status = StatusEnum.Publish, ParentId = 2, Sort = 7 },
+                new Category { Name = "Gối DOCTORLOAN khác", Slug = "goi-khac-doctorloan", Status = StatusEnum.Publish, ParentId = 2, Sort = 8 },
+            };
+            await _context.Categories.AddRangeAsync(listCategories);
             await _context.SaveChangesAsync();
         }
 
@@ -567,10 +581,15 @@ public class ApplicationDbContextInitialiser
             .ToListAsync();
 
         var _productCategories = await _context.Categories
-            .Where(c => c.Slug == "sanpham-doctorloan")
+            .Where(c => c.Slug == "sanpham-doctorloan" || c.Slug == "bestsaller-doctorloan" || 
+                        c.Slug == "ghe-nam-doctorloan" || c.Slug == "ghe-ngoi-95-doctorloan" ||
+                        c.Slug == "ghe-ngoi-90d-doctorloan" || c.Slug == "ghe-ngoi-90t-doctorloan" ||
+                        c.Slug == "ghe-ngoi-n85-doctorloan" || c.Slug == "goi-co-doctorloan" ||
+                        c.Slug == "goi-lung-doctorloan" || c.Slug == "dem-thien-doctorloan" ||
+                        c.Slug == "goi-khac-doctorloan")
             .ToListAsync();
 
-        if (_context.Brands.Any() && !_context.Products.Any())
+        if (_productCategories.Any() && _context.Brands.Any() && !_context.Products.Any())
         {
             var products = new List<DoctorLoan.Domain.Entities.Products.Product>
             {
@@ -645,7 +664,15 @@ public class ApplicationDbContextInitialiser
                    {
                           new DoctorLoan.Domain.Entities.Products.ProductCategory
                           {
-                            CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
+                            CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1,
+                          },
+                          new DoctorLoan.Domain.Entities.Products.ProductCategory
+                          {
+                              CategoryId = _productCategories.Find(s => s.Slug == "bestsaller-doctorloan")?.Id ?? 2,
+                          },
+                          new DoctorLoan.Domain.Entities.Products.ProductCategory
+                          {
+                            CategoryId = _productCategories.Find(s => s.Slug == "ghe-nam-doctorloan")?.Id ?? 3,
                           }
                    },
                 },
@@ -718,10 +745,18 @@ public class ApplicationDbContextInitialiser
                    },
                    ProductCategories = new List<DoctorLoan.Domain.Entities.Products.ProductCategory>
                    {
-                          new DoctorLoan.Domain.Entities.Products.ProductCategory
-                          {
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
                             CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
-                          }
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "bestsaller-doctorloan")?.Id ?? 2
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "ghe-ngoi-95-doctorloan")?.Id ?? 4
+                        }
                    },
                 },
                 new DoctorLoan.Domain.Entities.Products.Product
@@ -793,10 +828,18 @@ public class ApplicationDbContextInitialiser
                    },
                    ProductCategories = new List<DoctorLoan.Domain.Entities.Products.ProductCategory>
                    {
-                          new DoctorLoan.Domain.Entities.Products.ProductCategory
-                          {
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
                             CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
-                          }
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "bestsaller-doctorloan")?.Id ?? 2
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "ghe-ngoi-90d-doctorloan")?.Id ?? 5
+                        }
                    },
                 },
                 new DoctorLoan.Domain.Entities.Products.Product
@@ -868,10 +911,18 @@ public class ApplicationDbContextInitialiser
                    },
                    ProductCategories = new List<DoctorLoan.Domain.Entities.Products.ProductCategory>
                    {
-                          new DoctorLoan.Domain.Entities.Products.ProductCategory
-                          {
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
                             CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
-                          }
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "bestsaller-doctorloan")?.Id ?? 2
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "ghe-ngoi-90t-doctorloan")?.Id ?? 6
+                        }
                    },
                 },
                 new DoctorLoan.Domain.Entities.Products.Product
@@ -942,15 +993,23 @@ public class ApplicationDbContextInitialiser
                    },
                    ProductCategories = new List<DoctorLoan.Domain.Entities.Products.ProductCategory>
                    {
-                          new DoctorLoan.Domain.Entities.Products.ProductCategory
-                          {
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
                             CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
-                          }
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "bestsaller-doctorloan")?.Id ?? 2
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "ghe-ngoi-n85-doctorloan")?.Id ?? 7
+                        }
                    },
                 },
                 new DoctorLoan.Domain.Entities.Products.Product
                 {
-                   Name = "Gối cổ sáng chế F4",
+                   Name = "Gối cổ sáng chế DOCTORLOAN F4",
                    Sku = "NP04SEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
@@ -1016,15 +1075,23 @@ public class ApplicationDbContextInitialiser
                    },
                    ProductCategories = new List<DoctorLoan.Domain.Entities.Products.ProductCategory>
                    {
-                          new DoctorLoan.Domain.Entities.Products.ProductCategory
-                          {
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
                             CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
-                          }
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "bestsaller-doctorloan")?.Id ?? 2
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "goi-co-doctorloan")?.Id ?? 8
+                        }
                    },
                 },
                 new DoctorLoan.Domain.Entities.Products.Product
                 {
-                   Name = "Gối cổ sáng chế F5",
+                   Name = "Gối cổ sáng chế DOCTORLOAN F5",
                    Sku = "NP05SEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
@@ -1090,15 +1157,19 @@ public class ApplicationDbContextInitialiser
                    },
                    ProductCategories = new List<DoctorLoan.Domain.Entities.Products.ProductCategory>
                    {
-                          new DoctorLoan.Domain.Entities.Products.ProductCategory
-                          {
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
                             CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
-                          }
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "bestsaller-doctorloan")?.Id ?? 2
+                        },
                    },
                 },
                 new DoctorLoan.Domain.Entities.Products.Product
                 {
-                   Name = "Gối cổ sáng chế F6",
+                   Name = "Gối cổ sáng chế DOCTORLOAN F6",
                    Sku = "NP06SEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
@@ -1164,15 +1235,19 @@ public class ApplicationDbContextInitialiser
                    },
                    ProductCategories = new List<DoctorLoan.Domain.Entities.Products.ProductCategory>
                    {
-                          new DoctorLoan.Domain.Entities.Products.ProductCategory
-                          {
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
                             CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
-                          }
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "bestsaller-doctorloan")?.Id ?? 2
+                        },
                    },
                 },
                 new DoctorLoan.Domain.Entities.Products.Product
                 {
-                   Name = "Đệm thiền DOCTORLOAN",
+                   Name = "Đệm thiền sáng chế DOCTORLOAN",
                    Sku = "SDNLSESY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
@@ -1238,10 +1313,18 @@ public class ApplicationDbContextInitialiser
                    },
                    ProductCategories = new List<DoctorLoan.Domain.Entities.Products.ProductCategory>
                    {
-                          new DoctorLoan.Domain.Entities.Products.ProductCategory
-                          {
-                            CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
-                          }
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                        CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "bestsaller-doctorloan")?.Id ?? 2
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "dem-thien-doctorloan")?.Id ?? 10
+                        }
                    },
                 },
                 new DoctorLoan.Domain.Entities.Products.Product
@@ -1312,10 +1395,10 @@ public class ApplicationDbContextInitialiser
                    },
                    ProductCategories = new List<DoctorLoan.Domain.Entities.Products.ProductCategory>
                    {
-                          new DoctorLoan.Domain.Entities.Products.ProductCategory
-                          {
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
                             CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
-                          }
+                        },
                    },
                 },
                 new DoctorLoan.Domain.Entities.Products.Product
@@ -1386,10 +1469,10 @@ public class ApplicationDbContextInitialiser
                    },
                    ProductCategories = new List<DoctorLoan.Domain.Entities.Products.ProductCategory>
                    {
-                          new DoctorLoan.Domain.Entities.Products.ProductCategory
-                          {
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
                             CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
-                          }
+                        }
                    },
                 },
                 new DoctorLoan.Domain.Entities.Products.Product
@@ -1460,15 +1543,15 @@ public class ApplicationDbContextInitialiser
                    },
                    ProductCategories = new List<DoctorLoan.Domain.Entities.Products.ProductCategory>
                    {
-                          new DoctorLoan.Domain.Entities.Products.ProductCategory
-                          {
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
                             CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
-                          }
+                        }
                    },
                 },
                 new DoctorLoan.Domain.Entities.Products.Product
                 {
-                   Name = "Gối lưng DOCTORLOAN F3/C",
+                   Name = "Gối lưng sáng chế DOCTORLOAN F3/C",
                    Sku = "BP03CEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
@@ -1534,15 +1617,23 @@ public class ApplicationDbContextInitialiser
                    },
                    ProductCategories = new List<DoctorLoan.Domain.Entities.Products.ProductCategory>
                    {
-                          new DoctorLoan.Domain.Entities.Products.ProductCategory
-                          {
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
                             CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
-                          }
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "bestsaller-doctorloan")?.Id ?? 2
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "goi-lung-doctorloan")?.Id ?? 9
+                        }
                    },
                 },
                 new DoctorLoan.Domain.Entities.Products.Product
                 {
-                   Name = "Gối lưng DOCTORLOAN F1",
+                   Name = "Gối lưng sáng chế DOCTORLOAN F1",
                    Sku = "BP01LEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
@@ -1608,15 +1699,19 @@ public class ApplicationDbContextInitialiser
                    },
                    ProductCategories = new List<DoctorLoan.Domain.Entities.Products.ProductCategory>
                    {
-                          new DoctorLoan.Domain.Entities.Products.ProductCategory
-                          {
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
                             CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
-                          }
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "bestsaller-doctorloan")?.Id ?? 2
+                        }
                    },
                 },
                 new DoctorLoan.Domain.Entities.Products.Product
                 {
-                   Name = "Gối cổ người lớn",
+                   Name = "Gối cổ người lớn DOCTORLOAN",
                    Sku = "NPAUNEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
@@ -1682,15 +1777,19 @@ public class ApplicationDbContextInitialiser
                    },
                    ProductCategories = new List<DoctorLoan.Domain.Entities.Products.ProductCategory>
                    {
-                          new DoctorLoan.Domain.Entities.Products.ProductCategory
-                          {
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
                             CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
-                          }
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "bestsaller-doctorloan")?.Id ?? 2
+                        }
                    },
                 },
                 new DoctorLoan.Domain.Entities.Products.Product
                 {
-                   Name = "Gối cổ du lịch",
+                   Name = "Gối cổ du lịch DOCTORLOAN",
                    Sku = "NPTLSEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
@@ -1756,15 +1855,19 @@ public class ApplicationDbContextInitialiser
                    },
                    ProductCategories = new List<DoctorLoan.Domain.Entities.Products.ProductCategory>
                    {
-                          new DoctorLoan.Domain.Entities.Products.ProductCategory
-                          {
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
                             CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
-                          }
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "bestsaller-doctorloan")?.Id ?? 2
+                        },
                    },
                 },
                 new DoctorLoan.Domain.Entities.Products.Product
                 {
-                   Name = "Gối cổ đi xe",
+                   Name = "Gối cổ đi xe DOCTORLOAN",
                    Sku = "NPCROEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
@@ -1830,10 +1933,18 @@ public class ApplicationDbContextInitialiser
                    },
                    ProductCategories = new List<DoctorLoan.Domain.Entities.Products.ProductCategory>
                    {
-                          new DoctorLoan.Domain.Entities.Products.ProductCategory
-                          {
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
                             CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
-                          }
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "bestsaller-doctorloan")?.Id ?? 2
+                        },
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "goi-khac-doctorloan")?.Id ?? 11
+                        }
                    },
                 },
             };

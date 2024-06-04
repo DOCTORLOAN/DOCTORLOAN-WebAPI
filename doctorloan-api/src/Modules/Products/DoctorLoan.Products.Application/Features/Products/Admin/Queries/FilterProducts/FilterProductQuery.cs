@@ -37,9 +37,7 @@ public class FilterProductQueryHandle : ApplicationBaseService<FilterProductQuer
         if (request.CategoryId.HasValue)
             condition = condition.And(x => x.ProductCategories.Any(c => c.CategoryId == request.CategoryId));
 
-        var query = _context.Products.Where(condition)
-                                    .OrderByDescending(x => x.Status)
-                                        .ThenByDescending(s => s.LastModified);
+        var query = _context.Products.Where(condition);
         var data = await _mapper.ProjectTo<ProductFilterResultDto>(query)
             .ToPagedListAsync(request.Page, request.Take, cancellationToken);
         return Result.Success(data);

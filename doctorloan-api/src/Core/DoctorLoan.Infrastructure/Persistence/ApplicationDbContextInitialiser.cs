@@ -581,7 +581,7 @@ public class ApplicationDbContextInitialiser
             .ToListAsync();
 
         var _productCategories = await _context.Categories
-            .Where(c => c.Slug == "sanpham-doctorloan" || c.Slug == "bestsaller-doctorloan" || 
+            .Where(c => c.Slug == "sanpham-doctorloan" || c.Slug == "bestsaller-doctorloan" ||
                         c.Slug == "ghe-nam-doctorloan" || c.Slug == "ghe-ngoi-95-doctorloan" ||
                         c.Slug == "ghe-ngoi-90d-doctorloan" || c.Slug == "ghe-ngoi-90t-doctorloan" ||
                         c.Slug == "ghe-ngoi-n85-doctorloan" || c.Slug == "goi-co-doctorloan" ||
@@ -1251,7 +1251,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "SDNLSESY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 44800000,
+                   Price = 4480000,
                    Quantity = 100,
                    Slug = "demthien-doctorloan",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -1962,7 +1962,7 @@ public class ApplicationDbContextInitialiser
 
         if (_product.Any() && !_context.ProductItems.Any())
         {
-            var productItems = new List<DoctorLoan.Domain.Entities.Products.ProductItem> 
+            var productItems = new List<DoctorLoan.Domain.Entities.Products.ProductItem>
             {
                 new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "LC35LESY")?.Id ?? 1, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 135/B", Sku = "LC35LESB", Price = 37400000, },
                 new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "LC35LESY")?.Id ?? 1, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 135/P", Sku = "LC35LESP", Price = 37400000, },
@@ -2031,11 +2031,11 @@ public class ApplicationDbContextInitialiser
                         s.Sku == "SC90TESB" || s.Sku == "SC90TESP" || s.Sku == "SC90TESG" || s.Sku == "SC90TESY" ||
                         s.Sku == "PL85SFOR" || s.Sku == "PL85SFRE" || s.Sku == "PL85SFYL" || s.Sku == "PL85SFGR" || s.Sku == "PL85SFBL" || s.Sku == "PL85SFGE" ||
                         s.Sku == "PL85LFOR" || s.Sku == "PL85LFRE" || s.Sku == "PL85LFYL" || s.Sku == "PL85LFGR" || s.Sku == "PL85LFBL" || s.Sku == "PL85LFGE" ||
-                        s.Sku == "NP04SEFY" || s.Sku == "NP04MEFY" || 
-                        s.Sku == "NP05SEFY" || 
-                        s.Sku == "NP06SEFY" || 
+                        s.Sku == "NP04SEFY" || s.Sku == "NP04MEFY" ||
+                        s.Sku == "NP05SEFY" ||
+                        s.Sku == "NP06SEFY" ||
                         s.Sku == "SDNLSESY" || s.Sku == "SDNLMESY" ||
-                        s.Sku == "NP00OEFY" || s.Sku == "NP26OEFY" || s.Sku == "NP61OEFY" || 
+                        s.Sku == "NP00OEFY" || s.Sku == "NP26OEFY" || s.Sku == "NP61OEFY" ||
                         s.Sku == "BP03CEFY" ||
                         s.Sku == "BP01LEFY" || s.Sku == "BP01SEFY" ||
                         s.Sku == "NPAUNEFY" || s.Sku == "NPTLSEFY" || s.Sku == "NPCROEFY")
@@ -2167,7 +2167,7 @@ public class ApplicationDbContextInitialiser
                     OptionGroupId = _productOptionGroup.Find(s => s.Name == "Màu sắc")?.Id ?? 1,
                     Name = "Màu cam",
                     DisplayValue = "Màu cam",
-                }, 
+                },
                 new ProductOption
                 {
                     ProductItemId = _productItems.Find(s => s.Sku == "PL85SFOR")?.Id ?? 5,
@@ -2409,6 +2409,134 @@ public class ApplicationDbContextInitialiser
                 },
             };
             await _context.ProductOptions.AddRangeAsync(productOptions);
+            await _context.SaveChangesAsync();
+        }
+
+        if (_product.Any() && !_context.ProductDetails.Any())
+        {
+            var listProductDetails = new List<ProductDetail>
+            {
+                new ProductDetail
+                {
+                    ProductId = _product.Find(s => s.Sku == "LC35LESY")?.Id ?? 1,
+                    LanguageId = (int)LanguageEnum.VN,
+                    Summary = "Ghế SÁNG CHẾ có  đặc điểm LỒI TRƯỚC LÕM SAU bảo đảm cho khung xương được ÔM CHẶT - GIỮ CHUẨN - CHỐNG TRƯỢT\r\nĐiểm 1: Khối lõm ÔM CHẶT - GIỮ CHUẨN, tạo bởi liên kết lõm phía sau mặt ghế và lõm phía dưới lưng ghế\r\nĐiểm 2: Khối lồi trung tâm trước của mặt ghế giúp CHỐNG TRƯỢT",
+                    Description = "* Ghế DOCTORLOAN 135 được thiết kế với độ nghiêng 135 độ, ở góc độ này áp lực trên cột sống và đĩa đệm giảm nhiều so với tư thế khác. \r\nCác đường cong lồi lõm được thiết kế phù hợp với tỷ lệ cấu trúc xương sống và xương chậu.\r\nChỉnh toàn bộ khung xương chậu và cột sống khi nằm.\r\nGiảm áp lực lên đĩa đệm, ngăn ngừa chèn ép rễ thần kinh.\r\nKhôi phục đường cong tự nhiên của cột sống ở lưng, ngực và cổ.\r\nTăng cường lưu thông máu, tái tạo năng lượng và phục hồi tổn thương cho cơ thể.",
+                },
+                new ProductDetail
+                {
+                    ProductId = _product.Find(s => s.Sku == "SC95VESY")?.Id ?? 2,
+                    LanguageId = (int)LanguageEnum.VN,
+                    Summary = "Ghế SÁNG CHẾ có  đặc điểm LỒI TRƯỚC LÕM SAU bảo đảm cho khung xương được ÔM CHẶT - GIỮ CHUẨN - CHỐNG TRƯỢT\r\nĐiểm 1: Khối lõm ÔM CHẶT - GIỮ CHUẨN, tạo bởi liên kết lõm phía sau mặt ghế và lõm phía dưới lưng ghế\r\nĐiểm 2: Khối lồi trung tâm trước của mặt ghế giúp CHỐNG TRƯỢT",
+                    Description = "* Ghế SÁNG CHẾ có đặc điểm LỒI TRƯỚC LÕM SAU tạo chức năng điều chỉnh xương chậu, xương cùng, xương sống về cấu trúc chuẩn\r\n* Ghế Sáng chế có tác dụng:\r\n- Giảm tối đa áp lực trên đĩa đệm do nâng đỡ và giữ cấu trúc xương chuẩn\r\n- Ngăn chặn các yếu tố gây biến dạng xương chậu, xương cùng, xương sống\r\n- Tốt cho mọi lứa tuổi trong điều chỉnh khung xương và ngăn ngừa bệnh cột sống",
+                },
+                new ProductDetail
+                {
+                    ProductId = _product.Find(s => s.Sku == "SC90DESY")?.Id ?? 3,
+                    LanguageId = (int)LanguageEnum.VN,
+                    Summary = "Ghế SÁNG CHẾ có  đặc điểm LỒI TRƯỚC LÕM SAU bảo đảm cho khung xương được ÔM CHẶT - GIỮ CHUẨN - CHỐNG TRƯỢT\r\nĐiểm 1: Khối lõm ÔM CHẶT - GIỮ CHUẨN, tạo bởi liên kết lõm phía sau mặt ghế và lõm phía dưới lưng ghế\r\nĐiểm 2: Khối lồi trung tâm trước của mặt ghế giúp CHỐNG TRƯỢT",
+                    Description = "* Ghế SÁNG CHẾ có đặc điểm LỒI TRƯỚC LÕM SAU tạo chức năng điều chỉnh xương chậu, xương cùng, xương sống về cấu trúc chuẩn\r\n* Ghế Sáng chế có tác dụng:\r\n- Giảm tối đa áp lực trên đĩa đệm do nâng đỡ và giữ cấu trúc xương chuẩn\r\n- Ngăn chặn các yếu tố gây biến dạng xương chậu, xương cùng, xương sống\r\n- Tốt cho mọi lứa tuổi trong điều chỉnh khung xương và ngăn ngừa bệnh cột sống",
+                },
+                new ProductDetail
+                {
+                    ProductId = _product.Find(s => s.Sku == "SC90TESY")?.Id ?? 4,
+                    LanguageId = (int)LanguageEnum.VN,
+                    Summary = "Ghế SÁNG CHẾ có  đặc điểm LỒI TRƯỚC LÕM SAU bảo đảm cho khung xương được ÔM CHẶT - GIỮ CHUẨN - CHỐNG TRƯỢT\r\nĐiểm 1: Khối lõm ÔM CHẶT - GIỮ CHUẨN, tạo bởi liên kết lõm phía sau mặt ghế và lõm phía dưới lưng ghế\r\nĐiểm 2: Khối lồi trung tâm trước của mặt ghế giúp CHỐNG TRƯỢT",
+                    Description = "* Ghế SÁNG CHẾ có đặc điểm LỒI TRƯỚC LÕM SAU tạo chức năng điều chỉnh xương chậu, xương cùng, xương sống về cấu trúc chuẩn\r\n* Ghế Sáng chế có tác dụng:\r\n- Giảm tối đa áp lực trên đĩa đệm do nâng đỡ và giữ cấu trúc xương chuẩn\r\n- Ngăn chặn các yếu tố gây biến dạng xương chậu, xương cùng, xương sống\r\n- Tốt cho mọi lứa tuổi trong điều chỉnh khung xương và ngăn ngừa bệnh cột sống",
+                },
+                new ProductDetail
+                {
+                    ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 5,
+                    LanguageId = (int)LanguageEnum.VN,
+                    Summary = "Gối SÁNG CHẾ có  đặc điểm LỒI TRƯỚC LÕM SAU bảo đảm cho khung xương được ÔM CHẶT - GIỮ CHUẨN - CHỐNG TRƯỢT\r\nĐiểm 1: Khối lõm ÔM CHẶT - GIỮ CHUẨN, tạo bởi liên kết lõm phía sau mặt ghế và lõm phía dưới lưng ghế\r\nĐiểm 2: Khối lồi trung tâm trước của mặt ghế giúp CHỐNG TRƯỢT",
+                    Description = "* Gối SÁNG CHẾ có đặc điểm LỒI TRƯỚC LÕM SAU tạo chức năng điều chỉnh xương chậu, xương cùng, xương sống về cấu trúc chuẩn\r\n* Gối Sáng chế có tác dụng:\r\n- Giảm tối đa áp lực trên đĩa đệm do nâng đỡ và giữ cấu trúc xương chuẩn\r\n- Ngăn chặn các yếu tố gây biến dạng xương chậu, xương cùng, xương sống\r\n- Tốt cho mọi lứa tuổi trong điều chỉnh khung xương và ngăn ngừa bệnh cột sống",
+                },
+                new ProductDetail
+                {
+                    ProductId = _product.Find(s => s.Sku == "NP04SEFY")?.Id ?? 6,
+                    LanguageId = (int)LanguageEnum.VN,
+                    Summary = "- Đầu thấp (9cm): Thiết kế theo cấu trúc Cổ - Vai - Đầu: kết hợp với chất liệu có độ cơ tính bên chắc cao giúp nâng đỡ tốt và bảo vệ Cột Sống Cổ. Dùng để ngủ, nghỉ ngơi hàng ngày. \r\n- Đầu cao (17cm): Có lõi để điều chỉnh Cột Sống Cổ (Sử dụng 15'/ lần). Có thể sử dụng nhiều lần trong ngày.",
+                    Description = "Dùng để ngủ, nghỉ ngơi hàng ngày. Có 2 đầu tác dụng khác nhau. Đầu cao chỉ dùng điều chỉnh xương cột sống cổ mỗi lần 15 phút, ngày nhiều lần giúp giảm đau cổ vai cánh tay bàn tay và ngón tay. Đầu thấp dùng ngủ suốt đêm, có tác dụng giữ cho cột sống cổ có đường cong chuẩn, dốt sống cổ đúng vị trí , không bị trật vẹo khi nằm. Phòng bệnh cột sống cổ do sai tư thế nằm, làm việc.",
+                },
+                new ProductDetail
+                {
+                    ProductId = _product.Find(s => s.Sku == "NP05SEFY")?.Id ?? 7,
+                    LanguageId = (int)LanguageEnum.VN,
+                    Summary = "- Đầu thấp (9cm): Thiết kế theo cấu trúc Cổ - Vai - Đầu: kết hợp với chất liệu có độ cơ tính bên chắc cao giúp nâng đỡ tốt và bảo vệ Cột Sống Cổ. Dùng để ngủ, nghỉ ngơi hàng ngày. \r\n- Đầu cao (13cm): Có lõi để điều chỉnh Cột Sống Cổ (Sử dụng 15'/ lần). Có thể sử dụng nhiều lần trong ngày.",
+                    Description = "Dùng để ngủ, nghỉ ngơi hàng ngày. Có 2 đầu tác dụng khác nhau. Đầu cao chỉ dùng điều chỉnh xương cột sống cổ mỗi lần 15 phút, ngày nhiều lần giúp giảm đau cổ vai cánh tay bàn tay và ngón tay. Đầu thấp dùng ngủ suốt đêm, có tác dụng giữ cho cột sống cổ có đường cong chuẩn, đốt sống cổ đúng vị trí , không bị trật vẹo khi nằm. Phòng bệnh cột sống cổ do sai tư thế nằm, làm việc.",
+                },
+                new ProductDetail
+                {
+                    ProductId = _product.Find(s => s.Sku == "NP06SEFY")?.Id ?? 8,
+                    LanguageId = (int)LanguageEnum.VN,
+                    Summary = "- Đầu thấp (9cm): Thiết kế theo cấu trúc Cổ - Vai - Đầu: kết hợp với chất liệu có độ cơ tính bên chắc cao giúp nâng đỡ tốt và bảo vệ Cột Sống Cổ. Dùng để ngủ, nghỉ ngơi hàng ngày. \r\n- Đầu cao (17cm): Có lõi để điều chỉnh Cột Sống Cổ (Sử dụng 15'/ lần). Có thể sử dụng nhiều lần trong ngày.",
+                    Description = "Dùng để ngủ, nghỉ ngơi hàng ngày. Có 2 đầu tác dụng khác nhau. Đầu cao chỉ dùng điều chỉnh xương cột sống cổ mỗi lần 15 phút, ngày nhiều lần giúp giảm đau cổ vai cánh tay bàn tay và ngón tay. Đầu thấp dùng ngủ suốt đêm, có tác dụng giữ cho cột sống cổ có đường cong chuẩn, đốt sống cổ đúng vị trí , không bị trật vẹo khi nằm. Phòng bệnh cột sống cổ do sai tư thế nằm, làm việc.",
+                },
+                new ProductDetail
+                {
+                    ProductId = _product.Find(s => s.Sku == "SDNLSESY")?.Id ?? 9,
+                    LanguageId = (int)LanguageEnum.VN,
+                    Summary = "- Đệm ngồi được thiết kế với các bậc uốn cong theo cấu trúc xương chậu - xương cùng - xương cụt. \r\n- Đệm ngồi DOCTORLOAN – giải pháp chăm sóc khung xương chậu và xương sống an toàn và hiệu quả. Sử dụng công nghệ sáng chế vượt trội tạo kết cấu đặc biệt (đã được bảo hộ độc quyền).\r\n- Giảm đau và tê ở mông, lưng, chân khi ngồi dưới đất",
+                    Description = "Dùng để ngồi trên sản nhà khi thiền, nghi lễ, công việc, sinh hoạt hàng ngày. Có tác dụng giữ chặt xương chậu, xương cùng, xương cụt ở vị trí chuẩn, không lệch vẹo, khi dùng lâu có tác dụng chỉnh các xương trên về vị trí bình thường. \r\n• GIẢI PHÁP: \r\n- Giảm đau đầu gối, mông và tê chân khi ngồi dưới đất. \r\n- Tăng khả năng tập trung bằng cách cải thiện lưu thông máu đến não. \r\n- Công nghệ bảo vệ xương chậu - xương cùng \r\n- cột sống thẳng và chuẩn khi ngồi dưới đất. \r\n- Đột phá về điều chỉnh xương cùng, xương chậu trong tư thế ngồi thiền",
+                },
+                new ProductDetail
+                {
+                    ProductId = _product.Find(s => s.Sku == "NP00OEFY")?.Id ?? 10,
+                    LanguageId = (int)LanguageEnum.VN,
+                    Summary = "- Thiết kế ôm sát Đầu - Vai - Cổ kết hợp vật liệu đặc biệt  \r\n- Đầu thấp: dành cho trẻ sơ sinh đến 3 tháng tuổi \r\n- Đầu cao: dành cho trẻ từ 3 tháng tuổi đến 1 tuổi ",
+                    Description = "Gối sơ sinh được làm từ mút cao cấp, an toàn. Có tác dụng bảo vệ cột sống cổ tốt nhất giúp trẻ phát triển trí tuệ, thể chất và tinh thần toàn diện cho trẻ dưới 24 tháng tuổi.\r\n• GIẢI PHÁP:\r\n- Gối được thiết kế phù hợp cấu trúc Cổ - Vai - Đầu của trẻ sơ sinh, hỗ trợ nâng đỡ cột sống cổ trong tư thế nằm của trẻ sơ sinh\r\n- Hỗ trợ điều trị và ngăn ngừa các bệnh cột sống cổ, giúp điều chỉnh cột sống cổ trở lại trạng thái khỏe mạnh bình thường.\r\n- Có tác dụng bảo vệ cột sống cổ tốt nhất giúp trẻ phát triển trí tuệ, thể chất và tinh thần toàn diện"
+                },
+                new ProductDetail
+                {
+                    ProductId = _product.Find(s => s.Sku == "NP26OEFY")?.Id ?? 11,
+                    LanguageId = (int)LanguageEnum.VN,
+                    Summary = "- Thiết kế ôm sát Đầu - Vai - Cổ kết hợp vật liệu đặc biệt có tác dụng bảo vệ cột sống cổ tốt nhất giúp trẻ phát triển trí tuệ, thể chất và tinh thần toàn diện \r\n- Đầu thấp: dành cho trẻ 2 tuổi đến 4 tuổi \r\n- Đầu cao: dành cho trẻ 4 tuổi đến 6 tuổi ",
+                    Description = "Gối trẻ em 2/6 được làm từ mút cao cấp, an toàn. Có tác dụng bảo vệ cột sống cổ tốt nhất giúp trẻ phát triển trí tuệ, thể chất và tinh thần toàn diện cho trẻ từ 2 đến 6 tuổi.\r\n• GIẢI PHÁP:\r\n- Gối được thiết kế phù hợp cấu trúc Cổ - Vai - Đầu của trẻ em, hỗ trợ nâng đỡ cột sống cổ trong tư thế nằm của trẻ em\r\n- Hỗ trợ điều trị và ngăn ngừa các bệnh cột sống cổ, giúp điều chỉnh cột sống cổ trở lại trạng thái khỏe mạnh bình thường.\r\n- Có tác dụng bảo vệ cột sống cổ tốt nhất giúp trẻ phát triển trí tuệ, thể chất và tinh thần toàn diện"
+                },
+                new ProductDetail
+                {
+                    ProductId = _product.Find(s => s.Sku == "NP61OEFY")?.Id ?? 12,
+                    LanguageId = (int)LanguageEnum.VN,
+                    Summary = "- Thiết kế ôm sát Đầu - Vai - Cổ kết hợp vật liệu đặc biệt có tác dụng bảo vệ cột sống cổ tốt nhất giúp trẻ phát triển trí tuệ, thể chất và tinh thần toàn diện \r\n- Đầu thấp: dành cho trẻ 6 tuổi đến 8 tuổi \r\n- Đầu cao: dành cho trẻ 8 tuổi đến 10 tuổi ",
+                    Description = "Gối trẻ em 6/10 được làm từ mút cao cấp, an toàn. Có tác dụng bảo vệ cột sống cổ tốt nhất giúp trẻ phát triển trí tuệ, thể chất và tinh thần toàn diện cho trẻ từ 6 - 10 tuổi.\r\n• GIẢI PHÁP:\r\n- Gối được thiết kế phù hợp cấu trúc Cổ - Vai - Đầu của trẻ em, hỗ trợ nâng đỡ cột sống cổ trong tư thế nằm của trẻ em\r\n- Hỗ trợ điều trị và ngăn ngừa các bệnh cột sống cổ, giúp điều chỉnh cột sống cổ trở lại trạng thái khỏe mạnh bình thường.\r\n- Có tác dụng bảo vệ cột sống cổ tốt nhất giúp trẻ phát triển trí tuệ, thể chất và tinh thần toàn diện"
+                },
+                new ProductDetail
+                {
+                    ProductId = _product.Find(s => s.Sku == "BP03CEFY")?.Id ?? 13,
+                    LanguageId = (int)LanguageEnum.VN,
+                    Summary = "Có lõi cứng đặc biệt bên trong giúp điều chỉnh cột sống lưng và đĩa đệm",
+                    Description = "Gối lưng sáng chế DOCTORLOAN F3/C có lõi cứng đặc biệt bên trong giúp điều chỉnh cột sống lưng và đĩa đệm trở lại trạng thái khỏe mạnh. \r\n• GIẢI PHÁP: \r\n- Công nghệ điều chỉnh bệnh vẹo, trật, trượt cột sống lưng, thoát vị đĩa đệm \r\n- Công nghệ chăm sóc cột sống khỏe \r\n- Giảm đau, tê, nhức, buốt, mỏi cứng ở vùng thắt lưng, vùng mông và hai chân \r\n- Chuyển giao chăm sóc cột sống tại nhà, bảo đảm năng suất lao động, học tập hiệu quả",
+                },
+                new ProductDetail
+                {
+                    ProductId = _product.Find(s => s.Sku == "BP01LEFY")?.Id ?? 14,
+                    LanguageId = (int)LanguageEnum.VN,
+                    Summary = "Có lõi cứng đặc biệt bên trong giúp điều chỉnh cột sống lưng và đĩa đệm khi ngồi làm việc hoặc đi lại trên các phương tiện (Oto, Máy bay, ...)",
+                    Description = "Gối lưng có lõi dùng tại nhà giúp điều chỉnh cột sống lưng và cột sống ngực về hình dạng cong bình thường chuẩn.\r\nNgoài ra có tác dụng đưa đĩa đệm về đúng vị trí bình thường. \r\nGiảm đau lưng, giảm các chứng đau như thần kinh toạ, đau đầu gối, đau chân, đau bàn và gót chân.",
+                },
+                new ProductDetail
+                {
+                    ProductId = _product.Find(s => s.Sku == "NPAUNEFY")?.Id ?? 15,
+                    LanguageId = (int)LanguageEnum.VN,
+                    Summary = "- Đầu thấp (9cm): Thiết kế theo cấu trúc Cổ - Vai - Đầu: kết hợp với chất liệu có độ cơ tính bên chắc cao giúp nâng đỡ tốt và bảo vệ Cột Sống Cổ. Dùng hàng ngày. \r\n- Đầu cao (12cm): Không lõi để điều chỉnh Cột Sống Cổ. Có thể sử dụng nhiều lần trong ngày, và ngủ qua đêm. An toàn sử dụng cho người đã phẩu thuật cột sống cổ",
+                    Description = "Dùng để ngủ, nghỉ ngơi hàng ngày. Có 2 đầu tác dụng khác nhau. \r\nKhông lõi để điều chỉnh Cột Sống Cổ. Có thể sử dụng nhiều lần trong ngày, và ngủ qua đêm. An toàn sử dụng cho người đã phẩu thuật cột sống cổ.\r\nThiết kế theo cấu trúc Cổ - Vai - Đầu: kết hợp với chất liệu có độ cơ tính bên chắc cao giúp nâng đỡ tốt và bảo vệ Cột Sống Cổ. Dùng hàng ngày. "
+                },
+                new ProductDetail
+                {
+                    ProductId = _product.Find(s => s.Sku == "NPTLSEFY")?.Id ?? 16,
+                    LanguageId = (int)LanguageEnum.VN,
+                    Summary = "- Đầu thấp: Thiết kế theo cấu trúc Cổ - Vai - Đầu: kết hợp với chất liệu có độ cơ tính bên chắc cao giúp nâng đỡ tốt và bảo vệ Cột Sống Cổ. Dùng để ngủ, nghỉ ngơi hàng ngày. \r\n- Đầu cao: Có lõi để điều chỉnh Cột Sống Cổ (Sử dụng 15'/ lần). Thiết kê nhỏ gọn tiện cho những chuyến công tác và du lịch.",
+                    Description = "Dùng để ngủ, nghỉ ngơi hàng ngày. Có 2 đầu tác dụng khác nhau. \r\nKhông lõi để điều chỉnh Cột Sống Cổ. Có thể sử dụng nhiều lần trong ngày, và ngủ qua đêm.\r\nThiết kế theo cấu trúc Cổ - Vai - Đầu: kết hợp với chất liệu có độ cơ tính bên chắc cao giúp nâng đỡ tốt và bảo vệ Cột Sống Cổ.\r\nƯu điểm nhỏ ngọn thuận tiện cho những chuyến công tác",
+                },
+                new ProductDetail
+                {
+                    ProductId = _product.Find(s => s.Sku == "NPCROEFY")?.Id ?? 17,
+                    LanguageId = (int)LanguageEnum.VN,
+                    Summary = "- Gối được làm từ vật liệu mousse có tỷ trọng cao, tạo khả năng cố định không thay đổi hình dáng cột sống cổ.\r\n- Với các đường “ lồi, lõm” tuân thủ theo hình dạng cấu trúc của cột sống cổ, bảo toàn toàn bộ cấu trúc của cột sống cổ, phòng ngừa bệnh cột sống cổ mỗi ngày khi ngủ ngồi, nghỉ ngơi cho mọi tuổi, mọi người.",
+                    Description = "* Dùng trong khi di chuyển bằng  (oto, máy bay,..). \r\nKhông lõi để điều chỉnh Cột Sống Cổ. Có thể sử dụng nhiều lần trong ngày, và ngủ qua đêm. An toàn sử dụng cho người đã phẩu thuật cột sống cổ.",
+                },
+            };
+            await _context.ProductDetails.AddRangeAsync(listProductDetails);
             await _context.SaveChangesAsync();
         }
     }

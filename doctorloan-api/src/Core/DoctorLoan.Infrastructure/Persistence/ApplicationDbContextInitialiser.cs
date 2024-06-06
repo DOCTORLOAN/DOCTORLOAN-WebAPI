@@ -558,6 +558,7 @@ public class ApplicationDbContextInitialiser
                 new ProductOptionGroup{Name="Màu sắc"},
                 new ProductOptionGroup{Name="Kích cỡ"},
                 new ProductOptionGroup{Name="Cấu trúc"},
+                new ProductOptionGroup{Name="Phiên bản"},
             });
             await _context.SaveChangesAsync();
         }
@@ -2042,7 +2043,7 @@ public class ApplicationDbContextInitialiser
             .ToList();
 
         var _productOptionGroup = await _context.ProductOptionGroups
-            .Where(s => s.Name == "Màu sắc" || s.Name == "Kích thước")
+            .Where(s => s.Name == "Màu sắc" || s.Name == "Kích thước" || s.Name == "Cấu trúc" || s.Name == "Phiên bản")
             .ToListAsync();
 
         if (_productItems.Any() && _productOptionGroup.Any() && !_context.ProductOptions.Any())
@@ -2353,7 +2354,6 @@ public class ApplicationDbContextInitialiser
                     Name = "Mềm",
                     DisplayValue = "Mềm",
                 },
-
                 new ProductOption
                 {
                     ProductItemId = _productItems.Find(s => s.Sku == "NP06SEFY")?.Id ?? 8,
@@ -2361,7 +2361,6 @@ public class ApplicationDbContextInitialiser
                     Name = "9 cm",
                     DisplayValue = "9 cm",
                 },
-
                 new ProductOption
                 {
                     ProductItemId = _productItems.Find(s => s.Sku == "SDNLSESY")?.Id ?? 9,
@@ -2376,7 +2375,27 @@ public class ApplicationDbContextInitialiser
                     Name = "Size lớn",
                     DisplayValue = "Size lớn",
                 },
-
+                new ProductOption
+                {
+                    ProductItemId = _productItems.Find(s => s.Sku == "NP00OEFY")?.Id ?? 10,
+                    OptionGroupId = _productOptionGroup.Find(s => s.Name == "Phiên bản")?.Id ?? 4,
+                    Name = "Sơ sinh",
+                    DisplayValue = "Sơ sinh",
+                },
+                new ProductOption
+                {
+                    ProductItemId = _productItems.Find(s => s.Sku == "NP26OEFY")?.Id ?? 11,
+                    OptionGroupId = _productOptionGroup.Find(s => s.Name == "Phiên bản")?.Id ?? 4,
+                    Name = "Gối cổ 2/6 tuổi",
+                    DisplayValue = "Gối cổ 2/6 tuổi",
+                },
+                new ProductOption
+                {
+                    ProductItemId = _productItems.Find(s => s.Sku == "NP61OEFY")?.Id ?? 12,
+                    OptionGroupId = _productOptionGroup.Find(s => s.Name == "Phiên bản")?.Id ?? 4,
+                    Name = "Gối cổ 6/10 tuổi",
+                    DisplayValue = "Gối cổ 6/10 tuổi",
+                },
                 new ProductOption
                 {
                     ProductItemId = _productItems.Find(s => s.Sku == "BP03CEFY")?.Id ?? 13,
@@ -2399,7 +2418,13 @@ public class ApplicationDbContextInitialiser
                     Name = "Size dài",
                     DisplayValue = "Size dài",
                 },
-
+                 new ProductOption
+                {
+                    ProductItemId = _productItems.Find(s => s.Sku == "NPAUNEFY")?.Id ?? 15,
+                    OptionGroupId = _productOptionGroup.Find(s => s.Name == "Phiên bản")?.Id ?? 4,
+                    Name = "Gối cổ người lớn",
+                    DisplayValue = "Gối cổ người lớn",
+                },
                 new ProductOption
                 {
                     ProductItemId = _productItems.Find(s => s.Sku == "NPTLSEFY")?.Id ?? 16,
@@ -2407,6 +2432,13 @@ public class ApplicationDbContextInitialiser
                     Name = "9 cm",
                     DisplayValue = "9 cm",
                 },
+                new ProductOption
+                {
+                    ProductItemId = _productItems.Find(s => s.Sku == "NPCROEFY")?.Id ?? 17,
+                    OptionGroupId = _productOptionGroup.Find(s => s.Name == "Phiên bản")?.Id ?? 4,
+                    Name = "Gối cổ đi xe",
+                    DisplayValue = "Gối cổ đi xe",
+                }
             };
             await _context.ProductOptions.AddRangeAsync(productOptions);
             await _context.SaveChangesAsync();

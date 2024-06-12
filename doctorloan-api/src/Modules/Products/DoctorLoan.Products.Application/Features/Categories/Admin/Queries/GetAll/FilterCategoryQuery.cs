@@ -25,9 +25,7 @@ public class FilterCategoryQueryHandle : ApplicationBaseService<FilterCategoryQu
         var condition = PredicateBuilder.True<Category>();
         if (!string.IsNullOrEmpty(request.Keyword))
             condition = condition.And(x => x.Name.ToLower().Contains(request.Keyword));
-        var query = _context.Categories.Where(condition)
-                                            .OrderByDescending(x => x.Status)
-                                                .ThenByDescending(x => x.LastModified);
+        var query = _context.Categories.Where(condition).OrderBy(x => x.Id);
         var result = await Mapper.ProjectTo<CategoryDto>(query).ToPagedListAsync(request.Page, request.Take);
         PreparingCategory(result.Items);
 

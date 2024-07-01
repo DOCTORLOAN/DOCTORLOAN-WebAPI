@@ -1632,6 +1632,80 @@ public class ApplicationDbContextInitialiser
                         }
                    },
                 },
+                                new DoctorLoan.Domain.Entities.Products.Product
+                {
+                   Name = "Gối lưng sáng chế DOCTORLOAN F4",
+                   Sku = "BP04OEFY",
+                   Status = StatusEnum.Publish,
+                   BrandId = _context.Brands.FirstOrDefault().Id,
+                   Price = 2600000,
+                   Quantity = 100,
+                   Slug = "goilung-doctorloan-f4",
+                   ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
+                   {
+                       new DoctorLoan.Domain.Entities.Products.ProductAttribute
+                       {
+                           AttributeId = _attribute.Find(s => s.Name == "Kích thước")?.Id ?? 1,
+                           Value = "48 x 25 x 10.5 (cm)"
+                       },
+                       new DoctorLoan.Domain.Entities.Products.ProductAttribute
+                       {
+                            AttributeId = _attribute.Find(s => s.Name == "Khối lượng")?.Id ?? 2,
+                            Value = "0,4 kg"
+                       },
+                       new DoctorLoan.Domain.Entities.Products.ProductAttribute
+                       {
+                            AttributeId = _attribute.Find(s => s.Name == "Kiểu dáng")?.Id ?? 3,
+                            Value = "Gối cổ"
+                       },
+                       new DoctorLoan.Domain.Entities.Products.ProductAttribute
+                       {
+                            AttributeId = _attribute.Find(s => s.Name == "Chất liệu lõi")?.Id ?? 4,
+                            Value = "PU foam"
+                       },new DoctorLoan.Domain.Entities.Products.ProductAttribute
+                       {
+                            AttributeId = _attribute.Find(s => s.Name == "Chất liệu bọc")?.Id ?? 5,
+                            Value = "Vải kate"
+                       },
+                       new DoctorLoan.Domain.Entities.Products.ProductAttribute
+                       {
+                             AttributeId = _attribute.Find(s => s.Name == "Công nghệ sản xuất")?.Id ?? 6,
+                             Value = "PU"
+                       },
+                       new DoctorLoan.Domain.Entities.Products.ProductAttribute
+                       {
+                             AttributeId = _attribute.Find(s => s.Name == "Hiệu quả sử dụng")?.Id ?? 7,
+                             Value = "Bảo vệ cột sống"
+                       },
+                       new DoctorLoan.Domain.Entities.Products.ProductAttribute
+                       {
+                             AttributeId = _attribute.Find(s => s.Name == "Hướng dẫn sử dụng")?.Id ?? 8,
+                             Value = "Đọc kỹ hướng dẫn sử dụng trước khi sử dụng"
+                       },
+                       new DoctorLoan.Domain.Entities.Products.ProductAttribute
+                       {
+                              AttributeId = _attribute.Find(s => s.Name == "Bảo hành")?.Id ?? 9,
+                              Value = "1 năm"
+                        },
+                       new DoctorLoan.Domain.Entities.Products.ProductAttribute
+                       {
+                              AttributeId = _attribute.Find(s => s.Name == "Năm sản xuất")?.Id ?? 10,
+                              Value = "2023"
+                       },
+                       new DoctorLoan.Domain.Entities.Products.ProductAttribute
+                       {
+                              AttributeId = _attribute.Find(s => s.Name == "Sản xuất tại")?.Id ?? 11,
+                              Value = "Việt Nam"
+                       }
+                   },
+                   ProductCategories = new List<DoctorLoan.Domain.Entities.Products.ProductCategory>
+                   {
+                        new DoctorLoan.Domain.Entities.Products.ProductCategory
+                        {
+                            CategoryId = _productCategories.Find(s => s.Slug == "sanpham-doctorloan")?.Id ?? 1
+                        },
+                   },
+                },
                 new DoctorLoan.Domain.Entities.Products.Product
                 {
                    Name = "Gối lưng sáng chế DOCTORLOAN F1",
@@ -1957,7 +2031,7 @@ public class ApplicationDbContextInitialiser
             .Where(s => s.Sku == "LC35LESY" ||
                         s.Sku == "SC95VESY" || s.Sku == "SC90DESY" || s.Sku == "SC90TESY" || s.Sku == "PL85SFOR" ||
                         s.Sku == "NP04SEFY" || s.Sku == "NP05SEFY" || s.Sku == "NP06SEFY" || s.Sku == "SDNLSESY" ||
-                        s.Sku == "NP00OEFY" || s.Sku == "NP26OEFY" || s.Sku == "NP61OEFY" || s.Sku == "BP03CEFY" ||
+                        s.Sku == "NP00OEFY" || s.Sku == "NP26OEFY" || s.Sku == "NP61OEFY" || s.Sku == "BP03CEFY" || s.Sku == "BP04OEFY" ||
                         s.Sku == "BP01LEFY" || s.Sku == "NPAUNEFY" || s.Sku == "NPTLSEFY" || s.Sku == "NPCROEFY")
             .ToList();
 
@@ -2013,13 +2087,14 @@ public class ApplicationDbContextInitialiser
                 new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NP26OEFY")?.Id ?? 11, Quantity = 100, Name = "Gối cổ trẻ em DOCTORLOAN 2/6", Sku = "NP26OEFY", Price = 800000, },
                 new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NP61OEFY")?.Id ?? 12, Quantity = 100, Name = "Gối cổ trẻ em DOCTORLOAN 6/10", Sku = "NP61OEFY", Price = 1000000, },
                 new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "BP03CEFY")?.Id ?? 13, Quantity = 100, Name = "Gối lưng sáng chế DOCTORLOAN F3/C", Sku = "BP03CEFY", Price = 2600000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "BP04OEFY")?.Id ?? 14, Quantity = 100, Name = "Gối lưng sáng chế DOCTORLOAN F4", Sku = "BP04OEFY", Price = 2600000, },
 
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "BP01LEFY")?.Id ?? 14, Quantity = 500, Name = "Gối lưng sáng chế DOCTORLOAN F1/S", Sku = "BP01LEFY", Price = 2000000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "BP01LEFY")?.Id ?? 14, Quantity = 50, Name = "Gối lưng sáng chế DOCTORLOAN F1/L", Sku = "BP01SEFY", Price = 1000000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "BP01LEFY")?.Id ?? 15, Quantity = 500, Name = "Gối lưng sáng chế DOCTORLOAN F1/S", Sku = "BP01LEFY", Price = 2000000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "BP01LEFY")?.Id ?? 15, Quantity = 50, Name = "Gối lưng sáng chế DOCTORLOAN F1/L", Sku = "BP01SEFY", Price = 1000000, },
 
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NPAUNEFY")?.Id ?? 15, Quantity = 50, Name = "Gối cổ người lớn", Sku = "NPAUNEFY", Price = 2300000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NPTLSEFY")?.Id ?? 16, Quantity = 50, Name = "Gối cổ du lịch/09", Sku = "NPTLSEFY", Price = 1500000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NPCROEFY")?.Id ?? 17, Quantity = 50, Name = "Gối cổ đi xe", Sku = "NPCROEFY", Price = 600000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NPAUNEFY")?.Id ?? 16, Quantity = 50, Name = "Gối cổ người lớn", Sku = "NPAUNEFY", Price = 2300000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NPTLSEFY")?.Id ?? 17, Quantity = 50, Name = "Gối cổ du lịch/09", Sku = "NPTLSEFY", Price = 1500000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NPCROEFY")?.Id ?? 18, Quantity = 50, Name = "Gối cổ đi xe", Sku = "NPCROEFY", Price = 600000, },
             };
             await _context.ProductItems.AddRangeAsync(productItems);
             await _context.SaveChangesAsync();
@@ -2037,7 +2112,7 @@ public class ApplicationDbContextInitialiser
                         s.Sku == "NP06SEFY" ||
                         s.Sku == "SDNLSESY" || s.Sku == "SDNLMESY" ||
                         s.Sku == "NP00OEFY" || s.Sku == "NP26OEFY" || s.Sku == "NP61OEFY" ||
-                        s.Sku == "BP03CEFY" ||
+                        s.Sku == "BP03CEFY" || s.Sku == "BP04OEFY" ||
                         s.Sku == "BP01LEFY" || s.Sku == "BP01SEFY" ||
                         s.Sku == "NPAUNEFY" || s.Sku == "NPTLSEFY" || s.Sku == "NPCROEFY")
             .ToList();
@@ -2399,42 +2474,49 @@ public class ApplicationDbContextInitialiser
                 new ProductOption
                 {
                     ProductItemId = _productItems.Find(s => s.Sku == "BP03CEFY")?.Id ?? 13,
-                    OptionGroupId = _productOptionGroup.Find(s => s.Name == "Kích thước")?.Id ?? 2,
+                    OptionGroupId = _productOptionGroup.Find(s => s.Name == "Phiên bản")?.Id ?? 4,
                     Name = "C",
                     DisplayValue = "C",
+                },
+                new ProductOption
+                {
+                    ProductItemId = _productItems.Find(s => s.Sku == "BP04OEFY")?.Id ?? 14,
+                    OptionGroupId = _productOptionGroup.Find(s => s.Name == "Phiên bản")?.Id ?? 4,
+                    Name = "Gối lưng F4",
+                    DisplayValue = "Gối lưng F4",
                 },
 
                 new ProductOption
                 {
-                    ProductItemId = _productItems.Find(s => s.Sku == "BP01LEFY")?.Id ?? 14,
+                    ProductItemId = _productItems.Find(s => s.Sku == "BP01LEFY")?.Id ?? 15,
                     OptionGroupId = _productOptionGroup.Find(s => s.Name == "Kích thước")?.Id ?? 2,
                     Name = "Size ngắn",
                     DisplayValue = "Size ngắn",
                 },
                 new ProductOption
                 {
-                    ProductItemId = _productItems.Find(s => s.Sku == "BP01SEFY")?.Id ?? 14,
+                    ProductItemId = _productItems.Find(s => s.Sku == "BP01SEFY")?.Id ?? 15,
                     OptionGroupId = _productOptionGroup.Find(s => s.Name == "Kích thước")?.Id ?? 2,
                     Name = "Size dài",
                     DisplayValue = "Size dài",
                 },
                  new ProductOption
                 {
-                    ProductItemId = _productItems.Find(s => s.Sku == "NPAUNEFY")?.Id ?? 15,
+                    ProductItemId = _productItems.Find(s => s.Sku == "NPAUNEFY")?.Id ?? 16,
                     OptionGroupId = _productOptionGroup.Find(s => s.Name == "Phiên bản")?.Id ?? 4,
                     Name = "Gối cổ người lớn",
                     DisplayValue = "Gối cổ người lớn",
                 },
                 new ProductOption
                 {
-                    ProductItemId = _productItems.Find(s => s.Sku == "NPTLSEFY")?.Id ?? 16,
+                    ProductItemId = _productItems.Find(s => s.Sku == "NPTLSEFY")?.Id ?? 17,
                     OptionGroupId = _productOptionGroup.Find(s => s.Name == "Kích thước")?.Id ?? 2,
                     Name = "9 cm",
                     DisplayValue = "9 cm",
                 },
                 new ProductOption
                 {
-                    ProductItemId = _productItems.Find(s => s.Sku == "NPCROEFY")?.Id ?? 17,
+                    ProductItemId = _productItems.Find(s => s.Sku == "NPCROEFY")?.Id ?? 18,
                     OptionGroupId = _productOptionGroup.Find(s => s.Name == "Phiên bản")?.Id ?? 4,
                     Name = "Gối cổ đi xe",
                     DisplayValue = "Gối cổ đi xe",
@@ -2541,28 +2623,35 @@ public class ApplicationDbContextInitialiser
                 },
                 new ProductDetail
                 {
-                    ProductId = _product.Find(s => s.Sku == "BP01LEFY")?.Id ?? 14,
+                    ProductId = _product.Find(s => s.Sku == "BP04OEFY")?.Id ?? 14,
+                    LanguageId = (int)LanguageEnum.VN,
+                    Summary = "Gối lưng có lõi dùng tại nhà giúp điều chỉnh cột sống lưng và cột sống ngực về hình dạng cong bình thường chuẩn",
+                    Description = "Gối lưng có lõi dùng tại nhà giúp điều chỉnh cột sống lưng và cột sống ngực về hình dạng cong bình thường chuẩn.\r\nNgoài ra có tác dụng đưa đĩa đệm về đúng vị trí bình thường. \r\nGiảm đau lưng, giảm các chứng đau như thần kinh toạ, đau đầu gối, đau chân, đau bàn và gót chân.",
+                },
+                new ProductDetail
+                {
+                    ProductId = _product.Find(s => s.Sku == "BP01LEFY")?.Id ?? 15,
                     LanguageId = (int)LanguageEnum.VN,
                     Summary = "Có lõi cứng đặc biệt bên trong giúp điều chỉnh cột sống lưng và đĩa đệm khi ngồi làm việc hoặc đi lại trên các phương tiện (Oto, Máy bay, ...)",
                     Description = "Gối lưng có lõi dùng tại nhà giúp điều chỉnh cột sống lưng và cột sống ngực về hình dạng cong bình thường chuẩn.\r\nNgoài ra có tác dụng đưa đĩa đệm về đúng vị trí bình thường. \r\nGiảm đau lưng, giảm các chứng đau như thần kinh toạ, đau đầu gối, đau chân, đau bàn và gót chân.",
                 },
                 new ProductDetail
                 {
-                    ProductId = _product.Find(s => s.Sku == "NPAUNEFY")?.Id ?? 15,
+                    ProductId = _product.Find(s => s.Sku == "NPAUNEFY")?.Id ?? 16,
                     LanguageId = (int)LanguageEnum.VN,
                     Summary = "- Đầu thấp (9cm): Thiết kế theo cấu trúc Cổ - Vai - Đầu: kết hợp với chất liệu có độ cơ tính bên chắc cao giúp nâng đỡ tốt và bảo vệ Cột Sống Cổ. Dùng hàng ngày. \r\n- Đầu cao (12cm): Không lõi để điều chỉnh Cột Sống Cổ. Có thể sử dụng nhiều lần trong ngày, và ngủ qua đêm. An toàn sử dụng cho người đã phẩu thuật cột sống cổ",
                     Description = "Dùng để ngủ, nghỉ ngơi hàng ngày. Có 2 đầu tác dụng khác nhau. \r\nKhông lõi để điều chỉnh Cột Sống Cổ. Có thể sử dụng nhiều lần trong ngày, và ngủ qua đêm. An toàn sử dụng cho người đã phẩu thuật cột sống cổ.\r\nThiết kế theo cấu trúc Cổ - Vai - Đầu: kết hợp với chất liệu có độ cơ tính bên chắc cao giúp nâng đỡ tốt và bảo vệ Cột Sống Cổ. Dùng hàng ngày. "
                 },
                 new ProductDetail
                 {
-                    ProductId = _product.Find(s => s.Sku == "NPTLSEFY")?.Id ?? 16,
+                    ProductId = _product.Find(s => s.Sku == "NPTLSEFY")?.Id ?? 17,
                     LanguageId = (int)LanguageEnum.VN,
                     Summary = "- Đầu thấp: Thiết kế theo cấu trúc Cổ - Vai - Đầu: kết hợp với chất liệu có độ cơ tính bên chắc cao giúp nâng đỡ tốt và bảo vệ Cột Sống Cổ. Dùng để ngủ, nghỉ ngơi hàng ngày. \r\n- Đầu cao: Có lõi để điều chỉnh Cột Sống Cổ (Sử dụng 15'/ lần). Thiết kê nhỏ gọn tiện cho những chuyến công tác và du lịch.",
                     Description = "Dùng để ngủ, nghỉ ngơi hàng ngày. Có 2 đầu tác dụng khác nhau. \r\nKhông lõi để điều chỉnh Cột Sống Cổ. Có thể sử dụng nhiều lần trong ngày, và ngủ qua đêm.\r\nThiết kế theo cấu trúc Cổ - Vai - Đầu: kết hợp với chất liệu có độ cơ tính bên chắc cao giúp nâng đỡ tốt và bảo vệ Cột Sống Cổ.\r\nƯu điểm nhỏ ngọn thuận tiện cho những chuyến công tác",
                 },
                 new ProductDetail
                 {
-                    ProductId = _product.Find(s => s.Sku == "NPCROEFY")?.Id ?? 17,
+                    ProductId = _product.Find(s => s.Sku == "NPCROEFY")?.Id ?? 18,
                     LanguageId = (int)LanguageEnum.VN,
                     Summary = "- Gối được làm từ vật liệu mousse có tỷ trọng cao, tạo khả năng cố định không thay đổi hình dáng cột sống cổ.\r\n- Với các đường “ lồi, lõm” tuân thủ theo hình dạng cấu trúc của cột sống cổ, bảo toàn toàn bộ cấu trúc của cột sống cổ, phòng ngừa bệnh cột sống cổ mỗi ngày khi ngủ ngồi, nghỉ ngơi cho mọi tuổi, mọi người.",
                     Description = "* Dùng trong khi di chuyển bằng  (oto, máy bay,..). \r\nKhông lõi để điều chỉnh Cột Sống Cổ. Có thể sử dụng nhiều lần trong ngày, và ngủ qua đêm. An toàn sử dụng cho người đã phẩu thuật cột sống cổ.",

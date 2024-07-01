@@ -7,15 +7,10 @@ namespace DoctorLoan.Booking.Application.Features.Dtos;
 public class BookingDto : IMapFrom<Domain.Entities.Bookings.Booking>
 {
     public int Id { get; set; }
-
     public string FullName { get; set; }
-
     public string Phone { get; set; }
-
     public BookingType Type { get; set; }
-
     public string Address { get; set; }
-
     public int BookingTimes { get; set; }
     public DateOnly BookingDate { get; set; }
     public TimeOnly BookingStartTime { get; set; }

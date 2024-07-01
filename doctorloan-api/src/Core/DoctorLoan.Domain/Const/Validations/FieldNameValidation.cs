@@ -49,10 +49,11 @@ public static class FieldNameValidation
     public const string UserAddressId = "UserAddressId";
     #endregion
 
+    #region Product
     public const string ProductId = "ProductId";
     public const string Quantity = "Quantity";
     public const string CartItemId = "CartItemId";
-
+    #endregion
 
     #region Setting User
     public const string SettingUserType = "SettingUserType";
@@ -76,5 +77,9 @@ public static class FieldNameValidation
     public const string BookingDate = "BookingDate";
     public const string BookingStartTime = "BookingStartTime";
     public const string BookingEndTime = "BookingEndTime";
+    #endregion
+
+    #region MedicalRecord
+    public const string DateCreated = "DateCreated";
     #endregion
 }

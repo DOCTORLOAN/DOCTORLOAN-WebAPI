@@ -8,7 +8,8 @@ public enum PermissionModuleEnum
     Customer = 4,
     Book = 5,
     Order = 6,
-    User = 7
+    User = 7,
+    MedicalRecord = 8
 }
 
 public enum PermissionActionEnum

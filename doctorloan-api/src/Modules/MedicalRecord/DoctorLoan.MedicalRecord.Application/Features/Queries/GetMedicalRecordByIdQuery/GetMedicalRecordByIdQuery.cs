@@ -1,0 +1,38 @@
+﻿using AutoMapper;
+using DoctorLoan.Application;
+using DoctorLoan.Application.Interfaces.Commons;
+using DoctorLoan.Application.Interfaces.Data;
+using DoctorLoan.Application.Models.Commons;
+using DoctorLoan.MedicalRecord.Application.Features.Dtos;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+
+namespace DoctorLoan.MedicalRecord.Application.Features.Queries.GetMedicalRecordByIdQuery;
+public record GetMedicalRecordByIdQuery(int Id) : IRequest<Result<MedicalRecordDto>> { }
+public class GetMedicalRecordByIdHandler : ApplicationBaseService<GetMedicalRecordByIdHandler>, IRequestHandler<GetMedicalRecordByIdQuery, Result<MedicalRecordDto>>
+{
+    private readonly IMapper _mapper;
+    public GetMedicalRecordByIdHandler(ILogger<GetMedicalRecordByIdHandler> logger,
+                                 IApplicationDbContext context,
+                                 ICurrentRequestInfoService currentRequestInfoService,
+                                 ICurrentTranslateService currentTranslateService,
+                                 IDateTime dateTime, IMapper mapper)
+        : base(logger, context, currentRequestInfoService, currentTranslateService, dateTime)
+    {
+        _mapper = mapper;
+    }
+
+    public async Task<Result<MedicalRecordDto>> Handle(GetMedicalRecordByIdQuery request, CancellationToken cancellationToken)
+    {
+        var info = await _context.MedicalRecords.Include(s => s.Customer)
+                                            .Include(s => s.CustomerAddresses)
+                                                .ThenInclude(s => s.Address)
+                                        .FirstOrDefaultAsync(s => s.Id == request.Id, cancellationToken);
+
+        if (info == null) return Result.Failed<MedicalRecordDto>(ServiceError.NotFound(_currentTranslateService));
+        var data = _mapper.Map<MedicalRecordDto>(info);
+
+        return Result.Success(data);
+    }
+}

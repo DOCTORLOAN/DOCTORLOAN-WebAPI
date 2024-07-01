@@ -18,7 +18,7 @@ public class MedicalRecordConfiguration : IEntityTypeConfiguration<DoctorLoan.Do
         builder.Property(x => x.IsDelete).IsRequired();
         builder.HasQueryFilter(x => !x.IsDelete);
 
-        builder.HasOne(x => x.Customers)
+        builder.HasOne(x => x.Customer)
             .WithMany(x => x.MedicalRecords)
             .HasForeignKey(x => x.CustomerId)
             .IsRequired();

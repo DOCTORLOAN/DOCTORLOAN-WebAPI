@@ -78,6 +78,7 @@
         <ProjectReference Include="..\..\Modules\Commons\DoctorLoan.Common.WebUI\DoctorLoan.Common.WebUI.csproj" />
         <ProjectReference Include="..\..\Modules\Customers\DoctorLoan.Customer.WebUI\DoctorLoan.Customer.WebUI.csproj" />
         <ProjectReference Include="..\..\Modules\Documents\DoctorLoan.Documents.WebUI\DoctorLoan.Contents.WebUI.csproj" />
+        <ProjectReference Include="..\..\Modules\MedicalRecord\DoctorLoan.MedicalRecord.WebUI\DoctorLoan.MedicalRecord.WebUI.csproj" />
         <ProjectReference Include="..\..\Modules\News\DoctorLoan.News.WebUI\DoctorLoan.News.WebUI.csproj" />
         <ProjectReference Include="..\..\Modules\Orders\DoctorLoan.Order.WebUI\DoctorLoan.Order.WebUI.csproj" />
         <ProjectReference Include="..\..\Modules\Products\DoctorLoan.Products.WebUI\DoctorLoan.Products.WebUI.csproj" />

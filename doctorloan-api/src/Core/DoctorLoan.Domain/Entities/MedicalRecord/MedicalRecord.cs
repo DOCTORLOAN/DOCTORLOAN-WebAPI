@@ -8,13 +8,16 @@ namespace DoctorLoan.Domain.Entities.MedicalRecord;
 public class MedicalRecord : BaseEntityAudit<int>
 {
     public string MedicalRecordNo { get; set; }
-    public int? CustomerId { get; set; }
+    public int CustomerId { get; set; }
+    public int? CustomerAddressId { get; set; }
     public DateTimeOffset? DateCreated { get; set; }
     public StatusEnum Status { get; set; }
     public string OtherMedicalHistory { get; set; }
     public int ParentId { get; set; }
     public bool IsDelete { get; set; }
-    public virtual Customer Customers { get; set; }
+    public string Noted { get; set; }
+    public virtual Customer Customer { get; set; }
+    public virtual CustomerAddress CustomerAddresses { get; set; }
     public virtual ICollection<MedicalRecordsCategoryMapping> MedicalRecordsCategoryMapping { get; set; } = new HashSet<MedicalRecordsCategoryMapping>();
     public virtual ICollection<MedicalRecordMedia> MedicalRecordMedias { get; set; } = new HashSet<MedicalRecordMedia>();
     public virtual ICollection<MedicalRecordsSymptoms> MedicalRecordsSymptoms { get; set; } = new HashSet<MedicalRecordsSymptoms>();

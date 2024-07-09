@@ -1,7 +1,7 @@
 ﻿using DoctorLoan.Application.Models.Commons;
 using MediatR;
 
-namespace DoctorLoan.Order.Application.Features.Commands.CallBackPayooCommand;
+namespace DoctorLoan.Order.Application.Features.Commands;
 public class CallBackPayooCommand : IRequest<Result<bool>>
 {
     public ResponseData ResponseData { get; set; }

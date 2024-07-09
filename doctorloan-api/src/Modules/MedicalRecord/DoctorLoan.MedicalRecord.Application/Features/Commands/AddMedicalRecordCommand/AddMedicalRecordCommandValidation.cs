@@ -5,7 +5,7 @@ using DoctorLoan.Domain.Enums.Commons;
 using DoctorLoan.Domain.Enums.Validators;
 using FluentValidation;
 
-namespace DoctorLoan.MedicalRecord.Application.Features.Commands.AddMedicalRecordCommand;
+namespace DoctorLoan.MedicalRecord.Application.Features.Commands;
 public class AddMedicalRecordCommandValidator : AbstractValidator<AddMedicalRecordCommand>
 {
     public AddMedicalRecordCommandValidator(ICurrentTranslateService currentTranslateService)

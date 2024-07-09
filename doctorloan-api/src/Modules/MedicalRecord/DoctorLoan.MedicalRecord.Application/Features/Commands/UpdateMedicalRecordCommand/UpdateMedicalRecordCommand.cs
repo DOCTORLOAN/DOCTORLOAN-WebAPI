@@ -3,11 +3,10 @@ using DoctorLoan.Application.Interfaces.Commons;
 using DoctorLoan.Application.Interfaces.Data;
 using DoctorLoan.Application.Models.Commons;
 using DoctorLoan.Domain.Enums.Commons;
-using DoctorLoan.MedicalRecord.Application.Features.Commands.AddMedicalRecordCommand;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace DoctorLoan.MedicalRecord.Application.Features.Commands.UpdateMedicalRecordCommand;
+namespace DoctorLoan.MedicalRecord.Application.Features.Commands;
 public record UpdateMedicalRecordCommand(int Id) : IRequest<Result<bool>>
 {
     public StatusEnum Status { get; set; }

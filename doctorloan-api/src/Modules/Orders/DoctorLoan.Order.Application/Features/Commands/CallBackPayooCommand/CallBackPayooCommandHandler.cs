@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 
-namespace DoctorLoan.Order.Application.Features.Commands.CallBackPayooCommand;
+namespace DoctorLoan.Order.Application.Features.Commands;
 public class CallBackPayooCommandHandler : ApplicationBaseService<CallBackPayooCommandHandler>, IRequestHandler<CallBackPayooCommand, Result<bool>>
 {
     public CallBackPayooCommandHandler(ILogger<CallBackPayooCommandHandler> logger, IApplicationDbContext context,

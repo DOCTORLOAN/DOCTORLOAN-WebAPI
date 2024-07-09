@@ -2,7 +2,6 @@
 using DoctorLoan.Application.Common.Extentions;
 using DoctorLoan.Application.Interfaces.Commons;
 using DoctorLoan.MedicalRecord.Application.Features.Commands;
-using DoctorLoan.MedicalRecord.Application.Features.Commands.AddMedicalRecordCommand;
 using DoctorLoan.MedicalRecord.Application.Features.Dtos;
 
 namespace DoctorLoan.MedicalRecord.Application.Commons.Mappings;

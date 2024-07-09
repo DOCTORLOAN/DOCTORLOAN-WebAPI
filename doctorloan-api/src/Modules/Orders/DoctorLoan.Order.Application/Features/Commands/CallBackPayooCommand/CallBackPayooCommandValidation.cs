@@ -3,7 +3,7 @@ using DoctorLoan.Application.Interfaces.Commons;
 using DoctorLoan.Domain.Const.Validations;
 using FluentValidation;
 
-namespace DoctorLoan.Order.Application.Features.Commands.CallBackPayooCommand;
+namespace DoctorLoan.Order.Application.Features.Commands;
 public class CallBackPayooCommandValidator : AbstractValidator<CallBackPayooCommand>
 {
     public CallBackPayooCommandValidator(ICurrentTranslateService currentTranslateService)

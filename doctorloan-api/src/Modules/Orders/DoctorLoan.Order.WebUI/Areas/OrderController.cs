@@ -3,7 +3,6 @@ using DoctorLoan.Application.Common.Security;
 using DoctorLoan.Application.Models.Commons;
 using DoctorLoan.Domain.Enums.Authorizations;
 using DoctorLoan.Order.Application.Features.Commands;
-using DoctorLoan.Order.Application.Features.Commands.CallBackPayooCommand;
 using DoctorLoan.Order.Application.Features.Dtos;
 using DoctorLoan.Order.Application.Features.Queries;
 using Microsoft.AspNetCore.Mvc;

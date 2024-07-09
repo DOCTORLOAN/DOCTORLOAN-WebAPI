@@ -8,7 +8,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace DoctorLoan.MedicalRecord.Application.Features.Queries.GetMedicalRecordByIdQuery;
+namespace DoctorLoan.MedicalRecord.Application.Features.Queries;
 public record GetMedicalRecordByIdQuery(int Id) : IRequest<Result<MedicalRecordDto>> { }
 public class GetMedicalRecordByIdHandler : ApplicationBaseService<GetMedicalRecordByIdHandler>, IRequestHandler<GetMedicalRecordByIdQuery, Result<MedicalRecordDto>>
 {

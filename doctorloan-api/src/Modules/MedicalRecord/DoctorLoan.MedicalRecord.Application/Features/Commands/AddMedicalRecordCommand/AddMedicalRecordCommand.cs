@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using AutoMapper;
+﻿using AutoMapper;
 using DoctorLoan.Application;
 using DoctorLoan.Application.Common.Expressions;
 using DoctorLoan.Application.Common.Extentions;
@@ -19,7 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 
-namespace DoctorLoan.MedicalRecord.Application.Features.Commands.AddMedicalRecordCommand;
+namespace DoctorLoan.MedicalRecord.Application.Features.Commands;
 public class AddMedicalRecordCommand : IRequest<Result<int>>
 {
     public StatusEnum Status { get; set; }

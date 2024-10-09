@@ -6,7 +6,6 @@ using DoctorLoan.Order.Application.Features.Commands;
 using DoctorLoan.Order.Application.Features.Dtos;
 using DoctorLoan.Order.Application.Features.Queries;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace DoctorLoan.Order.WebUI.Areas;
 public class OrderController : ApiControllerBase
@@ -31,19 +30,18 @@ public class OrderController : ApiControllerBase
     #endregion
 
     #region CRUD customer
-
+    [HttpPost]
     [Route("create")]
     [ProducesResponseType(typeof(Result<int>), (int)HttpStatusCode.OK)]
-    [HttpPost]
     public async Task<IActionResult> CreateOrder([FromBody] AddOrderCommand command, CancellationToken cancellationToken)
     {
         return Ok(await Mediator.Send(command, cancellationToken));
     }
 
+    [HttpPatch]
     [Route("update-status")]
     [Authorize(PermissionModuleEnum.Order, PermissionActionEnum.Update)]
     [ProducesResponseType(typeof(Result<bool>), (int)HttpStatusCode.OK)]
-    [HttpPatch]
     public async Task<IActionResult> UpdateStatus([FromBody] UpdateStatusCommand command, CancellationToken cancellationToken)
     {
         return Ok(await Mediator.Send(command, cancellationToken));
@@ -51,7 +49,6 @@ public class OrderController : ApiControllerBase
     #endregion
 
     #region Call Back Payoo
-
     [HttpPost]
     [Route("callback-payoo")]
     [ProducesResponseType(typeof(Result<bool>), (int)HttpStatusCode.OK)]
@@ -59,6 +56,5 @@ public class OrderController : ApiControllerBase
     {
         return Ok(await Mediator.Send(command, cancellationToken));
     }
-
     #endregion
 }

@@ -14,7 +14,7 @@ public class MedicalRecordController : ApiControllerBase
     [HttpGet]
     [Route("filter")]
     [ProducesResponseType(typeof(Result<PaginatedList<MedicalRecordDto>>), (int)HttpStatusCode.OK)]
-    [Authorize(PermissionModuleEnum.MedicalRecord, PermissionActionEnum.Read)]
+    //[Authorize(PermissionModuleEnum.MedicalRecord, PermissionActionEnum.Read)]
     public async Task<IActionResult> FilterMedicalRecord([FromQuery] FilterMedicalRecordQuery query, CancellationToken cancellationToken)
     {
         return Ok(await Mediator.Send(query, cancellationToken));
@@ -23,7 +23,7 @@ public class MedicalRecordController : ApiControllerBase
     [HttpGet]
     [Route("{id:int}")]
     [ProducesResponseType(typeof(Result<MedicalRecordDto>), (int)HttpStatusCode.OK)]
-    [Authorize(PermissionModuleEnum.MedicalRecord, PermissionActionEnum.Read)]
+    //[Authorize(PermissionModuleEnum.MedicalRecord, PermissionActionEnum.Read)]
     public async Task<IActionResult> GetMedicalRecordById([FromRoute] int id, CancellationToken cancellationToken)
     {
         return Ok(await Mediator.Send(new GetMedicalRecordByIdQuery(id), cancellationToken));
@@ -32,19 +32,18 @@ public class MedicalRecordController : ApiControllerBase
     #endregion
 
     #region CRUD customer
-
+    [HttpPost]
     [Route("create")]
     [ProducesResponseType(typeof(Result<int>), (int)HttpStatusCode.OK)]
-    [HttpPost]
     public async Task<IActionResult> CreateMedicalRecord([FromBody] AddMedicalRecordCommand command, CancellationToken cancellationToken)
     {
         return Ok(await Mediator.Send(command, cancellationToken));
     }
 
+    [HttpPatch]
     [Route("update-status")]
     [ProducesResponseType(typeof(Result<int>), (int)HttpStatusCode.OK)]
     [Authorize(PermissionModuleEnum.MedicalRecord, PermissionActionEnum.Update)]
-    [HttpPatch]
     public async Task<IActionResult> UpdateStatusMedicalRecord([FromBody] UpdateMedicalRecordCommand command, CancellationToken cancellationToken)
     {
         return Ok(await Mediator.Send(command, cancellationToken));

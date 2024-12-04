@@ -8,6 +8,7 @@ using DoctorLoan.Domain.Entities.News;
 using DoctorLoan.Domain.Enums.Commons;
 using DoctorLoan.News.Application.Features.News.Admin.Dtos;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace DoctorLoan.News.Application.Features.News.Admin.Queries;
@@ -28,20 +29,29 @@ public class FilterProductQueryHandle : ApplicationBaseService<FilterProductQuer
     public async Task<Result<PaginatedList<NewsItemFilterResultDto>>> Handle(FilterNewsItemsQuery request, CancellationToken cancellationToken)
     {
         var condition = PredicateBuilder.True<NewsItem>();
-        if (request.Keyword != null)
+
+        if (!string.IsNullOrEmpty(request.Keyword))
             condition = condition.And(x => x.Title.ToLower().Contains(request.Keyword.ToLower()));
+
         if (request.Status.HasValue)
-        {
             condition = condition.And(x => x.Status == request.Status);
-        }
+
         if (request.CategoryId.HasValue)
             condition = condition.And(x => x.NewsCategories.Any(c => c.NewsCategoryId == request.CategoryId));
-        var query = _context.NewsItems.Where(condition)
-                                        .OrderByDescending(x => x.Status)
-                                            .ThenByDescending(s => s.LastModified);
 
+        _logger.LogInformation("Fetching news items with filters: Keyword={Keyword}, Status={Status}, CategoryId={CategoryId}",
+            request.Keyword, request.Status, request.CategoryId);
+
+        var query = _context.NewsItems
+            .AsNoTracking()
+            .Where(condition)
+            .OrderByDescending(x => x.Status)
+            .ThenByDescending(s => s.LastModified);
+
+        // Chuyển đổi truy vấn thành DTO, bao gồm trường 'short'
         var data = await _mapper.ProjectTo<NewsItemFilterResultDto>(query)
             .ToPagedListAsync(request.Page, request.Take, cancellationToken);
+
         return Result.Success(data);
     }
 }

@@ -34,17 +34,16 @@ public class MappingProfile : Profile, IOrderedMapperProfile
 
         CreateMap<NewsItemDetailDto, NewsItemDetail>();
         CreateMap<NewsMediaDto, NewsMedia>();
-      
+
         CreateMap<NewsItem, NewsItemFilterResultDto>()
-           .ForMember(x => x.Categories, x => x.MapFrom(c => c.NewsCategories.Select(v => v.NewsCategory.Name)))
-           .ForMember(x => x.ImageUrl, x =>
-           {
+            .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.NewsCategories.Select(c => c.NewsCategory.Name)))
+            .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.NewsMedias.FirstOrDefault() != null
+                ? src.NewsMedias.FirstOrDefault().Media.GetMediaUrl(true, 0)
+                : string.Empty))
+            .ForMember(dest => dest.Short, opt => opt.MapFrom(src => src.NewsItemDetails.FirstOrDefault(d => d.LanguageId == (int)LanguageEnum.VN) != null
+                ? src.NewsItemDetails.FirstOrDefault(d => d.LanguageId == (int)LanguageEnum.VN).Short
+                : string.Empty));
 
-               x.MapFrom(c => c.NewsMedias.FirstOrDefault().Media.GetMediaUrl(true, 0));
-
-           })
-          
-            ;
         #region Portal
         CreateMap<NewsItem, NewsSearchResultDto>()
             .ForMember(x=>x.Short,x=>x.MapFrom(c=>c.NewsItemDetails.FirstOrDefault(x=>x.LanguageId==(int)LanguageEnum.VN).Short))

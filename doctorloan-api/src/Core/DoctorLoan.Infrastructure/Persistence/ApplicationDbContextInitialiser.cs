@@ -600,7 +600,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "LC35LESY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 37400000,
+                   Price = 46750000,
                    Quantity = 100,
                    Slug = "ghesangche-doctorloan-135",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -683,7 +683,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "SC95VESY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 27300000,
+                   Price = 34130000,
                    Quantity = 100,
                    Slug = "ghesangche-doctorloan-95",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -766,7 +766,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "SC90DESY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 24300000,
+                   Price = 30380000,
                    Quantity = 100,
                    Slug = "ghesangche-doctorloan-90d",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -849,7 +849,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "SC90TESY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 13700000,
+                   Price = 17130000,
                    Quantity = 100,
                    Slug = "ghesangche-doctorloan-90t",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -932,7 +932,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "SC90OEBL",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 9100000,
+                   Price = 11380000,
                    Quantity = 300,
                    Slug = "ghesangche-doctorloan-90bl",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -1007,7 +1007,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "PL85SFOR",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 1320000,
+                   Price = 1850000,
                    Quantity = 100,
                    Slug = "ghesangche-doctorloan-n85",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -1089,7 +1089,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "NP04SEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 5300000,
+                   Price = 6630000,
                    Quantity = 100,
                    Slug = "goicosangche-f4",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -1171,7 +1171,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "NP05SEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 3000000,
+                   Price = 3750000,
                    Quantity = 100,
                    Slug = "goicosangche-f5",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -1249,7 +1249,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "NP06SEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 4900000,
+                   Price = 6130000,
                    Quantity = 100,
                    Slug = "goicosangche-f6",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -1327,7 +1327,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "SDNLSESY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 4480000,
+                   Price = 5470000,
                    Quantity = 100,
                    Slug = "demthien-doctorloan",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -1409,7 +1409,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "NP00OEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 300000,
+                   Price = 440000,
                    Quantity = 100,
                    Slug = "goicososinh-doctorloan",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -1483,7 +1483,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "NP26OEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 800000,
+                   Price = 1120000,
                    Quantity = 100,
                    Slug = "goicotreem-doctorloan-26",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -1557,7 +1557,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "NP61OEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 1000000,
+                   Price = 1400000,
                    Quantity = 100,
                    Slug = "goicotreem-doctorloan-61",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -1627,13 +1627,13 @@ public class ApplicationDbContextInitialiser
                 },
                 new DoctorLoan.Domain.Entities.Products.Product
                 {
-                   Name = "Gối lưng sáng chế DOCTORLOAN F3/C",
+                   Name = "Gối lưng sáng chế DOCTORLOAN F3",
                    Sku = "BP03CEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 2600000,
+                   Price = 3250000,
                    Quantity = 100,
-                   Slug = "goilung-doctorloan-f3c",
+                   Slug = "goilung-doctorloan-f3",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
                    {
                        new DoctorLoan.Domain.Entities.Products.ProductAttribute
@@ -1713,7 +1713,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "BP04OEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 2600000,
+                   Price = 3250000,
                    Quantity = 100,
                    Slug = "goilung-doctorloan-f4",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -1787,7 +1787,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "BP01LEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 1000000,
+                   Price = 1250000,
                    Quantity = 100,
                    Slug = "goilung-doctorloan-f1",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -1865,7 +1865,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "NPAUNEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 2300000,
+                   Price = 2880000,
                    Quantity = 100,
                    Slug = "goiconguoilon",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -1943,7 +1943,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "NPTLSEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 1500000,
+                   Price = 1880000,
                    Quantity = 100,
                    Slug = "goicodulich",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -2021,7 +2021,7 @@ public class ApplicationDbContextInitialiser
                    Sku = "NPCROEFY",
                    Status = StatusEnum.Publish,
                    BrandId = _context.Brands.FirstOrDefault().Id,
-                   Price = 600000,
+                   Price = 750000,
                    Quantity = 100,
                    Slug = "goicodixe",
                    ProductAttributes = new List<DoctorLoan.Domain.Entities.Products.ProductAttribute>
@@ -2114,64 +2114,64 @@ public class ApplicationDbContextInitialiser
         {
             var productItems = new List<DoctorLoan.Domain.Entities.Products.ProductItem>
             {
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "LC35LESY")?.Id ?? 1, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 135/B", Sku = "LC35LESB", Price = 37400000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "LC35LESY")?.Id ?? 1, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 135/P", Sku = "LC35LESP", Price = 37400000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "LC35LESY")?.Id ?? 1, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 135/G", Sku = "LC35LESG", Price = 37400000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "LC35LESY")?.Id ?? 1, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 135/Y", Sku = "LC35LESY", Price = 37400000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "LC35LESY")?.Id ?? 1, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 135/B", Sku = "LC35LESB", Price = 46750000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "LC35LESY")?.Id ?? 1, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 135/P", Sku = "LC35LESP", Price = 46750000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "LC35LESY")?.Id ?? 1, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 135/G", Sku = "LC35LESG", Price = 46750000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "LC35LESY")?.Id ?? 1, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 135/Y", Sku = "LC35LESY", Price = 46750000, },
 
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC95VESY")?.Id ?? 2, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 95/B", Sku = "SC95VESB", Price = 27300000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC95VESY")?.Id ?? 2, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 95/P", Sku = "SC95VESP", Price = 27300000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC95VESY")?.Id ?? 2, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 95/G", Sku = "SC95VESG", Price = 27300000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC95VESY")?.Id ?? 2, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 95/Y", Sku = "SC95VESY", Price = 27300000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC95VESY")?.Id ?? 2, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 95/B", Sku = "SC95VESB", Price = 34130000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC95VESY")?.Id ?? 2, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 95/P", Sku = "SC95VESP", Price = 34130000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC95VESY")?.Id ?? 2, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 95/G", Sku = "SC95VESG", Price = 34130000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC95VESY")?.Id ?? 2, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 95/Y", Sku = "SC95VESY", Price = 34130000, },
 
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC90DESY")?.Id ?? 3, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 90D/B", Sku = "SC90DESB", Price = 24300000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC90DESY")?.Id ?? 3, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 90D/P", Sku = "SC90DESP", Price = 24300000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC90DESY")?.Id ?? 3, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 90D/G", Sku = "SC90DESG", Price = 24300000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC90DESY")?.Id ?? 3, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 90D/Y", Sku = "SC90DESY", Price = 24300000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC90DESY")?.Id ?? 3, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 90D/B", Sku = "SC90DESB", Price = 30380000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC90DESY")?.Id ?? 3, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 90D/P", Sku = "SC90DESP", Price = 30380000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC90DESY")?.Id ?? 3, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 90D/G", Sku = "SC90DESG", Price = 30380000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC90DESY")?.Id ?? 3, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 90D/Y", Sku = "SC90DESY", Price = 30380000, },
 
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC90TESY")?.Id ?? 4, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 90T/B", Sku = "SC90TESB", Price = 13700000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC90TESY")?.Id ?? 4, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 90T/P", Sku = "SC90TESP", Price = 13700000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC90TESY")?.Id ?? 4, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 90T/G", Sku = "SC90TESG", Price = 13700000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC90TESY")?.Id ?? 4, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 90T/Y", Sku = "SC90TESY", Price = 13700000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC90TESY")?.Id ?? 4, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 90T/B", Sku = "SC90TESB", Price = 17130000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC90TESY")?.Id ?? 4, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 90T/P", Sku = "SC90TESP", Price = 17130000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC90TESY")?.Id ?? 4, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 90T/G", Sku = "SC90TESG", Price = 17130000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC90TESY")?.Id ?? 4, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 90T/Y", Sku = "SC90TESY", Price = 17130000, },
 
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC90OEBL")?.Id ?? 5, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 90/BL", Sku = "SC90OEBL", Price = 9100000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SC90OEBL")?.Id ?? 5, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN 90/BL", Sku = "SC90OEBL", Price = 11380000, },
 
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-S/OR", Sku = "PL85SFOR", Price = 1320000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-S/RE", Sku = "PL85SFRE", Price = 1320000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-S/YL", Sku = "PL85SFYL", Price = 1320000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-S/GR", Sku = "PL85SFGR", Price = 1320000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-S/BL", Sku = "PL85SFBL", Price = 1320000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-S/GE", Sku = "PL85SFGE", Price = 1320000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-S/OR", Sku = "PL85SFOR", Price = 1850000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-S/RE", Sku = "PL85SFRE", Price = 1850000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-S/YL", Sku = "PL85SFYL", Price = 1850000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-S/GR", Sku = "PL85SFGR", Price = 1850000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-S/BL", Sku = "PL85SFBL", Price = 1850000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-S/GE", Sku = "PL85SFGE", Price = 1850000, },
 
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-L/OR", Sku = "PL85LFOR", Price = 1430000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-L/RE", Sku = "PL85LFRE", Price = 1430000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-L/YL", Sku = "PL85LFYL", Price = 1430000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-L/GR", Sku = "PL85LFGR", Price = 1430000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-L/BL", Sku = "PL85LFBL", Price = 1430000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-L/GE", Sku = "PL85LFGE", Price = 1430000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-L/OR", Sku = "PL85LFOR", Price = 2000000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-L/RE", Sku = "PL85LFRE", Price = 2000000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-L/YL", Sku = "PL85LFYL", Price = 2000000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-L/GR", Sku = "PL85LFGR", Price = 2000000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-L/BL", Sku = "PL85LFBL", Price = 2000000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "PL85SFOR")?.Id ?? 6, Quantity = 25, Name = "Ghế sáng chế DOCTORLOAN N85-L/GE", Sku = "PL85LFGE", Price = 2000000, },
 
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NP04SEFY")?.Id ?? 7, Quantity = 50, Name = "Gối cổ sáng chế DOCTORLOAN F4/09", Sku = "NP04SEFY", Price = 5300000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NP04SEFY")?.Id ?? 7, Quantity = 50, Name = "Gối cổ sáng chế DOCTORLOAN F4/12", Sku = "NP04MEFY", Price = 5500000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NP04SEFY")?.Id ?? 7, Quantity = 50, Name = "Gối cổ sáng chế DOCTORLOAN F4/09", Sku = "NP04SEFY", Price = 6630000, },
+                //new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NP04SEFY")?.Id ?? 7, Quantity = 50, Name = "Gối cổ sáng chế DOCTORLOAN F4/12", Sku = "NP04MEFY", Price = 5500000, },
 
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NP05SEFY")?.Id ?? 8, Quantity = 100, Name = "Gối cổ sáng chế DOCTORLOAN F5/S", Sku = "NP05SEFY", Price = 3000000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NP05SEFY")?.Id ?? 8, Quantity = 100, Name = "Gối cổ sáng chế DOCTORLOAN F5/S", Sku = "NP05SEFY", Price = 3750000, },
 
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NP06SEFY")?.Id ?? 9, Quantity = 100, Name = "Gối cổ sáng chế DOCTORLOAN F6/09", Sku = "NP06SEFY", Price = 4900000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NP06SEFY")?.Id ?? 9, Quantity = 100, Name = "Gối cổ sáng chế DOCTORLOAN F6/09", Sku = "NP06SEFY", Price = 6130000, },
 
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SDNLSESY")?.Id ?? 10, Quantity = 50, Name = "Đệm thiền sáng chế DOCTORLOAN/S", Sku = "SDNLSESY", Price = 4480000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SDNLSESY")?.Id ?? 10, Quantity = 50, Name = "Đệm thiền sáng chế DOCTORLOAN/M", Sku = "SDNLMESY", Price = 4760000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SDNLSESY")?.Id ?? 10, Quantity = 50, Name = "Đệm thiền sáng chế DOCTORLOAN/S", Sku = "SDNLSESY", Price = 5740000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "SDNLSESY")?.Id ?? 10, Quantity = 50, Name = "Đệm thiền sáng chế DOCTORLOAN/M", Sku = "SDNLMESY", Price = 5800000, },
 
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NP00OEFY")?.Id ?? 11, Quantity = 100, Name = "Gối cổ sơ sinh DOCTORLOAN", Sku = "NP00OEFY", Price = 300000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NP26OEFY")?.Id ?? 12, Quantity = 100, Name = "Gối cổ trẻ em DOCTORLOAN 2/6", Sku = "NP26OEFY", Price = 800000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NP61OEFY")?.Id ?? 13, Quantity = 100, Name = "Gối cổ trẻ em DOCTORLOAN 6/10", Sku = "NP61OEFY", Price = 1000000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "BP03CEFY")?.Id ?? 14, Quantity = 100, Name = "Gối lưng sáng chế DOCTORLOAN F3/C", Sku = "BP03CEFY", Price = 2600000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "BP04OEFY")?.Id ?? 15, Quantity = 100, Name = "Gối lưng sáng chế DOCTORLOAN F4", Sku = "BP04OEFY", Price = 2600000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NP00OEFY")?.Id ?? 11, Quantity = 100, Name = "Gối cổ sơ sinh DOCTORLOAN", Sku = "NP00OEFY", Price = 440000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NP26OEFY")?.Id ?? 12, Quantity = 100, Name = "Gối cổ trẻ em DOCTORLOAN 2/6", Sku = "NP26OEFY", Price = 1120000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NP61OEFY")?.Id ?? 13, Quantity = 100, Name = "Gối cổ trẻ em DOCTORLOAN 6/10", Sku = "NP61OEFY", Price = 1400000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "BP03CEFY")?.Id ?? 14, Quantity = 100, Name = "Gối lưng sáng chế DOCTORLOAN F3/C", Sku = "BP03CEFY", Price = 3250000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "BP04OEFY")?.Id ?? 15, Quantity = 100, Name = "Gối lưng sáng chế DOCTORLOAN F4", Sku = "BP04OEFY", Price = 3250000, },
 
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "BP01LEFY")?.Id ?? 16, Quantity = 500, Name = "Gối lưng sáng chế DOCTORLOAN F1/S", Sku = "BP01LEFY", Price = 2000000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "BP01LEFY")?.Id ?? 16, Quantity = 50, Name = "Gối lưng sáng chế DOCTORLOAN F1/L", Sku = "BP01SEFY", Price = 1000000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "BP01LEFY")?.Id ?? 16, Quantity = 500, Name = "Gối lưng sáng chế DOCTORLOAN F1/S", Sku = "BP01SEFY", Price = 1250000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "BP01LEFY")?.Id ?? 16, Quantity = 50, Name = "Gối lưng sáng chế DOCTORLOAN F1/L", Sku = "BP01LEFY", Price = 2500000, },
 
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NPAUNEFY")?.Id ?? 17, Quantity = 50, Name = "Gối cổ người lớn", Sku = "NPAUNEFY", Price = 2300000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NPTLSEFY")?.Id ?? 18, Quantity = 50, Name = "Gối cổ du lịch/09", Sku = "NPTLSEFY", Price = 1500000, },
-                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NPCROEFY")?.Id ?? 19, Quantity = 50, Name = "Gối cổ đi xe", Sku = "NPCROEFY", Price = 600000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NPAUNEFY")?.Id ?? 17, Quantity = 50, Name = "Gối cổ người lớn DOCTORLOAN AU/N", Sku = "NPAUNEFY", Price = 2880000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NPTLSEFY")?.Id ?? 18, Quantity = 50, Name = "Gối cổ du lịch DOCTORLOAN/N", Sku = "NPTLSEFY", Price = 1880000, },
+                new ProductItem { Available = 0, ProductId = _product.Find(s => s.Sku == "NPCROEFY")?.Id ?? 19, Quantity = 50, Name = "Gối cổ đi xe", Sku = "NPCROEFY", Price = 750000, },
             };
             await _context.ProductItems.AddRangeAsync(productItems);
             await _context.SaveChangesAsync();

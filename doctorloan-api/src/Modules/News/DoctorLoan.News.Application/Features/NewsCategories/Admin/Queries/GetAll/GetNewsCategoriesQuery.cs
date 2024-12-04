@@ -33,7 +33,7 @@ public class GetNewsCategoriesQueryHandle : ApplicationBaseService<GetNewsCatego
      
         if (request.Status.HasValue)
             condition = condition.And(x => x.Status == request.Status);
-        var query=_context.NewsCategories.Where(condition).OrderByDescending(c => c.Sort);
+        var query=_context.NewsCategories.Where(condition).OrderBy(c => c.Id);
         var result =await Mapper.ProjectTo<NewsCategoryDto>(query).ToPagedListAsync(request.Page, request.Take);
         return Result.Success(result);
     }

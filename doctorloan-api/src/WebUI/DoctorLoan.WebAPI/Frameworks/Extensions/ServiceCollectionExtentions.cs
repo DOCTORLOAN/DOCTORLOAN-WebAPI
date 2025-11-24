@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.RateLimiting;
 using DoctorLoan.Application.Interfaces.Commons;
 using DoctorLoan.Application.Interfaces.Data;
 using DoctorLoan.Application.Interfaces.Settings;
@@ -15,9 +16,11 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using NSwag;
@@ -87,16 +90,18 @@ public static class ServiceCollectionExtentions
         {
             var key = Encoding.UTF8.GetBytes(jwtKey);
             p.SaveToken = true;
+            p.RequireHttpsMetadata = !isDevelopment;
             p.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuer = false,// on production make it true
-                ValidateAudience = false,// on production make it true
+                ValidateIssuer = !isDevelopment,
+                ValidateAudience = !isDevelopment,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = jwtIssuer,
                 ValidAudience = jwtAudience,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
-                ClockSkew = TimeSpan.Zero
+                ClockSkew = TimeSpan.Zero,
+                ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha256 }
             };
             p.Events = new JwtBearerEvents
             {
@@ -137,20 +142,15 @@ public static class ServiceCollectionExtentions
             };
         });
 
-        //services.AddAuthorization(o =>
-        //{
-        //    o.DefaultPolicy = new AuthorizationPolicyBuilder()
-        //        .RequireAuthenticatedUser()
-        //        .RequireClaim("username", "true")
-        //        .Build();
+        services.AddAuthorization(options =>
+        {
+            var authenticatedPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
 
-        //    var tradieAuthorizerPolicy = new AuthorizationPolicyBuilder()
-        //        .RequireAuthenticatedUser()
-        //        .RequireClaim("trade_license_number")
-        //        .Build();
-        //    o.AddPolicy("TradieOnly", tradieAuthorizerPolicy);
-
-        //});
+            options.DefaultPolicy = authenticatedPolicy;
+            options.FallbackPolicy = authenticatedPolicy;
+        });
 
         var assemblies = typeFinder.GetAssemblies();
         foreach (var assembly in assemblies)
@@ -173,6 +173,7 @@ public static class ServiceCollectionExtentions
         services.AddCustomResourceLocalization();
         services.AddAllConfigureServices(configuration, typeFinder);
         services.AddSettings(typeFinder);
+        services.AddRequestRateLimiter(configuration);
         services.AddEnableCORS(configuration);
 
         if (!isDevelopment)
@@ -302,5 +303,50 @@ public static class ServiceCollectionExtentions
             });
 
         }
+    }
+
+    private static IServiceCollection AddRequestRateLimiter(this IServiceCollection services, IConfiguration configuration)
+    {
+        var rateLimitEnabled = configuration.GetValue<bool?>("RateLimiting:Enabled") ?? true;
+        if (!rateLimitEnabled)
+        {
+            return services;
+        }
+
+        var permitLimit = configuration.GetValue<int?>("RateLimiting:PermitLimit") ?? 100;
+        var windowSeconds = configuration.GetValue<int?>("RateLimiting:WindowSeconds") ?? 60;
+        var queueLimit = configuration.GetValue<int?>("RateLimiting:QueueLimit") ?? 0;
+
+        services.AddRateLimiter(options =>
+        {
+            options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+            {
+                var remoteIp = context.Connection.RemoteIpAddress?.ToString() ?? "global";
+                return RateLimitPartition.GetFixedWindowLimiter(remoteIp, _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = permitLimit,
+                    Window = TimeSpan.FromSeconds(windowSeconds),
+                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                    QueueLimit = queueLimit
+                });
+            });
+
+            options.OnRejected = (context, token) =>
+            {
+                if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+                {
+                    context.HttpContext.Response.Headers.RetryAfter = retryAfter.TotalSeconds.ToString(CultureInfo.InvariantCulture);
+                }
+
+                return new ValueTask(context.HttpContext.Response.WriteAsJsonAsync(new
+                {
+                    error = "TooManyRequests",
+                    detail = "Request limit exceeded. Please retry later."
+                }, cancellationToken: token));
+            };
+        });
+
+        return services;
     }
 }

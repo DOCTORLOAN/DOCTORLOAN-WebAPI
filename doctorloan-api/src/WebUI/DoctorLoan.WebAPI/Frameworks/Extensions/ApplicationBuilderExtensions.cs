@@ -2,6 +2,7 @@
 using DoctorLoan.Application.Interfaces.Commons;
 using DoctorLoan.Application.Models.Settings;
 using DoctorLoan.WebAPI.Middlewares;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Options;
 
 namespace DoctorLoan.WebAPI.Frameworks.Extensions;
@@ -40,18 +41,23 @@ public static class ApplicationBuilderExtensions
 
         app.UseHealthChecks("/health");
         app.UseHttpsRedirection();
+        app.UseStandardSecurityHeaders();
         app.UseStaticFiles();
 
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 
-        app.UseSwaggerUi3(settings =>
+        if (app.Environment.IsDevelopment())
         {
-            settings.Path = "/api";
-            settings.DocumentPath = "/api/specification.json";
-        });
+            app.UseSwaggerUi3(settings =>
+            {
+                settings.Path = "/api";
+                settings.DocumentPath = "/api/specification.json";
+            });
+        }
 
         app.UseRouting();
+        app.UseRateLimiter();
         app.UseAllowCORS();
         app.UseAuthentication();
         app.UseAuthorization();
@@ -97,14 +103,7 @@ public static class ApplicationBuilderExtensions
         var allowCORSUrls = setting.Value.GetAllowCORS();
         if (allowCORSUrls.Length > 0)
         {
-            app.UseCors(c =>
-            {
-                c.WithOrigins(allowCORSUrls)
-                          .AllowAnyMethod()
-                          .AllowAnyHeader()
-                          .SetIsOriginAllowed(origin => true)
-                          .AllowCredentials();
-            });
+            app.UseCors("AllowSpecificOrigin");
         }
         return app;
     }

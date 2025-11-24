@@ -20,29 +20,19 @@ if (isDevelopment)
 {
     app.UseDeveloperExceptionPage();
     app.UseMigrationsEndPoint();
-    app.MapControllers().AllowAnonymous();
+}
 
-    // Initialise and seed database
+app.MapControllers();
+
+// Only initialize and seed in development
+if (isDevelopment)
+{
     using (var scope = app.Services.CreateScope())
     {
         var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();
         await initialiser.InitialiseAsync();
         await initialiser.SeedAsync();
     }
-}
-else
-    app.MapControllers();
-
-app.UseDeveloperExceptionPage();
-app.UseMigrationsEndPoint();
-app.MapControllers().AllowAnonymous();
-
-// Initialise and seed database
-using (var scope = app.Services.CreateScope())
-{
-    var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();
-    await initialiser.InitialiseAsync();
-    await initialiser.SeedAsync();
 }
 
 app.ConfigWebApplication(typeFinder);

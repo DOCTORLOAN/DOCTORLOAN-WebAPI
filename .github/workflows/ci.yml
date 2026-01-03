@@ -237,22 +237,17 @@ jobs:
           
           # Export findings as JSON
           if [ "$SECRET_COUNT" -gt 0 ]; then
-            SECRETS_STR=$(printf '%s ' "${SECRETS_FOUND[@]}")
-            export SECRETS_FOUND="$SECRETS_STR"
-            python3 << 'EOF'
+            printf '%s\n' "${SECRETS_FOUND[@]}" | python3 << 'EOF'
 import json
 import sys
-import os
-
-secrets_str = os.environ.get('SECRETS_FOUND', '')
-if not secrets_str:
-    print("[]")
-    sys.exit(0)
 
 findings = []
-for item in secrets_str.strip().split():
-    if ':' in item:
-        parts = item.split(':', 2)
+for line in sys.stdin:
+    line = line.strip()
+    if not line:
+        continue
+    if ':' in line:
+        parts = line.split(':', 2)
         if len(parts) >= 3:
             findings.append({
                 "type": "hardcoded_secret",
@@ -393,13 +388,44 @@ EOF
           echo "total_lines=$TOTAL_LINES" >> $GITHUB_OUTPUT
           
           # Create performance findings JSON
-          cat > performance-findings.json << EOF
-          [
-            $([ "$BLOCKING_ASYNC" -gt 0 ] && echo "{\"type\":\"blocking_async\",\"title\":\"Blocking async operations found\",\"count\":$BLOCKING_ASYNC,\"severity\":\"critical\",\"recommendation\":\"Use async/await instead of .Result, .Wait(), or .GetAwaiter().GetResult()\"}," || echo "")
-            $([ "$STRING_CONCAT" -gt 0 ] && echo "{\"type\":\"string_concat\",\"title\":\"String concatenation in loops found\",\"count\":$STRING_CONCAT,\"severity\":\"medium\",\"recommendation\":\"Use StringBuilder for string concatenation in loops\"}," || echo "")
-            $([ "$LARGE_FILES" -gt 0 ] && echo "{\"type\":\"large_files\",\"title\":\"Large files found (>500 lines)\",\"count\":$LARGE_FILES,\"severity\":\"enhancement\",\"recommendation\":\"Consider splitting large files into smaller, more maintainable units\"}" || echo "")
-          ]
-          EOF
+          BLOCKING_ASYNC=$BLOCKING_ASYNC STRING_CONCAT=$STRING_CONCAT LARGE_FILES=$LARGE_FILES python3 << 'PYEOF' > performance-findings.json
+import json
+import os
+
+findings = []
+
+blocking_async = int(os.environ.get('BLOCKING_ASYNC', '0'))
+if blocking_async > 0:
+    findings.append({
+        "type": "blocking_async",
+        "title": "Blocking async operations found",
+        "count": blocking_async,
+        "severity": "critical",
+        "recommendation": "Use async/await instead of .Result, .Wait(), or .GetAwaiter().GetResult()"
+    })
+
+string_concat = int(os.environ.get('STRING_CONCAT', '0'))
+if string_concat > 0:
+    findings.append({
+        "type": "string_concat",
+        "title": "String concatenation in loops found",
+        "count": string_concat,
+        "severity": "medium",
+        "recommendation": "Use StringBuilder for string concatenation in loops"
+    })
+
+large_files = int(os.environ.get('LARGE_FILES', '0'))
+if large_files > 0:
+    findings.append({
+        "type": "large_files",
+        "title": "Large files found (>500 lines)",
+        "count": large_files,
+        "severity": "enhancement",
+        "recommendation": "Consider splitting large files into smaller, more maintainable units"
+    })
+
+print(json.dumps(findings, indent=2))
+PYEOF
 
       - name: Upload Performance Artifacts
         if: always()

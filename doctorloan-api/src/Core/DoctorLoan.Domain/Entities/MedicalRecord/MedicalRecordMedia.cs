@@ -5,7 +5,7 @@ using DoctorLoan.Domain.Enums.Commons;
 namespace DoctorLoan.Domain.Entities.MedicalRecord;
 
 [Table("MedicalRecordMedia")]
-public class MedicalRecordMedia:BaseEntityAudit<int>
+public class MedicalRecordMedia : BaseEntityAudit<int>
 {
     public long? MediaId { get; set; }
     public int? MedicalRecordId { get; set; }

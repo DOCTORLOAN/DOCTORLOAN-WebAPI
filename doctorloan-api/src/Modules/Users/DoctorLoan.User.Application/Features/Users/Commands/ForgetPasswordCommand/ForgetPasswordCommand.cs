@@ -99,4 +99,3 @@ public class ForgetPasswordCommandHandle : ApplicationBaseService<ForgetPassword
         return builder.ToString();
     }
 }
-

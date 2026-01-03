@@ -8,10 +8,10 @@ using DoctorLoan.Domain.Enums.Commons;
 
 namespace DoctorLoan.Products.Application.Features.Categories.Dtos;
 
-public class CategoryDto 
+public class CategoryDto
 {
     public int Id { get; set; }
-    public string Name { get; set; }=string.Empty;
+    public string Name { get; set; } = string.Empty;
     public int ParentId { get; set; }
     public string MetaTitle { get; set; } = string.Empty;
     public string Content { get; set; } = string.Empty;
@@ -22,4 +22,3 @@ public class CategoryDto
     public string ParentName { get; internal set; }
     public DateTimeOffset LastModified { get; set; }
 }
-

@@ -9,7 +9,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace DoctorLoan.Products.Application.Features.Categories.Admin.Queries;
-public record GetCategoryByIdQuery(int id):IRequest<Result<CategoryDto>>
+public record GetCategoryByIdQuery(int id) : IRequest<Result<CategoryDto>>
 {
 }
 public class GetCategoryByIdQueryHandle : ApplicationBaseService<GetCategoryByIdQueryHandle>, IRequestHandler<GetCategoryByIdQuery, Result<CategoryDto>>

@@ -7,8 +7,8 @@ public class NewsItemFilterResultDto
     public int Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Short { get; set; } = string.Empty;
-    public StatusEnum Status { get; set; }   
+    public StatusEnum Status { get; set; }
     public List<string> Tags { get; set; } = new List<string>();
     public List<string> Categories { get; set; } = new List<string>();
-    public DateTimeOffset LastModified {  get; set; }
+    public DateTimeOffset LastModified { get; set; }
 }

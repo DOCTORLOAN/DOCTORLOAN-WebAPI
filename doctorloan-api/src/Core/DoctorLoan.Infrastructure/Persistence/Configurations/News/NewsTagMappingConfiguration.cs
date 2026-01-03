@@ -18,10 +18,10 @@ public class NewsTagMappingConfiguration : IEntityTypeConfiguration<NewsTagsMapp
             .HasForeignKey(x => x.NewsTagId)
             .IsRequired();
         builder.HasOne(x => x.NewsItem)
-          .WithMany(x=>x.NewsTags)
+          .WithMany(x => x.NewsTags)
           .HasForeignKey(x => x.NewsItemId)
           .IsRequired()
           .OnDelete(DeleteBehavior.Cascade);
-          ;
+        ;
     }
 }

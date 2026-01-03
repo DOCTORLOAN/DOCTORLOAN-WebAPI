@@ -2,7 +2,7 @@
 
 namespace DoctorLoan.Domain.Entities.Products;
 [Table("ProductCategories")]
-public class ProductCategory:BaseEntityAudit<int>
+public class ProductCategory : BaseEntityAudit<int>
 {
     public int ProductId { get; set; }
     public int CategoryId { get; set; }

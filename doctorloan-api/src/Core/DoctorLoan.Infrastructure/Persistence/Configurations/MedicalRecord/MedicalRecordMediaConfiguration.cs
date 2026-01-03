@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using DoctorLoan.Domain.Entities.MedicalRecord;
 using Microsoft.EntityFrameworkCore;
-using DoctorLoan.Domain.Entities.MedicalRecord;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DoctorLoan.Infrastructure.Persistence.Configurations.MedicalRecord;
 public class MedicalRecordMediaConfiguration : IEntityTypeConfiguration<MedicalRecordMedia>

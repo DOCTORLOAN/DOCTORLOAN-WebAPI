@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DoctorLoan.Infrastructure.Persistence.Configurations.MedicalRecord;
 public class MedicalRecordConfiguration : IEntityTypeConfiguration<DoctorLoan.Domain.Entities.MedicalRecord.MedicalRecord>

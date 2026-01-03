@@ -3,7 +3,7 @@
 namespace DoctorLoan.Domain.Entities.MedicalRecord;
 
 [Table("MedicalRecordsSymptoms")]
-public class MedicalRecordsSymptoms:BaseEntityAudit<int>
+public class MedicalRecordsSymptoms : BaseEntityAudit<int>
 {
     public int? MedicalRecordId { get; set; }
     public int? SymptomId { get; set; }

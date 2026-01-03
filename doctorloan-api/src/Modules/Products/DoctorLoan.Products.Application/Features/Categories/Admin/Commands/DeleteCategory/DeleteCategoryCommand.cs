@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DoctorLoan.Products.Application.Features.Categories.Admin.Commands;
 
-public class DeleteCategoryCommand :  IRequest<Result<int>>
+public class DeleteCategoryCommand : IRequest<Result<int>>
 {
     public int Id { get; set; }
     public StatusEnum Status { get; set; }
@@ -25,7 +25,7 @@ public class DeleteCategoryCommandCommandHandle : ApplicationBaseService<DeleteC
         {
             return Result.Failed<int>(ServiceError.NotFound(_currentTranslateService));
         }
-        category.IsDeleted =true;     
+        category.IsDeleted = true;
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success(category.Id);
 

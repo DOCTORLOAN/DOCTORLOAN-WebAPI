@@ -6,6 +6,6 @@ public class InsertNewsItemCommandValidator : AbstractValidator<InsertNewsItemCo
     public InsertNewsItemCommandValidator()
     {
         RuleFor(x => x.Title).NotEmpty().MaximumLength(200);
-       
+
     }
 }

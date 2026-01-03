@@ -12,11 +12,11 @@ public class NewsTagConfiguration : IEntityTypeConfiguration<NewsTag>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedOnAdd().IsRequired();
         builder.ConfigurateBaseAudit<NewsTag, int>();
-     
+
         builder.Property(x => x.Name)
             .IsRequired()
             .HasMaxLength(200)
             .IsUnicode();
-     
+
     }
 }

@@ -82,4 +82,3 @@ public class RequestResponseLoggerMiddleware
     private static string FormatHeaders(IHeaderDictionary headers) => string.Join(", ", headers.Select(kvp => $"{{{kvp.Key}: {string.Join(", ", kvp.Value)}}}"));
 
 }
-

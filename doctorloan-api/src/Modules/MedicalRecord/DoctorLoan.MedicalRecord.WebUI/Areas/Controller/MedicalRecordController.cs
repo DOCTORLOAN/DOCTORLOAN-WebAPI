@@ -1,10 +1,10 @@
 ﻿using System.Net;
 using DoctorLoan.Application.Common.Security;
 using DoctorLoan.Application.Models.Commons;
+using DoctorLoan.Domain.Enums.Authorizations;
 using DoctorLoan.MedicalRecord.Application.Features.Commands;
 using DoctorLoan.MedicalRecord.Application.Features.Dtos;
 using DoctorLoan.MedicalRecord.Application.Features.Queries;
-using DoctorLoan.Domain.Enums.Authorizations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DoctorLoan.MedicalRecord.WebUI.Areas.Controller;

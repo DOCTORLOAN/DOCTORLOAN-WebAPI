@@ -13,47 +13,47 @@ public class MediaService : ApplicationBaseService<MediaService>
     public MediaService(ILogger<MediaService> logger, IApplicationDbContext context, ICurrentRequestInfoService currentRequestInfoService, ICurrentTranslateService currentTranslateService, IDateTime dateTime) : base(logger, context, currentRequestInfoService, currentTranslateService, dateTime)
     {
     }
-    
-   
+
+
 
     public async Task<string> GetMediaUrlAsync(int mediaId, int targetSize = 0, bool showDefaultPicture = true, string storeLocation = null)
     {
         var media = await _context.Medias.FirstOrDefaultAsync(x => x.Id == mediaId);
-        if(media != null)
+        if (media != null)
         {
-            return $"{storeLocation}/{media.Path}{(targetSize>0?targetSize:"")}{media.Name}";
+            return $"{storeLocation}/{media.Path}{(targetSize > 0 ? targetSize : "")}{media.Name}";
         }
         if (showDefaultPicture)
             return GetDefaultImageUrl(storeLocation);
         return string.Empty;
-            
+
     }
     public string GetDefaultImageUrl(string storeLocation = null)
     {
         return $"{storeLocation}/images/placeholder-image.jpg";
     }
-    public (string folderPath,string fileName) GetFileInfo(string fileName,MediaType mediaType,int size=0,string subFolder=null)
+    public (string folderPath, string fileName) GetFileInfo(string fileName, MediaType mediaType, int size = 0, string subFolder = null)
     {
-        string _fileName=Path.GetFileNameWithoutExtension(fileName);
-        string _fileExt=Path.GetExtension(fileName);
-        string _random=Path.GetFileNameWithoutExtension(Path.GetRandomFileName());
-        string fullFileName = $"{(size > 0 ?  size+"_" : "")}{_fileName}_{_random}{_fileExt}";
+        string _fileName = Path.GetFileNameWithoutExtension(fileName);
+        string _fileExt = Path.GetExtension(fileName);
+        string _random = Path.GetFileNameWithoutExtension(Path.GetRandomFileName());
+        string fullFileName = $"{(size > 0 ? size + "_" : "")}{_fileName}_{_random}{_fileExt}";
 
-        return ($"/DataFiles/{mediaType.ToString().ToLower()}{(subFolder!=null?"/"+subFolder:"")}",fullFileName);
+        return ($"/DataFiles/{mediaType.ToString().ToLower()}{(subFolder != null ? "/" + subFolder : "")}", fullFileName);
     }
-    protected Media GetMediaInfo(string fileName,string folderPath,string originFileName,MediaType mediaType,bool hasStorage=false)
+    protected Media GetMediaInfo(string fileName, string folderPath, string originFileName, MediaType mediaType, bool hasStorage = false)
     {
         return new Media
         {
             ContentType = "image/jpeg",
             Extention = Path.GetExtension(fileName),
-            HasStorage= hasStorage,
-            OriginalName= originFileName,
-            Name= fileName,
-            Type=mediaType,
-            Path= folderPath,
-            Status=MediaStatus.Active,
-            
+            HasStorage = hasStorage,
+            OriginalName = originFileName,
+            Name = fileName,
+            Type = mediaType,
+            Path = folderPath,
+            Status = MediaStatus.Active,
+
         };
     }
     protected async Task DeleteMediaAsync(Media picture, CancellationToken cancellationToken)
@@ -84,7 +84,7 @@ public class MediaService : ApplicationBaseService<MediaService>
             width = targetSize;
             height = image.Height * (targetSize / (float)image.Width);
         }
-        
+
         if ((int)width == 0 || (int)height == 0)
         {
             width = image.Width;

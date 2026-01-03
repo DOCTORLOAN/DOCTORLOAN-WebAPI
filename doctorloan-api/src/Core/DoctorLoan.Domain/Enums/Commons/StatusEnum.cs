@@ -12,7 +12,7 @@ public enum BookingStatus
     Pending = 10,
     Confirm = 20,
     Rejected = 30,
-    Processing  = 40,
+    Processing = 40,
     Completed = 50
 }
 

@@ -1,9 +1,9 @@
-﻿using DoctorLoan.Application;
+﻿using AutoMapper;
+using DoctorLoan.Application;
 using DoctorLoan.Application.Interfaces.Commons;
 using DoctorLoan.Application.Interfaces.Data;
 using DoctorLoan.Application.Models.Commons;
 using DoctorLoan.Domain.Entities.Contents;
-using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

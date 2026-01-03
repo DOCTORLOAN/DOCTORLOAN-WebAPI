@@ -1,6 +1,6 @@
 ﻿using DoctorLoan.Domain.Entities.MedicalRecord;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DoctorLoan.Infrastructure.Persistence.Configurations.MedicalRecord;
 public class MedicalRecordsSymptomsConfiguration : IEntityTypeConfiguration<MedicalRecordsSymptoms>

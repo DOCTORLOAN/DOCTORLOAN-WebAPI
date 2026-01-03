@@ -17,4 +17,3 @@ public class ConfigureServices : IConfigService
     }
     public int Order => 0;
 }
-

@@ -26,4 +26,3 @@ public static class BanVietDRCR
     public const string Debit = "D";
     public const string Credit = "C";
 }
-

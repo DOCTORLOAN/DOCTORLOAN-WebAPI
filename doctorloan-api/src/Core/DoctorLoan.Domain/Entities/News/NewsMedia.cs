@@ -3,7 +3,7 @@ using DoctorLoan.Domain.Entities.Medias;
 
 namespace DoctorLoan.Domain.Entities.News;
 [Table("NewsMedias")]
-public class NewsMedia:BaseEntityAudit<int>
+public class NewsMedia : BaseEntityAudit<int>
 {
     public bool IsThumb { get; set; }
     public int NewsId { get; set; }

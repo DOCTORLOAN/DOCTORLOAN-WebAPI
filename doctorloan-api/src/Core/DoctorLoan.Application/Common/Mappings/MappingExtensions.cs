@@ -1,5 +1,5 @@
-﻿using DoctorLoan.Application.Models.Commons;
-using AutoMapper;
+﻿using AutoMapper;
+using DoctorLoan.Application.Models.Commons;
 using Microsoft.EntityFrameworkCore;
 
 namespace DoctorLoan.Application.Common.Mappings;

@@ -19,10 +19,10 @@ public class UpdateNewsItemCommand : NewsItemDto, IRequest<Result<int>>
 }
 public class UpdateNewsItemCommandHandler : ApplicationBaseService<UpdateNewsItemCommandHandler>, IRequestHandler<UpdateNewsItemCommand, Result<int>>
 {
-    private readonly  StorageConfiguration _storageConfiguration;
+    private readonly StorageConfiguration _storageConfiguration;
     private readonly IMediaService _mediaService;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    public UpdateNewsItemCommandHandler(IHttpContextAccessor httpContextAccessor,IOptions<StorageConfiguration> storageConfigurationOption, IMediaService mediaService,ILogger<UpdateNewsItemCommandHandler> logger, IApplicationDbContext context, ICurrentRequestInfoService currentRequestInfoService, ICurrentTranslateService currentTranslateService, IDateTime dateTime) : base(logger, context, currentRequestInfoService, currentTranslateService, dateTime)
+    public UpdateNewsItemCommandHandler(IHttpContextAccessor httpContextAccessor, IOptions<StorageConfiguration> storageConfigurationOption, IMediaService mediaService, ILogger<UpdateNewsItemCommandHandler> logger, IApplicationDbContext context, ICurrentRequestInfoService currentRequestInfoService, ICurrentTranslateService currentTranslateService, IDateTime dateTime) : base(logger, context, currentRequestInfoService, currentTranslateService, dateTime)
     {
         _storageConfiguration = storageConfigurationOption.Value;
         _mediaService = mediaService;
@@ -34,18 +34,18 @@ public class UpdateNewsItemCommandHandler : ApplicationBaseService<UpdateNewsIte
         var newsItem = await _context.NewsItems
               .Include(x => x.NewsItemDetails)
                 .Include(x => x.NewsCategories)
-                .Include(x => x.NewsMedias).ThenInclude(x=>x.Media)
+                .Include(x => x.NewsMedias).ThenInclude(x => x.Media)
                 .Include(x => x.NewsTags)
-            .FirstOrDefaultAsync(x => x.Id==request.Id);
+            .FirstOrDefaultAsync(x => x.Id == request.Id);
         if (newsItem == null)
             return Result.Failed<int>(ServiceError.NotFound(_currentTranslateService));
         request.MapperTo(newsItem);
-           
-         UpdateNewsDetail(newsItem, request);
+
+        UpdateNewsDetail(newsItem, request);
         UpdateTags(request, newsItem);
         UpdateNewsItemCategories(newsItem, request);
         await _context.SaveChangesAsync(cancellationToken);
-        await UpdateNewsImages(request,newsItem,cancellationToken);
+        await UpdateNewsImages(request, newsItem, cancellationToken);
         return Result.Success(newsItem.Id);
     }
     private void UpdateNewsItemCategories(NewsItem newsItem, UpdateNewsItemCommand updateNewsItemComman)
@@ -56,22 +56,22 @@ public class UpdateNewsItemCommandHandler : ApplicationBaseService<UpdateNewsIte
         {
             if (!newsItem.NewsCategories.Any(x => x.NewsCategoryId == item))
             {
-                newsItem.NewsCategories.Add(new NewsCategoryMapping {NewsItemId=newsItem.Id, NewsCategoryId = item });
+                newsItem.NewsCategories.Add(new NewsCategoryMapping { NewsItemId = newsItem.Id, NewsCategoryId = item });
             }
-           
+
 
         }
-    }      
-   
+    }
+
     private void UpdateNewsDetail(NewsItem newsItem, UpdateNewsItemCommand updateNewsItemCommand)
     {
-        
+
         foreach (var item in updateNewsItemCommand.NewsItemDetails)
         {
-           
+
             var detail = newsItem.NewsItemDetails.FirstOrDefault(x => x.LanguageId == item.LanguageId);
-            if (detail!=null)
-            {               
+            if (detail != null)
+            {
                 item.MapperTo(detail);
                 if (detail.Title == null)
                     detail.Title = newsItem.Title;
@@ -80,25 +80,25 @@ public class UpdateNewsItemCommandHandler : ApplicationBaseService<UpdateNewsIte
     }
     private async Task UpdateNewsImages(UpdateNewsItemCommand req, NewsItem newsItem, CancellationToken cancellationToken)
     {
-        var listFileSize = new List<int> {0};
-        var listDeleted = newsItem.NewsMedias.Where(x => !req.NewsMedias.Where(x=>x.MediaId!=0).Any(m => m.MediaId == x.MediaId));
-        foreach(var deleteItem in listDeleted)
+        var listFileSize = new List<int> { 0 };
+        var listDeleted = newsItem.NewsMedias.Where(x => !req.NewsMedias.Where(x => x.MediaId != 0).Any(m => m.MediaId == x.MediaId));
+        foreach (var deleteItem in listDeleted)
         {
             var isDeleted = await _mediaService.DeleteMediaAsync(deleteItem.Media);
             if (isDeleted)
             {
                 newsItem.NewsMedias.Remove(deleteItem);
-               await _context.SaveChangesAsync(cancellationToken);
+                await _context.SaveChangesAsync(cancellationToken);
             }
-          
+
         }
-        foreach (var item in req.NewsMedias.Where(x=>x.MediaId>0))
+        foreach (var item in req.NewsMedias.Where(x => x.MediaId > 0))
         {
             var newsMedia = newsItem.NewsMedias.FirstOrDefault(x => x.MediaId == item.MediaId);
             if (newsMedia == null)
                 continue;
-            item.MapperTo(newsMedia);            
-            await _context.SaveChangesAsync(cancellationToken);           
+            item.MapperTo(newsMedia);
+            await _context.SaveChangesAsync(cancellationToken);
         }
         int i = 0;
         foreach (var item in req.NewsMedias.Where(x => x.MediaId == 0))
@@ -115,10 +115,10 @@ public class UpdateNewsItemCommandHandler : ApplicationBaseService<UpdateNewsIte
                     continue;
                 newsItem.NewsMedias.Add(new NewsMedia { MediaId = media.Id, OrderBy = item.OrderBy });
             }
-           
+
             await _context.SaveChangesAsync(cancellationToken);
 
-           
+
 
 
         }

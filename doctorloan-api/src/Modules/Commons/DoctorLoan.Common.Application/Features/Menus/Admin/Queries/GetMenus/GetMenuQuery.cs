@@ -42,4 +42,3 @@ public class GetMenuQueryHandler : ApplicationBaseService<GetMenuQueryHandler>, 
     }
 
 }
-

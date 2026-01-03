@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DoctorLoan.Domain.Entities.Addresses;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using DoctorLoan.Domain.Entities.Addresses;
 
 namespace DoctorLoan.Infrastructure.Persistence.Configurations.Orders;
 

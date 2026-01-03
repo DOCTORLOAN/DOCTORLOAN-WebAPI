@@ -26,7 +26,7 @@ public class UpdateMedicalRecordCommandHandler : ApplicationBaseService<AddMedic
     {
         var medicalRecord = await _context.MedicalRecords.FindAsync(new object[] { request.Id }, cancellationToken);
         if (medicalRecord is null) return Result.Failed<bool>(ServiceError.NotFound(_currentTranslateService));
-         medicalRecord.Status = request.Status;
+        medicalRecord.Status = request.Status;
         medicalRecord.Noted = request.Noted;
         await _context.SaveChangesAsync(cancellationToken);
 

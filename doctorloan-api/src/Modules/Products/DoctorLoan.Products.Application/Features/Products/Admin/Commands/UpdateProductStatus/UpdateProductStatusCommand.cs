@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace DoctorLoan.Products.Application.Features.Products.Admin.Commands;
-public class UpdateProductStatusCommand:IRequest<Result<bool>>
+public class UpdateProductStatusCommand : IRequest<Result<bool>>
 {
-    public List<int> Ids { get; set; }=new List<int>();
+    public List<int> Ids { get; set; } = new List<int>();
     public StatusEnum Status { get; set; }
 }
 public class UpdateProductStatusCommandHandle : ApplicationBaseService<UpdateProductStatusCommandHandle>, IRequestHandler<UpdateProductStatusCommand, Result<bool>>
@@ -22,7 +22,8 @@ public class UpdateProductStatusCommandHandle : ApplicationBaseService<UpdatePro
     public async Task<Result<bool>> Handle(UpdateProductStatusCommand request, CancellationToken cancellationToken)
     {
         var listProduct = await _context.Products.Where(x => request.Ids.Contains(x.Id)).ToListAsync(cancellationToken);
-        foreach(var product in listProduct) {
+        foreach (var product in listProduct)
+        {
             product.Status = request.Status;
         }
         await _context.SaveChangesAsync(cancellationToken);

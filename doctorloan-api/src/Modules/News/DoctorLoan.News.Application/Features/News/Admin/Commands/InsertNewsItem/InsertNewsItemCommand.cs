@@ -22,9 +22,9 @@ public class InsertNewsItemCommandHandler : ApplicationBaseService<InsertNewsIte
     private readonly IMediaService _mediaService;
     private readonly StorageConfiguration _storageConfiguration;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    public InsertNewsItemCommandHandler(IHttpContextAccessor httpContextAccessor, 
-        IOptions<StorageConfiguration> storageConfigurationOption,IMediaService mediaService,ILogger<InsertNewsItemCommandHandler> logger,
-        IApplicationDbContext context, ICurrentRequestInfoService currentRequestInfoService, ICurrentTranslateService currentTranslateService, IDateTime dateTime) 
+    public InsertNewsItemCommandHandler(IHttpContextAccessor httpContextAccessor,
+        IOptions<StorageConfiguration> storageConfigurationOption, IMediaService mediaService, ILogger<InsertNewsItemCommandHandler> logger,
+        IApplicationDbContext context, ICurrentRequestInfoService currentRequestInfoService, ICurrentTranslateService currentTranslateService, IDateTime dateTime)
         : base(logger, context, currentRequestInfoService, currentTranslateService, dateTime)
     {
         _mediaService = mediaService;
@@ -36,23 +36,23 @@ public class InsertNewsItemCommandHandler : ApplicationBaseService<InsertNewsIte
     {
         request.NewsItemDetails.ForEach(x => x.Title = request.Title);
         var newsItem = request.MapperTo<InsertNewsItemCommand, NewsItem>();
-        
+
         newsItem.NewsCategories.AddRange(request.CategoryIds.Select(x => new NewsCategoryMapping
         {
-             NewsCategoryId= x,
+            NewsCategoryId = x,
         }));
 
         InsertTags(request, newsItem);
         newsItem.Status = Domain.Enums.Commons.StatusEnum.Draft;
         newsItem.Slug = request.Title.ToSlug();
         await _context.NewsItems.AddAsync(newsItem);
-    
+
         await _context.SaveChangesAsync(cancellationToken);
         await InserNewsImages(request, newsItem, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success(newsItem.Id);
     }
-    private async Task InserNewsImages(InsertNewsItemCommand req,NewsItem newsItem,CancellationToken  cancellationToken)
+    private async Task InserNewsImages(InsertNewsItemCommand req, NewsItem newsItem, CancellationToken cancellationToken)
     {
         var listFileSize = new List<int> { 0 };
         int i = 0;
@@ -64,15 +64,15 @@ public class InsertNewsItemCommandHandler : ApplicationBaseService<InsertNewsIte
                 continue;
             using (var ms = new MemoryStream())
             {
-                await file.CopyToAsync(ms, cancellationToken);              
+                await file.CopyToAsync(ms, cancellationToken);
                 var media = await _mediaService.UploadMediaAsync(ms.ToArray(), file.FileName, Domain.Enums.Medias.MediaType.News, listFileSize, newsItem.Id.ToString("0000"));
                 if (media.Id == 0)
                     continue;
                 newsItem.NewsMedias.Add(new NewsMedia { MediaId = media.Id, OrderBy = item.OrderBy });
                 item.MapperTo(newsMedia);
             }
-                
-            
+
+
 
 
 

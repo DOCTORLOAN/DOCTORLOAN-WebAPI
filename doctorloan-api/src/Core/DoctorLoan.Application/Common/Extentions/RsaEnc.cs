@@ -10,7 +10,7 @@ namespace DoctorLoan.Application.Common.Extentions;
 
 public class RsaEnc
 {
-    private static RSACryptoServiceProvider csp = new RSACryptoServiceProvider(2048);
+    private static readonly RSACryptoServiceProvider csp = new RSACryptoServiceProvider(2048);
     private RSAParameters _privateKey;
     private RSAParameters _publicKey;
 

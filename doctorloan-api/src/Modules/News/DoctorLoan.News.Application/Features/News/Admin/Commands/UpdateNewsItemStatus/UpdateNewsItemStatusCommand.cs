@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace DoctorLoan.News.Application.Features.News.Admin.Commands;
 public class UpdateNewsItemStatusCommand : IRequest<Result<bool>>
 {
-    public List<int> Ids { get; set; }=new List<int>();
+    public List<int> Ids { get; set; } = new List<int>();
     public StatusEnum Status { get; set; }
 }
 public class UpdateNewsItemStatusCommandHandle : ApplicationBaseService<UpdateNewsItemStatusCommandHandle>, IRequestHandler<UpdateNewsItemStatusCommand, Result<bool>>
@@ -22,7 +22,8 @@ public class UpdateNewsItemStatusCommandHandle : ApplicationBaseService<UpdateNe
     public async Task<Result<bool>> Handle(UpdateNewsItemStatusCommand request, CancellationToken cancellationToken)
     {
         var listNew = await _context.NewsItems.Where(x => request.Ids.Contains(x.Id)).ToListAsync(cancellationToken);
-        foreach(var news in listNew) {
+        foreach (var news in listNew)
+        {
             news.Status = request.Status;
         }
         await _context.SaveChangesAsync(cancellationToken);

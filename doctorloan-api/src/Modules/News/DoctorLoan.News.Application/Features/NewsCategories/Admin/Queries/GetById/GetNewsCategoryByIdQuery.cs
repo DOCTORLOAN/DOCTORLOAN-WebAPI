@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DoctorLoan.News.Application.Features.NewsCategories.Admin.Queries;
 
-public record class GetNewsCategoryByIdQuery(int id):IRequest<Result<NewsCategoryDto>>;
+public record class GetNewsCategoryByIdQuery(int id) : IRequest<Result<NewsCategoryDto>>;
 public class GetCategoryByIdQueryHandle : ApplicationBaseService<GetCategoryByIdQueryHandle>, IRequestHandler<GetNewsCategoryByIdQuery, Result<NewsCategoryDto>>
 {
     public GetCategoryByIdQueryHandle(ILogger<GetCategoryByIdQueryHandle> logger, IApplicationDbContext context, ICurrentRequestInfoService currentRequestInfoService, ICurrentTranslateService currentTranslateService, IDateTime dateTime) : base(logger, context, currentRequestInfoService, currentTranslateService, dateTime)
@@ -17,10 +17,9 @@ public class GetCategoryByIdQueryHandle : ApplicationBaseService<GetCategoryById
     }
     public async Task<Result<NewsCategoryDto>> Handle(GetNewsCategoryByIdQuery request, CancellationToken cancellationToken)
     {
-        var category=await Mapper.ProjectTo<NewsCategoryDto>(_context.NewsCategories.Where(x=>x.Id==request.id)).FirstOrDefaultAsync(cancellationToken);
+        var category = await Mapper.ProjectTo<NewsCategoryDto>(_context.NewsCategories.Where(x => x.Id == request.id)).FirstOrDefaultAsync(cancellationToken);
         if (category == null)
             return Result.Failed<NewsCategoryDto>(ServiceError.NotFound(_currentTranslateService));
         return Result.Success(category);
     }
 }
-

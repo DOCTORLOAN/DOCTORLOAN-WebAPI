@@ -8,7 +8,7 @@ public class AppDomainTypeFinder : ITypeFinder
 {
     #region Fields
 
-    private bool _ignoreReflectionErrors = true;
+    private readonly bool _ignoreReflectionErrors = true;
 
     #endregion
 

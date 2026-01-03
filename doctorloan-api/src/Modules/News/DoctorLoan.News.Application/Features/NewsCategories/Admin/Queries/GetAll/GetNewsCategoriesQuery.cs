@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DoctorLoan.News.Application.Features.NewsCategories.Admin.Queries;
 
-public class  GetNewsCategoriesQuery:QueryParam, IRequest<Result<PaginatedList<NewsCategoryDto>>>
+public class GetNewsCategoriesQuery : QueryParam, IRequest<Result<PaginatedList<NewsCategoryDto>>>
 {
     public string? Slug { get; set; }
     public int? ParentId { get; set; }
@@ -30,12 +30,11 @@ public class GetNewsCategoriesQueryHandle : ApplicationBaseService<GetNewsCatego
         if (request.Slug != null)
             condition = condition.And(x => x.Slug == request.Slug);
 
-     
+
         if (request.Status.HasValue)
             condition = condition.And(x => x.Status == request.Status);
-        var query=_context.NewsCategories.Where(condition).OrderBy(c => c.Id);
-        var result =await Mapper.ProjectTo<NewsCategoryDto>(query).ToPagedListAsync(request.Page, request.Take);
+        var query = _context.NewsCategories.Where(condition).OrderBy(c => c.Id);
+        var result = await Mapper.ProjectTo<NewsCategoryDto>(query).ToPagedListAsync(request.Page, request.Take);
         return Result.Success(result);
     }
 }
-

@@ -1,11 +1,11 @@
-﻿using DoctorLoan.Application.Interfaces.Commons;
+﻿using DoctorLoan.Application;
+using DoctorLoan.Application.Interfaces.Commons;
 using DoctorLoan.Application.Interfaces.Data;
 using DoctorLoan.Application.Models.Commons;
-using DoctorLoan.Application;
 using DoctorLoan.News.Application.Features.News.Dtos;
 using MediatR;
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace DoctorLoan.News.Application.Features.News.Admin.Queries.GetTags;
 

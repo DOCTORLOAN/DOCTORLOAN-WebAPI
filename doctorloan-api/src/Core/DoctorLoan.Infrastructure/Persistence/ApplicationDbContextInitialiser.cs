@@ -56,7 +56,7 @@ public class ApplicationDbContextInitialiser
     {
         if (!_context.SymptomGroups.Any())
         {
-            var listSymptomGroups = new List<SymptomGroups> 
+            var listSymptomGroups = new List<SymptomGroups>
             {
                 new SymptomGroups { Name = "Cột sống cổ - Đầu và mặt" },
                 new SymptomGroups { Name = "Cột sống cổ - Cổ" },
@@ -2642,7 +2642,7 @@ public class ApplicationDbContextInitialiser
                     LanguageId = (int)LanguageEnum.VN,
                     Summary = "Ghế SÁNG CHẾ có  đặc điểm LỒI TRƯỚC LÕM SAU bảo đảm cho khung xương được ÔM CHẶT - GIỮ CHUẨN - CHỐNG TRƯỢT\r\nĐiểm 1: Khối lõm ÔM CHẶT - GIỮ CHUẨN, tạo bởi liên kết lõm phía sau mặt ghế và lõm phía dưới lưng ghế\r\nĐiểm 2: Khối lồi trung tâm trước của mặt ghế giúp CHỐNG TRƯỢT",
                     Description = "* Ghế SÁNG CHẾ có đặc điểm LỒI TRƯỚC LÕM SAU tạo chức năng điều chỉnh xương chậu, xương cùng, xương sống về cấu trúc chuẩn\r\n* Ghế Sáng chế có tác dụng:\r\n- Giảm tối đa áp lực trên đĩa đệm do nâng đỡ và giữ cấu trúc xương chuẩn\r\n- Ngăn chặn các yếu tố gây biến dạng xương chậu, xương cùng, xương sống\r\n- Tốt cho mọi lứa tuổi trong điều chỉnh khung xương và ngăn ngừa bệnh cột sống",
-                }, 
+                },
                 new ProductDetail
                 {
                     ProductId = _product.Find(s => s.Sku == "SC90OEBL")?.Id ?? 5,

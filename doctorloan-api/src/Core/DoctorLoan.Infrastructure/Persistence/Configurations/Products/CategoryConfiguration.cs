@@ -11,7 +11,7 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedOnAdd().IsRequired();
         builder.ConfigurateBaseAudit<Category, int>();
-        builder.Property(x=>x.ParentId).HasColumnType("ltree");
+        builder.Property(x => x.ParentId).HasColumnType("ltree");
         builder.HasQueryFilter(x => !x.IsDeleted);
         builder.Property(x => x.Name)
             .IsRequired()

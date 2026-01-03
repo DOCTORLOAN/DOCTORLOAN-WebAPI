@@ -19,12 +19,12 @@ public class GetProductByIdQueryHandle : ApplicationBaseService<GetProductByIdQu
 
     public async Task<Result<ProductDto>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
     {
-        var product=await _context.Products.Include(x => x.ProductItems).ThenInclude(x => x.ProductOptions)
-                .Include(x=>x.ProductMedias).ThenInclude(x=>x.Media)
-                .Include(x=>x.ProductDetails)
-                .Include(x=>x.ProductAttributes)
-                .Include(x=>x.ProductCategories)
-            .FirstOrDefaultAsync(x=>x.Id==request.id, cancellationToken);
+        var product = await _context.Products.Include(x => x.ProductItems).ThenInclude(x => x.ProductOptions)
+                .Include(x => x.ProductMedias).ThenInclude(x => x.Media)
+                .Include(x => x.ProductDetails)
+                .Include(x => x.ProductAttributes)
+                .Include(x => x.ProductCategories)
+            .FirstOrDefaultAsync(x => x.Id == request.id, cancellationToken);
         if (product == null)
             return Result.Failed<ProductDto>(ServiceError.NotFound(_currentTranslateService));
         var model = product.MapperTo<Product, ProductDto>();

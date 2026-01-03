@@ -29,7 +29,7 @@ public class InsertProductCommandHandler : ApplicationBaseService<InsertProductC
     private readonly IMediaService _mediaService;
     private readonly StorageConfiguration _storageConfiguration;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    public InsertProductCommandHandler(IHttpContextAccessor httpContextAccessor, IOptions<StorageConfiguration> storageConfigurationOption,IMediaService mediaService,ILogger<InsertProductCommandHandler> logger, IApplicationDbContext context, ICurrentRequestInfoService currentRequestInfoService, ICurrentTranslateService currentTranslateService, IDateTime dateTime) : base(logger, context, currentRequestInfoService, currentTranslateService, dateTime)
+    public InsertProductCommandHandler(IHttpContextAccessor httpContextAccessor, IOptions<StorageConfiguration> storageConfigurationOption, IMediaService mediaService, ILogger<InsertProductCommandHandler> logger, IApplicationDbContext context, ICurrentRequestInfoService currentRequestInfoService, ICurrentTranslateService currentTranslateService, IDateTime dateTime) : base(logger, context, currentRequestInfoService, currentTranslateService, dateTime)
     {
         _mediaService = mediaService;
         _storageConfiguration = storageConfigurationOption.Value;
@@ -38,7 +38,7 @@ public class InsertProductCommandHandler : ApplicationBaseService<InsertProductC
 
     public async Task<Result<int>> Handle(InsertProductCommand request, CancellationToken cancellationToken)
     {
-        var exists = await _context.Products.FirstOrDefaultAsync(x => x.Sku ==request.Sku);
+        var exists = await _context.Products.FirstOrDefaultAsync(x => x.Sku == request.Sku);
         if (exists != null)
             return Result.Failed<int>(ServiceError.CustomMessage("Mã sản phẩm đã tồn tại!"));
         var product = request.MapperTo<InsertProductCommand, Product>();
@@ -48,15 +48,15 @@ public class InsertProductCommandHandler : ApplicationBaseService<InsertProductC
         }));
         product.Status = Domain.Enums.Commons.StatusEnum.Draft;
         product.Slug = product.Name.ToSlug();
-        await _context.Products.AddAsync(product);       
+        await _context.Products.AddAsync(product);
         await _context.SaveChangesAsync(cancellationToken);
         await InsertProductImages(request, product, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success(product.Id);
     }
-    private async Task InsertProductImages(InsertProductCommand req,Product product,CancellationToken  cancellationToken)
+    private async Task InsertProductImages(InsertProductCommand req, Product product, CancellationToken cancellationToken)
     {
-        var listFileSize = new List<int> { 0};
+        var listFileSize = new List<int> { 0 };
         int i = 0;
         foreach (var item in req.ProductMedias)
         {
@@ -67,11 +67,11 @@ public class InsertProductCommandHandler : ApplicationBaseService<InsertProductC
                 continue;
             using (var ms = new MemoryStream())
             {
-                await file.CopyToAsync(ms, cancellationToken);              
+                await file.CopyToAsync(ms, cancellationToken);
                 var media = await _mediaService.UploadMediaAsync(ms.ToArray(), file.FileName, Domain.Enums.Medias.MediaType.Product, listFileSize, product.Id.ToString("0000"));
                 if (media.Id == 0)
                     continue;
-                product.ProductMedias.Add(new ProductMedia {ProductItemId= productItem?.Id, MediaId = media.Id, OrderBy = item.OrderBy, Status = Domain.Enums.Commons.StatusEnum.Publish });            
+                product.ProductMedias.Add(new ProductMedia { ProductItemId = productItem?.Id, MediaId = media.Id, OrderBy = item.OrderBy, Status = Domain.Enums.Commons.StatusEnum.Publish });
             }
         }
     }

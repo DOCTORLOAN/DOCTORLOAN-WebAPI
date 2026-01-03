@@ -18,4 +18,3 @@ public class PermissionActionConfiguration : IEntityTypeConfiguration<Permission
         builder.Property(x => x.ActionId).IsRequired();
     }
 }
-

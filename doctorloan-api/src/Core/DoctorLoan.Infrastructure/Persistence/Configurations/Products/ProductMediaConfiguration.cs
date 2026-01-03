@@ -16,7 +16,7 @@ public class ProductMediaConfiguration : IEntityTypeConfiguration<ProductMedia>
             .HasForeignKey(x => x.MediaId)
             .IsRequired();
         builder.HasOne(x => x.Product)
-           .WithMany(x=>x.ProductMedias)
+           .WithMany(x => x.ProductMedias)
            .HasForeignKey(x => x.ProductId)
            .IsRequired();
     }

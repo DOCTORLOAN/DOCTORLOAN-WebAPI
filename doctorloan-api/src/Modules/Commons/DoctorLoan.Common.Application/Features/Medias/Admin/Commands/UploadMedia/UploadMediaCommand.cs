@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace DoctorLoan.Common.Application.Features.Medias.Admin.Commands;
-public class UploadMediaCommand:IRequest<Result<string>>
+public class UploadMediaCommand : IRequest<Result<string>>
 {
     public required IFormFile File { get; set; }
     public MediaType Type { get; set; }
@@ -30,7 +30,7 @@ public class UploadMediaCommandHandle : ApplicationBaseService<UploadMediaComman
     public async Task<Result<string>> Handle(UploadMediaCommand request, CancellationToken cancellationToken)
     {
         using var ms = new MemoryStream();
-        await  request.File.CopyToAsync(ms, cancellationToken);
+        await request.File.CopyToAsync(ms, cancellationToken);
         var media = await _mediaService.UploadMediaAsync(ms.ToArray(), request.File.FileName, request.Type, new List<int> { _storageConfiguration.ImageSizes.Large });
         return Result.Success(media.GetMediaUrl(size: _storageConfiguration.ImageSizes.Large));
     }

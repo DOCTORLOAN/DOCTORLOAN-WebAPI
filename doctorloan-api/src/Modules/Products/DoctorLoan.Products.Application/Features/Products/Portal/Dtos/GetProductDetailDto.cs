@@ -18,7 +18,7 @@ public class GetProductDetailProductItemDto
     public required string Name { get; set; }
     public required string Sku { get; set; }
     public decimal Price { get; set; }
-    public decimal PriceDiscount { get; set; }  
+    public decimal PriceDiscount { get; set; }
     public List<GetProductDetailProductOptionDto> ProductOptions { get; set; } = new List<GetProductDetailProductOptionDto>();
 }
 public class GetProductDetailProductOptionDto

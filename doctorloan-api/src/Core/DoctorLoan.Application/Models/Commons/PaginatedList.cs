@@ -14,7 +14,7 @@ public class PaginatedList<T>
         TotalPages = (int)Math.Ceiling(count / (double)pageSize);
         TotalCount = count;
         Items = items;
-        PageSize= pageSize;
+        PageSize = pageSize;
     }
 
     public bool HasPreviousPage => PageNumber > 1;
@@ -29,4 +29,3 @@ public class PaginatedList<T>
         return new PaginatedList<T>(items, count, pageNumber, pageSize);
     }
 }
-

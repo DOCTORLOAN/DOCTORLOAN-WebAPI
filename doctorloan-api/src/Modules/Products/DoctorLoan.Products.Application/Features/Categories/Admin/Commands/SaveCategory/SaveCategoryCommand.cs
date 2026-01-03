@@ -42,7 +42,7 @@ public class SaveCategoryCommandHandle : ApplicationBaseService<SaveCategoryComm
         else
         {
             category.Slug = request.Name.ToSlug();
-            
+
         }
         request.MapperTo(category);
         category.Status = category.Status > 0 ? category.Status : Domain.Enums.Commons.StatusEnum.Draft;

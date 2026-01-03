@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DoctorLoan.News.Application.Features.NewsCategories.Admin.Commands;
 
-public class DeleteCategoryNewsCommand :  IRequest<Result<int>>
+public class DeleteCategoryNewsCommand : IRequest<Result<int>>
 {
     public int Id { get; set; }
 }
@@ -24,7 +24,7 @@ public class DeleteCategoryNewsCommandHandle : ApplicationBaseService<DeleteCate
         {
             return Result.Failed<int>(ServiceError.NotFound(_currentTranslateService));
         }
-        newsCategory.IsDeleted =true;     
+        newsCategory.IsDeleted = true;
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success(newsCategory.Id);
 

@@ -19,10 +19,10 @@ public class MediaController : ApiControllerBase
 {
 
     [HttpPost]
-    public async Task<IActionResult> UploadImage([FromForm]UploadMediaCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> UploadImage([FromForm] UploadMediaCommand command, CancellationToken cancellationToken)
     {
         return Ok(await Mediator.Send(command, cancellationToken));
     }
-   
+
 
 }

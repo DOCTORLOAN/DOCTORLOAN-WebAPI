@@ -19,12 +19,12 @@ public class GetNewsByIdQueryHandle : ApplicationBaseService<GetNewsByIdQueryHan
 
     public async Task<Result<NewsItemDto>> Handle(GetNewsItemByIdQuery request, CancellationToken cancellationToken)
     {
-        var news=await _context.NewsItems
+        var news = await _context.NewsItems
             .Include(x => x.NewsItemDetails)
-                .Include(x=>x.NewsCategories)
-                .Include(x=>x.NewsMedias).ThenInclude(x=>x.Media)
-                .Include(x=>x.NewsTags).ThenInclude(x=>x.NewsTag)
-            .FirstOrDefaultAsync(x=>x.Id==request.id, cancellationToken);
+                .Include(x => x.NewsCategories)
+                .Include(x => x.NewsMedias).ThenInclude(x => x.Media)
+                .Include(x => x.NewsTags).ThenInclude(x => x.NewsTag)
+            .FirstOrDefaultAsync(x => x.Id == request.id, cancellationToken);
         if (news == null)
             return Result.Failed<NewsItemDto>(ServiceError.NotFound(_currentTranslateService));
         var model = news.MapperTo<NewsItem, NewsItemDto>();

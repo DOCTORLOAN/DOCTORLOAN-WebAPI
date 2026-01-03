@@ -27,4 +27,3 @@ public class CustomerDto : IMapFrom<Domain.Entities.Customers.Customer>
     [JsonIgnore]
     public List<CustomerAddress>? CustomerAddresses { get; set; }
 }
-

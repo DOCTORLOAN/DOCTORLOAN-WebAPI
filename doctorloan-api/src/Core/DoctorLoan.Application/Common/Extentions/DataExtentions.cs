@@ -113,7 +113,7 @@ public static class DataExtensions
         host = host ?? EngineContext.GetService<IWebHelper>().GetApiHost().TrimEnd('/');
         if (media == null)
             return EngineContext.GetService<IMediaService>().GetDefaultImageUrl(includeHostName ? host : "");
-        string url = $"{media.Path}/{(size > 0 ? size+"_" : "")}{media.Name}";
+        string url = $"{media.Path}/{(size > 0 ? size + "_" : "")}{media.Name}";
         if (includeHostName)
             return $"{host}{url}";
         return url;

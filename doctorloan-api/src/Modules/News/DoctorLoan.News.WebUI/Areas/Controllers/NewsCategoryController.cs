@@ -17,7 +17,7 @@ public class NewsCategoryController : ApiControllerBase
         return Ok(await Mediator.Send(new GetNewsCategoryByIdQuery(id)));
     }
     [HttpPost]
-    public async Task<IActionResult> SaveCategory([FromBody]SaveNewsCategoryCommand command)
+    public async Task<IActionResult> SaveCategory([FromBody] SaveNewsCategoryCommand command)
     {
         return Ok(await Mediator.Send(command));
     }
@@ -29,6 +29,6 @@ public class NewsCategoryController : ApiControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCategory([FromRoute] int id)
     {
-        return Ok(await Mediator.Send(new DeleteCategoryNewsCommand { Id=id}));
+        return Ok(await Mediator.Send(new DeleteCategoryNewsCommand { Id = id }));
     }
 }

@@ -28,4 +28,3 @@ public class ResponseData
     public string PyTransId { get; set; }
     public string PaymentMethodName { get; set; }
 }
-

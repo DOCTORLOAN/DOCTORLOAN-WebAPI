@@ -48,4 +48,3 @@ public class OrderItemDto : IMapFrom<OrderItem>
 
     public decimal TotalPrice { get; set; }
 }
-

@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DoctorLoan.News.Application.Features.NewsCategories.Admin.Commands;
 
-public class UpdateCategoryNewsStatusCommand :  IRequest<Result<int>>
+public class UpdateCategoryNewsStatusCommand : IRequest<Result<int>>
 {
     public int Id { get; set; }
     public StatusEnum Status { get; set; }
@@ -25,7 +25,7 @@ public class UpdateCategoryNewsStatusCommandHandle : ApplicationBaseService<Upda
         {
             return Result.Failed<int>(ServiceError.NotFound(_currentTranslateService));
         }
-        newsCategory.Status =request.Status;     
+        newsCategory.Status = request.Status;
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success(newsCategory.Id);
 

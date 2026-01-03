@@ -5,7 +5,7 @@ public enum MediaType
     Avatar = 20,
     Identity = 30,
     Product = 40,
-    News=50,
+    News = 50,
     Files = 50,
     Library = 60,
     Cover = 70

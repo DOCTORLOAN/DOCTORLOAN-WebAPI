@@ -35,4 +35,3 @@ public class GetCustomerInforQuery : IRequest<Result<CustomerDto>>
         }
     }
 }
-

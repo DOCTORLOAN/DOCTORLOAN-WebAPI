@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DoctorLoan.Application;
 using DoctorLoan.Application.Interfaces.Commons;
 using DoctorLoan.Application.Interfaces.Data;
 using DoctorLoan.Application.Models.Commons;
-using DoctorLoan.Application;
 using DoctorLoan.Domain.Enums.Commons;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -25,10 +25,10 @@ public class DeleteNewsItemCommandHandle : ApplicationBaseService<DeleteNewsItem
 
     public async Task<Result<bool>> Handle(DeleteNewsItemCommand request, CancellationToken cancellationToken)
     {
-        var newsItem = await _context.NewsItems.FindAsync(request.Id,cancellationToken);
+        var newsItem = await _context.NewsItems.FindAsync(request.Id, cancellationToken);
         if (newsItem == null)
             return Result.Failed<bool>(ServiceError.NotFound(_currentTranslateService));
-        newsItem.IsDeleted= true;
+        newsItem.IsDeleted = true;
         await _context.SaveChangesAsync(cancellationToken);
         return new Result<bool>(true);
     }

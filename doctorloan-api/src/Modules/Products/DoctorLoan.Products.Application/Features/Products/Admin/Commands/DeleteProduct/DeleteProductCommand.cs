@@ -14,7 +14,7 @@ public class DeleteProductCommand : IRequest<Result<bool>>
 }
 public class DeleteProductCommandHandle : ApplicationBaseService<DeleteProductCommandHandle>, IRequestHandler<DeleteProductCommand, Result<bool>>
 {
-    public DeleteProductCommandHandle(ILogger<DeleteProductCommandHandle> logger, IApplicationDbContext context, ICurrentRequestInfoService currentRequestInfoService, ICurrentTranslateService currentTranslateService, IDateTime dateTime) 
+    public DeleteProductCommandHandle(ILogger<DeleteProductCommandHandle> logger, IApplicationDbContext context, ICurrentRequestInfoService currentRequestInfoService, ICurrentTranslateService currentTranslateService, IDateTime dateTime)
         : base(logger, context, currentRequestInfoService, currentTranslateService, dateTime)
     {
     }
@@ -24,7 +24,7 @@ public class DeleteProductCommandHandle : ApplicationBaseService<DeleteProductCo
         var product = await _context.Products.FindAsync(request.Id, cancellationToken);
         if (product == null)
             return Result.Failed<bool>(ServiceError.NotFound(_currentTranslateService));
-       product.IsDelete= true;
+        product.IsDelete = true;
         await _context.SaveChangesAsync(cancellationToken);
         return new Result<bool>(true);
     }

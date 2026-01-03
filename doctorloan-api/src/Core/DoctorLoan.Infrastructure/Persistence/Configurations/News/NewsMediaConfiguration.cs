@@ -12,9 +12,9 @@ public class NewsMediaConfiguration : IEntityTypeConfiguration<NewsMedia>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedOnAdd().IsRequired();
         builder.ConfigurateBaseAudit<NewsMedia, int>();
-        builder.HasOne(x=>x.NewsItem)
-            .WithMany(x=>x.NewsMedias)
-            .HasForeignKey(x=>x.NewsId)
+        builder.HasOne(x => x.NewsItem)
+            .WithMany(x => x.NewsMedias)
+            .HasForeignKey(x => x.NewsId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
         builder.HasOne(x => x.Media)

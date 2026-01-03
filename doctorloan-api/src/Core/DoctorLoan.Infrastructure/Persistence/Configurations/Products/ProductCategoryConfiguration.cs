@@ -16,7 +16,7 @@ public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCate
             .HasForeignKey(x => x.ProductId)
             .OnDelete(DeleteBehavior.Restrict);
         builder.HasOne(x => x.Category)
-            .WithMany(x=>x.ProductCategories)
+            .WithMany(x => x.ProductCategories)
             .HasForeignKey(x => x.CategoryId)
             .OnDelete(DeleteBehavior.Restrict);
     }

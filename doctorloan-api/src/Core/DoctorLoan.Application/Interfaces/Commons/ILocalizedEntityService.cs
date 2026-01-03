@@ -24,4 +24,3 @@ public interface ILocalizedEntityService
 
     Task<string> GetLocalizedValueEnumAsync<TEnum>(TEnum @enum, LanguageEnum language = LanguageEnum.VN) where TEnum : struct, IConvertible;
 }
-

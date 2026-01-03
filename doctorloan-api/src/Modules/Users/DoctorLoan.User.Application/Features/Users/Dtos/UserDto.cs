@@ -44,4 +44,3 @@ public class UserDto : IMapFrom<Domain.Entities.Users.User>
     [JsonIgnore]
     public List<UserActivity>? UserActivities { get; set; }
 }
-

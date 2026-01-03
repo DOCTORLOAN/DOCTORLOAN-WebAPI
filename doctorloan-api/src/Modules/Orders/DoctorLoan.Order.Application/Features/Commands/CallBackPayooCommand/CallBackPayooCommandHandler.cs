@@ -1,28 +1,30 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using DoctorLoan.Application;
 using DoctorLoan.Application.Interfaces.Commons;
 using DoctorLoan.Application.Interfaces.Data;
 using DoctorLoan.Application.Models.Commons;
-using DoctorLoan.Application;
+using DoctorLoan.Application.Models.Settings;
 using DoctorLoan.Domain.Enums.Commons;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Microsoft.EntityFrameworkCore;
 
 namespace DoctorLoan.Order.Application.Features.Commands;
 public class CallBackPayooCommandHandler : ApplicationBaseService<CallBackPayooCommandHandler>, IRequestHandler<CallBackPayooCommand, Result<bool>>
 {
+    private readonly PayooConfiguration _payooConfiguration;
+
     public CallBackPayooCommandHandler(ILogger<CallBackPayooCommandHandler> logger, IApplicationDbContext context,
                                     ICurrentRequestInfoService currentRequestInfoService,
                                     ICurrentTranslateService currentTranslateService,
-                                    IDateTime dateTime)
+                                    IDateTime dateTime,
+                                    PayooConfiguration payooConfiguration)
     : base(logger, context, currentRequestInfoService, currentTranslateService, dateTime)
     {
+        _payooConfiguration = payooConfiguration;
     }
-    private readonly string _checkSumKey = "ZTJmMjk1NGU2OTNlODE0MjExZGM3MDM3MmJkNDI5NWU=";
-    private readonly string _payooIpSan = "118.69.56.194";
-    private readonly string _payooIpPro = "118.69.206.8";
     public async Task<Result<bool>> Handle(CallBackPayooCommand request, CancellationToken cancellationToken)
     {
         var _responseData = request.ResponseData;
@@ -31,7 +33,10 @@ public class CallBackPayooCommandHandler : ApplicationBaseService<CallBackPayooC
 
         if (_responseData.PaymentStatus != 1) return Result.Failed<bool>(ServiceError.NotFound(_currentTranslateService));
 
-        var _hash = _checkSumKey + JsonConvert.SerializeObject(_responseData) + _payooIpSan;
+        var checkSumKey = _payooConfiguration.CheckSumKey;
+        var payooIp = _payooConfiguration.SandboxIp; // sử dụng IP sandbox theo cấu hình hiện tại
+
+        var _hash = checkSumKey + JsonConvert.SerializeObject(_responseData) + payooIp;
 
         var sha512Hash = ComputeSha512Hash(_hash);
         bool isHashValid = sha512Hash.Equals(request.SecureHash, StringComparison.InvariantCultureIgnoreCase);

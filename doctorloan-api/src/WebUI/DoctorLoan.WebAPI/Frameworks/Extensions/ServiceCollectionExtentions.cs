@@ -19,8 +19,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using NSwag;
@@ -81,6 +82,11 @@ public static class ServiceCollectionExtentions
         var jwtKey = jwtOption?.GetValue<string>(nameof(JWTTokenConfiguration.Key)) ?? string.Empty;
         var jwtAudience = jwtOption?.GetValue<string>(nameof(JWTTokenConfiguration.Audience)) ?? string.Empty;
         var jwtIssuer = jwtOption?.GetValue<string>(nameof(JWTTokenConfiguration.Issuer)) ?? string.Empty;
+
+        // Bind Payoo configuration
+        var payooSection = configuration.GetSection(nameof(PayooConfiguration));
+        services.Configure<PayooConfiguration>(payooSection);
+        services.AddSingleton(sp => sp.GetRequiredService<IOptions<PayooConfiguration>>().Value);
         services.AddAuthentication(k =>
         {
             k.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -189,7 +195,7 @@ public static class ServiceCollectionExtentions
             var source = logConfig.GetValue<string>("Source");
 
 
-         
+
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Override("System", (LogEventLevel)levelSystem)
@@ -197,7 +203,7 @@ public static class ServiceCollectionExtentions
                 .MinimumLevel.Override("Microsoft.AspNetCore", (LogEventLevel)levelAsp)
                 .Enrich.FromLogContext()
                 .WriteTo.Console(new RenderedCompactJsonFormatter())
-                
+
                 .CreateLogger();
 
             #endregion

@@ -39,4 +39,3 @@ public class GetMeQuery : IRequest<Result<UserDto>>
         }
     }
 }
-

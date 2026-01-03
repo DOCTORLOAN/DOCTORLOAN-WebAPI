@@ -30,4 +30,3 @@ public class UserPermissionConfiguration : IEntityTypeConfiguration<UserPermissi
             .OnDelete(DeleteBehavior.Restrict);
     }
 }
-

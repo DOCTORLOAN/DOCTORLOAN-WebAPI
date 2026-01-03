@@ -10,7 +10,7 @@ public class NewsItemDetailConfiguration : IEntityTypeConfiguration<NewsItemDeta
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedOnAdd().IsRequired();
-        builder.ConfigurateBaseAudit<NewsItemDetail, int>();      
+        builder.ConfigurateBaseAudit<NewsItemDetail, int>();
         builder.Property(x => x.Title)
             .IsRequired()
             .HasMaxLength(500)
@@ -24,6 +24,6 @@ public class NewsItemDetailConfiguration : IEntityTypeConfiguration<NewsItemDeta
             .HasForeignKey(x => x.NewsId)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
-      
+
     }
 }

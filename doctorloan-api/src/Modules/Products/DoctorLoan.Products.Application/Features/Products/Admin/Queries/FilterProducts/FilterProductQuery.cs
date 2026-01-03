@@ -33,7 +33,7 @@ public class FilterProductQueryHandle : ApplicationBaseService<FilterProductQuer
 
         if (request.Status.HasValue)
             condition = condition.And(x => x.Status == request.Status);
-        
+
         if (request.CategoryId.HasValue)
             condition = condition.And(x => x.ProductCategories.Any(c => c.CategoryId == request.CategoryId));
 

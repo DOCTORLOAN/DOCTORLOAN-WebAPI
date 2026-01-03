@@ -1,11 +1,11 @@
-﻿using DoctorLoan.Application.Interfaces.Commons;
+﻿using DoctorLoan.Application;
+using DoctorLoan.Application.Interfaces.Commons;
 using DoctorLoan.Application.Interfaces.Data;
-using DoctorLoan.Application;
 using DoctorLoan.Application.Models.Commons;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
 using DoctorLoan.Products.Application.Features.Products.Dtos;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace DoctorLoan.Products.Application.Features.Products.Admin.Queries;
 
@@ -26,7 +26,7 @@ public class GetDataSelectQueryHandle : ApplicationBaseService<GetDataSelectQuer
     {
         var data = new ListProductOptions
         {
-            Attributes=await _context.Attributes.Select(x=>new Option { Value=x.Id,Label=x.Name}).ToListAsync(cancellationToken),
+            Attributes = await _context.Attributes.Select(x => new Option { Value = x.Id, Label = x.Name }).ToListAsync(cancellationToken),
             Categories = await _context.Categories.Select(x => new Option { Value = x.Id, Label = x.Name }).ToListAsync(cancellationToken),
             OptionGroups = await _context.ProductOptionGroups.Select(x => new Option { Value = x.Id, Label = x.Name }).ToListAsync(cancellationToken),
             Brands = await _context.Brands.Select(x => new Option { Value = x.Id, Label = x.Name }).ToListAsync(cancellationToken)

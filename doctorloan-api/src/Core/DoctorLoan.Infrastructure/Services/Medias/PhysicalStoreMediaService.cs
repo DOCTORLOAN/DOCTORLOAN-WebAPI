@@ -13,10 +13,10 @@ public class PhysicalStoreMediaService : MediaService, IMediaService
     private readonly IWebHelper _webHelper;
     public PhysicalStoreMediaService(
         IWebHelper webHelper,
-        ILogger<MediaService> logger, 
+        ILogger<MediaService> logger,
         IApplicationDbContext context, ICurrentRequestInfoService currentRequestInfoService, ICurrentTranslateService currentTranslateService, IDateTime dateTime) : base(logger, context, currentRequestInfoService, currentTranslateService, dateTime)
     {
-        _webHelper= webHelper;
+        _webHelper = webHelper;
     }
 
     public async Task<bool> DeleteMediaAsync(Media picture)
@@ -35,11 +35,11 @@ public class PhysicalStoreMediaService : MediaService, IMediaService
         }
     }
 
-    public async Task<Media> UploadMediaAsync(byte[] fileBinary,string fileName, MediaType fileType, List<int> listTargetSize,string subFolder=null)
+    public async Task<Media> UploadMediaAsync(byte[] fileBinary, string fileName, MediaType fileType, List<int> listTargetSize, string subFolder = null)
     {
         var fileInfo = GetFileInfo(fileName, fileType, 0, subFolder);
-        var fullFolderPath= _webHelper.MapPath(fileInfo.folderPath);
-        string fullFilePath =_webHelper.MapPath($"{fullFolderPath}/{fileInfo.fileName}");
+        var fullFolderPath = _webHelper.MapPath(fileInfo.folderPath);
+        string fullFilePath = _webHelper.MapPath($"{fullFolderPath}/{fileInfo.fileName}");
         var folderInfo = new DirectoryInfo(fullFolderPath);
         if (!folderInfo.Exists)
             folderInfo.Create();
@@ -48,12 +48,12 @@ public class PhysicalStoreMediaService : MediaService, IMediaService
 
             string fileBySize = $"{(targetSize > 0 ? targetSize + "_" : "")}{fileInfo.fileName}";
             var fullFilePathBySize = $"{fullFolderPath}/{fileBySize}";
-            using var mutex = new Mutex(false,Path.GetFileNameWithoutExtension(fileBySize));
+            using var mutex = new Mutex(false, Path.GetFileNameWithoutExtension(fileBySize));
             mutex.WaitOne();
             try
             {
                 using var image = SKBitmap.Decode(fileBinary);
-               
+
                 byte[] pictureBinary;
                 var format = GetImageFormatByMimeType(fileBySize);
                 if (targetSize > 0)
@@ -64,10 +64,10 @@ public class PhysicalStoreMediaService : MediaService, IMediaService
                 {
                     pictureBinary = fileBinary;
                 }
-               
-                File.WriteAllBytes(fullFilePathBySize, pictureBinary);             
-               
-              
+
+                File.WriteAllBytes(fullFilePathBySize, pictureBinary);
+
+
             }
             catch
             {
@@ -76,7 +76,7 @@ public class PhysicalStoreMediaService : MediaService, IMediaService
             }
 
 
-        }       
+        }
         var media = GetMediaInfo(fileInfo.fileName, fileInfo.folderPath, fileName, fileType);
         await InsertMediaAsync(media);
         return media;

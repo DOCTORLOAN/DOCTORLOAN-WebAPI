@@ -12,7 +12,7 @@ public class NewsCategoryConfiguration : IEntityTypeConfiguration<NewsCategory>
         builder.Property(x => x.Id).ValueGeneratedOnAdd().IsRequired();
         builder.ConfigurateBaseAudit<NewsCategory, int>();
         builder.HasQueryFilter(x => !x.IsDeleted);
-        builder.Property(x=>x.Name).IsRequired().HasMaxLength(250).IsUnicode(); ; 
+        builder.Property(x => x.Name).IsRequired().HasMaxLength(250).IsUnicode(); ;
         builder.Property(x => x.Slug)
         .IsRequired()
         .HasMaxLength(255);

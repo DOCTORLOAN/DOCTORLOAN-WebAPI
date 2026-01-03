@@ -15,7 +15,7 @@ public class NewsCategoryMappingConfiguration : IEntityTypeConfiguration<NewsCat
             .HasForeignKey(x => x.NewsCategoryId)
             .IsRequired();
         builder.HasOne(x => x.NewsItem)
-            .WithMany(x=>x.NewsCategories)
+            .WithMany(x => x.NewsCategories)
             .HasForeignKey(x => x.NewsItemId)
             .IsRequired();
 

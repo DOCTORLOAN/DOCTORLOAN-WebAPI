@@ -44,10 +44,10 @@ public class WebHelper : IWebHelper
 
         return storeHost;
     }
-   
-    public  string MapPath(string path)
+
+    public string MapPath(string path)
     {
         path = path.Replace("~/", string.Empty).TrimStart('/');
-        return _webHostEnvironment.WebRootPath+"/" + path;
+        return _webHostEnvironment.WebRootPath + "/" + path;
     }
 }

@@ -46,5 +46,3 @@ public class AddCustomerCommandValidator : AbstractValidator<AddCustomerCommand>
 
     }
 }
-
-

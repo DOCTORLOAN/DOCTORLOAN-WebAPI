@@ -1,14 +1,14 @@
-﻿using DoctorLoan.Application.Interfaces.Commons;
-using DoctorLoan.Application.Interfaces.Data;
-using DoctorLoan.Application;
-using DoctorLoan.Application.Models.Commons;
-using DoctorLoan.News.Application.Features.NewsCategories.Dtos;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using FluentValidation;
-using DoctorLoan.Domain.Entities.News;
-using Microsoft.EntityFrameworkCore;
+﻿using DoctorLoan.Application;
 using DoctorLoan.Application.Common.Extentions;
+using DoctorLoan.Application.Interfaces.Commons;
+using DoctorLoan.Application.Interfaces.Data;
+using DoctorLoan.Application.Models.Commons;
+using DoctorLoan.Domain.Entities.News;
+using DoctorLoan.News.Application.Features.NewsCategories.Dtos;
+using FluentValidation;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace DoctorLoan.News.Application.Features.NewsCategories.Admin.Commands.SaveCategory;
 public class SaveNewsCategoryCommandValidator : AbstractValidator<SaveNewsCategoryCommand>
@@ -18,7 +18,7 @@ public class SaveNewsCategoryCommandValidator : AbstractValidator<SaveNewsCatego
         RuleFor(x => x.Name).NotEmpty();
     }
 }
-public class SaveNewsCategoryCommand:NewsCategoryDto,IRequest<Result<int>>
+public class SaveNewsCategoryCommand : NewsCategoryDto, IRequest<Result<int>>
 {
 }
 public class SaveNewsCategoryCommandHandle : ApplicationBaseService<SaveNewsCategoryCommandHandle>, IRequestHandler<SaveNewsCategoryCommand, Result<int>>
@@ -42,16 +42,15 @@ public class SaveNewsCategoryCommandHandle : ApplicationBaseService<SaveNewsCate
             category = new NewsCategory
             {
                 Slug = request.Name.ToSlug(),
-               
+
             };
         }
         request.MapperTo(category);
         category.Status = category.Status > 0 ? category.Status : Domain.Enums.Commons.StatusEnum.Draft;
-        if (category.Id==0)
+        if (category.Id == 0)
             _context.NewsCategories.Add(category);
         await _context.SaveChangesAsync(cancellationToken);
         return Result.Success(category.Id);
-        
+
     }
 }
-

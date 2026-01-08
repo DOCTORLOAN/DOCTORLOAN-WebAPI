@@ -1,5 +1,1 @@
-﻿namespace DoctorLoan.WebAPI.Validation;
-
-public class Resource
-{
-}
+﻿namespace DoctorLoan.WebAPI.Validation;public class Resource{}

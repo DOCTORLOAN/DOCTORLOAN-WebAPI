@@ -1,5 +1,1 @@
-﻿namespace DoctorLoan.WebAPI.SystemMessage;
-
-public class Resource
-{
-}
+﻿namespace DoctorLoan.WebAPI.SystemMessage;public class Resource{}

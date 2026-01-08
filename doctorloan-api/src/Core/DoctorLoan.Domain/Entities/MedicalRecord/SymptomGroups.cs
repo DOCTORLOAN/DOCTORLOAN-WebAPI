@@ -1,11 +1,1 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace DoctorLoan.Domain.Entities.MedicalRecord;
-
-[Table("SymptomGroups")]
-public class SymptomGroups : BaseEntityAudit<int>
-{
-    public string Name { get; set; }
-    public bool IsDelete { get; set; }
-    public virtual ICollection<Symptoms> Symptoms { get; set; }
-}
+﻿using System.ComponentModel.DataAnnotations.Schema;namespace DoctorLoan.Domain.Entities.MedicalRecord;[Table("SymptomGroups")]public class SymptomGroups : BaseEntityAudit<int>{    public string Name { get; set; }    public bool IsDelete { get; set; }    public virtual ICollection<Symptoms> Symptoms { get; set; }}

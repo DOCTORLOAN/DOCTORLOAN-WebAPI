@@ -1,5 +1,1 @@
-﻿namespace DoctorLoan.WebAPI.Frameworks.Configurations;
-
-public class Resource
-{
-}
+﻿namespace DoctorLoan.WebAPI.Frameworks.Configurations;public class Resource{}

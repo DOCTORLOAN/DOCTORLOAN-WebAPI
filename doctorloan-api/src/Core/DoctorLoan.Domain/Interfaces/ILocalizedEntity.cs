@@ -1,4 +1,1 @@
-﻿namespace DoctorLoan.Domain.Interfaces;
-public interface ILocalizedEntity
-{
-}
+﻿namespace DoctorLoan.Domain.Interfaces;public interface ILocalizedEntity{}

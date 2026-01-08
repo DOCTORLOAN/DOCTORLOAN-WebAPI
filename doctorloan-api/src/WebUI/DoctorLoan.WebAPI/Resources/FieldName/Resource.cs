@@ -1,5 +1,1 @@
-﻿namespace DoctorLoan.WebAPI.FieldName;
-
-public class Resource
-{
-}
+﻿namespace DoctorLoan.WebAPI.FieldName;public class Resource{}

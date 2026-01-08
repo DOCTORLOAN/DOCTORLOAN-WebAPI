@@ -1,4 +1,1 @@
-﻿namespace DoctorLoan.Domain.Interfaces;
-public interface ISettings
-{
-}
+﻿namespace DoctorLoan.Domain.Interfaces;public interface ISettings{}

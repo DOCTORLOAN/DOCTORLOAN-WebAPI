@@ -1,6 +1,1 @@
-namespace DoctorLoan.Application.Interfaces.Users;
-
-public interface IUserBaseService
-{
-
-}
+﻿namespace DoctorLoan.Application.Interfaces.Users;public interface IUserBaseService{}

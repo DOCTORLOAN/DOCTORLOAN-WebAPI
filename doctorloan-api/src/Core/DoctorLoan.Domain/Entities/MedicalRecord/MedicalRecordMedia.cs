@@ -1,17 +1,1 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using DoctorLoan.Domain.Entities.Medias;
-using DoctorLoan.Domain.Enums.Commons;
-
-namespace DoctorLoan.Domain.Entities.MedicalRecord;
-
-[Table("MedicalRecordMedia")]
-public class MedicalRecordMedia : BaseEntityAudit<int>
-{
-    public long? MediaId { get; set; }
-    public int? MedicalRecordId { get; set; }
-    public int OrderBy { get; set; }
-    public StatusEnum Status { get; set; }
-    public bool IsDelete { get; set; }
-    public virtual MedicalRecord MedicalRecord { get; set; }
-    public virtual Media Media { get; set; }
-}
+﻿using System.ComponentModel.DataAnnotations.Schema;using DoctorLoan.Domain.Entities.Medias;using DoctorLoan.Domain.Enums.Commons;namespace DoctorLoan.Domain.Entities.MedicalRecord;[Table("MedicalRecordMedia")]public class MedicalRecordMedia : BaseEntityAudit<int>{    public long? MediaId { get; set; }    public int? MedicalRecordId { get; set; }    public int OrderBy { get; set; }    public StatusEnum Status { get; set; }    public bool IsDelete { get; set; }    public virtual MedicalRecord MedicalRecord { get; set; }    public virtual Media Media { get; set; }}

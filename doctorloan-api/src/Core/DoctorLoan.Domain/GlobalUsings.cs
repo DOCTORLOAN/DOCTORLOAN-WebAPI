@@ -1,2 +1,1 @@
-﻿global using DoctorLoan.Domain.Common;
-global using DoctorLoan.Domain.Enums;
+﻿global using DoctorLoan.Domain.Common;global using DoctorLoan.Domain.Enums;

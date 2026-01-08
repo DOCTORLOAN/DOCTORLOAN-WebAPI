@@ -1,6 +1,1 @@
-﻿namespace DoctorLoan.Application.Interfaces.Commons;
-
-public interface IDateTime
-{
-    DateTimeOffset UtcNow { get; }
-}
+﻿namespace DoctorLoan.Application.Interfaces.Commons;public interface IDateTime{    DateTimeOffset UtcNow { get; }}

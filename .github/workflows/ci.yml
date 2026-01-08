@@ -389,52 +389,52 @@ jobs:
           
           # Create performance findings JSON
           BLOCKING_ASYNC=$BLOCKING_ASYNC STRING_CONCAT=$STRING_CONCAT LARGE_FILES=$LARGE_FILES python3 << 'PYEOF' > performance-findings.json
-        import json
-        import os
+          import json
+          import os
 
-        findings = []
+          findings = []
 
-        blocking_async = int(os.environ.get('BLOCKING_ASYNC', '0'))
-        if blocking_async > 0:
+          blocking_async = int(os.environ.get('BLOCKING_ASYNC', '0'))
+          if blocking_async > 0:
+              findings.append({
+                  "type": "blocking_async",
+                  "title": "Blocking async operations found",
+                  "count": blocking_async,
+                  "severity": "critical",
+                  "recommendation": "Use async/await instead of .Result, .Wait(), or .GetAwaiter().GetResult()"
+              })
+
+          string_concat = int(os.environ.get('STRING_CONCAT', '0'))
+          if string_concat > 0:
+              findings.append({
+                  "type": "string_concat",
+                  "title": "String concatenation in loops found",
+                  "count": string_concat,
+                  "severity": "medium",
+                  "recommendation": "Use StringBuilder for string concatenation in loops"
+              })
+
+          large_files = int(os.environ.get('LARGE_FILES', '0'))
+          if large_files > 0:
             findings.append({
-                "type": "blocking_async",
-                "title": "Blocking async operations found",
-                "count": blocking_async,
-                "severity": "critical",
-                "recommendation": "Use async/await instead of .Result, .Wait(), or .GetAwaiter().GetResult()"
+                "type": "large_files",
+                "title": "Large files found (>500 lines)",
+                "count": large_files,
+                "severity": "enhancement",
+                "recommendation": "Consider splitting large files into smaller, more maintainable units"
             })
 
-        string_concat = int(os.environ.get('STRING_CONCAT', '0'))
-        if string_concat > 0:
-            findings.append({
-                "type": "string_concat",
-                "title": "String concatenation in loops found",
-                "count": string_concat,
-                "severity": "medium",
-                "recommendation": "Use StringBuilder for string concatenation in loops"
-            })
+              print(json.dumps(findings, indent=2))
+              PYEOF
 
-        large_files = int(os.environ.get('LARGE_FILES', '0'))
-        if large_files > 0:
-          findings.append({
-              "type": "large_files",
-              "title": "Large files found (>500 lines)",
-              "count": large_files,
-              "severity": "enhancement",
-              "recommendation": "Consider splitting large files into smaller, more maintainable units"
-          })
-
-            print(json.dumps(findings, indent=2))
-            PYEOF
-
-              - name: Upload Performance Artifacts
-                if: always()
-                uses: actions/upload-artifact@v4
-                with:
-                  name: performance-logs
-                  path: |
-                    performance-findings.json
-                  retention-days: 7
+                - name: Upload Performance Artifacts
+                  if: always()
+                  uses: actions/upload-artifact@v4
+                  with:
+                    name: performance-logs
+                    path: |
+                      performance-findings.json
+                    retention-days: 7
 
   # Job 4: API Validation & Documentation (API-specific)
   api-validation:

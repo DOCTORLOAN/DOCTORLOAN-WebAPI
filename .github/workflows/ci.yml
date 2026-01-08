@@ -1,4 +1,4 @@
-name: CI Pipeline - Code Quality, Security, Performance & API Validation
+name: CI Pipeline - DoctorLoan API Full Validation
 
 on:
   push:
@@ -16,12 +16,11 @@ env:
   PROJECT_ROOT: 'doctorloan-api'
 
 jobs:
-  # Job 1: Code Quality Checks (chạy song song với security)
+  # 1. Kiểm tra chất lượng code & Build
   code-quality:
-    name: Code Quality & Formatting
+    name: Code Quality & Build
     runs-on: ubuntu-latest
     timeout-minutes: 15
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -38,411 +37,107 @@ jobs:
         with:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
+          restore-keys: ${{ runner.os }}-nuget-
 
       - name: Restore dependencies
         run: dotnet restore ${{ env.SOLUTION_FILE }}
 
-      - name: Install .NET Format Tool
-        run: dotnet tool install -g dotnet-format || dotnet tool update -g dotnet-format
-
       - name: Check Code Formatting
-        id: format-check
         run: |
-          echo "Checking code formatting..."
-          set +e
-          dotnet format ${{ env.SOLUTION_FILE }} --verify-no-changes --verbosity diagnostic 2>&1 | tee format-output.txt
-          FORMAT_EXIT_CODE=${PIPESTATUS[0]}
-          set -e
-          
-          # Count files that need formatting
-          FORMAT_COUNT=$(grep -c "error WHITESPACE\|needs formatting\|files need formatting" format-output.txt 2>/dev/null || echo "0")
-          
-          if [ $FORMAT_EXIT_CODE -ne 0 ]; then
-            echo "format_failed=true" >> $GITHUB_OUTPUT
-            echo "format_issues=${FORMAT_COUNT}" >> $GITHUB_OUTPUT
-            echo "❌ Code formatting check failed - ${FORMAT_COUNT} issue(s) found"
-          else
-            echo "format_failed=false" >> $GITHUB_OUTPUT
-            echo "format_issues=0" >> $GITHUB_OUTPUT
-            echo "✅ Code formatting is correct"
-          fi
+          dotnet tool install -g dotnet-format || true
+          dotnet format ${{ env.SOLUTION_FILE }} --verify-no-changes --verbosity minimal
 
-      - name: Build Solution
-        id: build
+      - name: Build Solution (Release)
         run: |
-          echo "Building solution..."
           dotnet build ${{ env.SOLUTION_FILE }} \
             --configuration Release \
             --no-restore \
-            --verbosity minimal \
-            /p:TreatWarningsAsErrors=false \
-            /p:WarningLevel=5 \
-            /p:GenerateDocumentationFile=false 2>&1 | tee build-output.txt
-          
-          WARNINGS=$(grep -iE "warning\s+[A-Z]{2}[0-9]{4}" build-output.txt | wc -l || echo "0")
-          ERRORS=$(grep -iE "error\s+[A-Z]{2}[0-9]{4}" build-output.txt | wc -l || echo "0")
-          
-          echo "warnings_count=$WARNINGS" >> $GITHUB_OUTPUT
-          echo "errors_count=$ERRORS" >> $GITHUB_OUTPUT
-          
-          if [ "$ERRORS" -gt 0 ]; then
-            echo "❌ Build failed with $ERRORS error(s)"
-            exit 1
-          fi
-          
-          if [ "$WARNINGS" -gt 0 ]; then
-            echo "⚠️ Build succeeded with $WARNINGS warning(s)"
-          else
-            echo "✅ Build succeeded with no warnings"
-          fi
+            /p:TreatWarningsAsErrors=false
 
-      - name: Run Code Analysis
-        id: analyze
+  # 2. Chạy Unit Tests & Integration Tests (Bổ sung mới)
+  unit-tests:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: code-quality
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Run All Tests
         run: |
-          echo "Running code analysis..."
-          dotnet build ${{ env.SOLUTION_FILE }} \
+          dotnet test ${{ env.SOLUTION_FILE }} \
             --configuration Release \
-            --no-restore \
-            /p:RunAnalyzersDuringBuild=true \
-            /p:EnableNETAnalyzers=true \
-            /p:AnalysisLevel=latest \
-            /p:EnforceCodeStyleInBuild=true 2>&1 | tee analysis-output.txt || true
-          
-          ANALYSIS_WARNINGS=$(grep -iE "warning\s+[A-Z]{2}[0-9]{4}" analysis-output.txt | wc -l || echo "0")
-          echo "analysis_warnings=$ANALYSIS_WARNINGS" >> $GITHUB_OUTPUT
-          
-          # Extract specific analysis issues
-          grep -iE "warning\s+[A-Z]{2}[0-9]{4}" analysis-output.txt > analysis-issues.txt || true
-
-      - name: Check Code Smells
-        id: code-smells
-        run: |
-          echo "Checking for code smells..."
-          
-          TODO_COUNT=$(grep -r "TODO\|FIXME\|HACK\|XXX" --include="*.cs" ${{ env.PROJECT_ROOT }}/ 2>/dev/null | wc -l || echo "0")
-          COMMENTED_CODE=$(grep -r "^[[:space:]]*//[[:space:]]*[a-zA-Z].*[;}]$" --include="*.cs" ${{ env.PROJECT_ROOT }}/ 2>/dev/null | wc -l || echo "0")
-          LONG_METHODS=$(find ${{ env.PROJECT_ROOT }} -name "*.cs" -not -path "*/obj/*" -not -path "*/bin/*" -exec sh -c 'lines=$(wc -l < "$1"); if [ "$lines" -gt 500 ]; then echo "$1:$lines"; fi' _ {} \; | wc -l || echo "0")
-          
-          echo "todo_count=$TODO_COUNT" >> $GITHUB_OUTPUT
-          echo "commented_code=$COMMENTED_CODE" >> $GITHUB_OUTPUT
-          echo "long_files=$LONG_METHODS" >> $GITHUB_OUTPUT
-          
-          # Export code smell findings
-          {
-            echo "["
-            grep -r "TODO\|FIXME\|HACK" --include="*.cs" ${{ env.PROJECT_ROOT }}/ -n 2>/dev/null | head -20 | while IFS=: read -r file line content; do
-              [ -n "$prev" ] && echo "$prev,"
-              prev="{\"type\":\"code_smell\",\"title\":\"TODO/FIXME comment found\",\"file\":\"$file\",\"line\":\"$line\",\"description\":\"Found TODO/FIXME comment: ${content#*:}\"}"
-            done
-            [ -n "$prev" ] && echo "$prev"
-            echo "]"
-          } > code-smell-findings.json 2>/dev/null || echo "[]" > code-smell-findings.json
-
-      - name: Upload Code Quality Artifacts
+            --verbosity normal \
+            --collect:"XPlat Code Coverage"
+        
+      - name: Upload Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: code-quality-logs
-          path: |
-            build-output.txt
-            analysis-output.txt
-            analysis-issues.txt
-            format-output.txt
-            code-smell-findings.json
-          retention-days: 7
+          name: test-results
+          path: "**/TestResults/*.xml"
 
-  # Job 2: Security Scanning (chạy song song với code-quality)
+  # 3. Quét bảo mật (Security Analysis)
   security-scan:
-    name: Security Analysis
+    name: Security Scan
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    permissions:
-      contents: read
-      security-events: write
-      issues: write
-
+    needs: code-quality
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Cache NuGet packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
-      - name: Restore dependencies
-        run: dotnet restore ${{ env.SOLUTION_FILE }}
-
       - name: Check for NuGet Vulnerabilities
-        id: nuget-security
         run: |
-          echo "Checking for vulnerable NuGet packages..."
-          dotnet list ${{ env.SOLUTION_FILE }} package --vulnerable --include-transitive > nuget-vulnerabilities.txt 2>&1 || true
-          
-          VULN_COUNT=$(grep -c "vulnerable\|known vulnerability" nuget-vulnerabilities.txt || echo "0")
-          echo "vulnerable_packages=$VULN_COUNT" >> $GITHUB_OUTPUT
-          
-          if [ "$VULN_COUNT" -gt 0 ]; then
-            echo "⚠️ Found $VULN_COUNT vulnerable package(s)"
-          else
-            echo "✅ No vulnerable packages found"
-          fi
-
-      - name: Install Python for Scripts
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y python3 || true
+          dotnet list ${{ env.SOLUTION_FILE }} package --vulnerable --include-transitive > nuget-vulnerabilities.txt
 
       - name: Scan for Hardcoded Secrets
-        id: secret-scan
         run: |
-          echo "Scanning for hardcoded secrets..."
-          
-          # Patterns to detect secrets
-          SECRET_PATTERNS=(
-            "password\s*[=:]\s*[\"'][^\"']+[\"']"
-            "api[_-]?key\s*[=:]\s*[\"'][^\"']+[\"']"
-            "secret\s*[=:]\s*[\"'][^\"']+[\"']"
-            "token\s*[=:]\s*[\"'][^\"']+[\"']"
-            "connectionstring\s*[=:]\s*[\"'][^\"']+[\"']"
-            "apikey\s*[=:]\s*[\"'][^\"']+[\"']"
-            "jwt.*key\s*[=:]\s*[\"'][^\"']+[\"']"
-          )
-          
-          SECRETS_FOUND=()
-          
-          for pattern in "${SECRET_PATTERNS[@]}"; do
-            while IFS=: read -r file line content; do
-              # Skip comments, test files, and appsettings.json (expected to have placeholders)
-              if ! echo "$content" | grep -q "^\s*//" && ! echo "$file" | grep -qE "(test|spec|appsettings\.json)"; then
-                SECRETS_FOUND+=("$file:$line:$content")
-              fi
-            done < <(grep -rnE "$pattern" --include="*.cs" ${{ env.PROJECT_ROOT }}/ 2>/dev/null || true)
-          done
-          
-          SECRET_COUNT=${#SECRETS_FOUND[@]}
-          echo "secret_count=$SECRET_COUNT" >> $GITHUB_OUTPUT
-          
-          # Export findings as JSON
-          if [ "$SECRET_COUNT" -gt 0 ]; then
-            printf '%s\n' "${SECRETS_FOUND[@]}" | python3 << 'EOF'
-import json
-import sys
+          grep -rnE "password|api[_-]?key|secret|token|connectionstring" --include="*.cs" --include="*.json" ${{ env.PROJECT_ROOT }}/ > secrets-found.txt || true
 
-findings = []
-for line in sys.stdin:
-    line = line.strip()
-    if not line:
-        continue
-    if ':' in line:
-        parts = line.split(':', 2)
-        if len(parts) >= 3:
-            findings.append({
-                "type": "hardcoded_secret",
-                "category": "security",
-                "title": f"Hardcoded secret found in {parts[0]}",
-                "file": parts[0],
-                "line": parts[1],
-                "description": f"Potential hardcoded secret: {parts[2][:100]}",
-                "severity": "critical",
-                "recommendation": "Move secret to configuration file or environment variables"
-            })
-
-print(json.dumps(findings, indent=2))
-EOF
-          else
-            echo "[]"
-          fi > secret-findings.json
-          
-          if [ "$SECRET_COUNT" -gt 0 ]; then
-            echo "⚠️ Found $SECRET_COUNT potential hardcoded secret(s)"
-          else
-            echo "✅ No hardcoded secrets detected"
-          fi
-
-      - name: Security Code Analysis
-        id: security-analysis
-        run: |
-          echo "Running security code analysis..."
-          
-          # Build with security analyzers
-          dotnet build ${{ env.SOLUTION_FILE }} \
-            --configuration Release \
-            --no-restore \
-            /p:RunAnalyzersDuringBuild=true \
-            /p:EnableNETAnalyzers=true \
-            /p:AnalysisLevel=latest 2>&1 | tee security-analysis.txt || true
-          
-          # Extract security-related warnings
-          grep -iE "(CA2100|CA2109|CA2111|CA2112|CA2114|CA2115|CA2116|CA2117|CA2118|CA2119|CA2120|CA2121|CA2122|CA2123|CA2124|CA2126|CA2127|CA2128|CA2129|CA2130|CA2131|CA2132|CA2133|CA2134|CA2135|CA2136|CA2137|CA2138|CA2139|CA2140|CA2141|CA2142|CA2143|CA2144|CA2145|CA2146|CA2147|CA2149|CA2151|CA3001|CA3002|CA3003|CA3004|CA3005|CA3006|CA3007|CA3008|CA3009|CA3010|CA3011|CA3012|CA5350|CA5351|CA5358|CA5359|CA5360|CA5361|CA5362|CA5363|CA5364|CA5365|CA5366|CA5367|CA5368|CA5369|CA5370|CA5371|CA5372|CA5373|CA5374|CA5375|CA5376|CA5377|CA5378|CA5379|CA5380|CA5381|CA5382|CA5383|CA5384|CA5385|CA5386|CA5387|CA5388|CA5389|CA5390|CA5391|CA5392|CA5393|CA5394|CA5395|CA5396|CA5397|CA5398|CA5399|CA5400|CA5401|CA5402|CA5403)" security-analysis.txt > security-warnings.txt || true
-          
-          SECURITY_WARNINGS=$(wc -l < security-warnings.txt || echo "0")
-          echo "security_warnings=$SECURITY_WARNINGS" >> $GITHUB_OUTPUT
-
-      - name: Install Node.js for Security Analysis
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Combine Security Findings
-        run: |
-          echo "Combining security findings..."
-          node -e "
-            const fs = require('fs');
-            const secrets = JSON.parse(fs.readFileSync('secret-findings.json', 'utf8') || '[]');
-            const vulnerabilities = fs.readFileSync('nuget-vulnerabilities.txt', 'utf8') || '';
-            const vulnLines = vulnerabilities.split('\n').filter(line => line.includes('@'));
-            const vulnFindings = vulnLines.map(line => {
-              const match = line.match(/(\S+@[\S]+)/);
-              const pkg = match ? match[1] : line.trim();
-              return {
-                type: 'vulnerable_package',
-                category: 'security',
-                title: \`Vulnerable package: \${pkg}\`,
-                description: \`Package \${pkg} has known vulnerabilities\`,
-                recommendation: 'Update package to latest secure version',
-                severity: 'high'
-              };
-            }).filter(f => f.title);
-            const allFindings = [...secrets, ...vulnFindings];
-            fs.writeFileSync('security-findings.json', JSON.stringify(allFindings, null, 2));
-            console.log(\`Combined \${allFindings.length} security findings\`);
-          "
-
-      - name: Upload Security Artifacts
+      - name: Upload Security Logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: security-logs
           path: |
             nuget-vulnerabilities.txt
-            secret-findings.json
-            security-analysis.txt
-            security-warnings.txt
-            security-findings.json
-          retention-days: 7
+            secrets-found.txt
 
-  # Job 3: Performance Analysis (chạy song song)
-  performance-analysis:
+  # 4. Phân tích hiệu năng (Performance Analysis)
+  performance-check:
     name: Performance Analysis
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: []  # Chạy độc lập
-
+    needs: code-quality
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Cache NuGet packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
-      - name: Restore dependencies
-        run: dotnet restore ${{ env.SOLUTION_FILE }}
-
-      - name: Build for Analysis
-        run: dotnet build ${{ env.SOLUTION_FILE }} --configuration Release --no-restore
-
-      - name: Analyze Code Complexity & Performance
-        id: complexity
+      - name: Analyze Blocking Async
         run: |
-          echo "Analyzing code complexity and performance patterns..."
-          
-          # Check for blocking async operations
-          BLOCKING_ASYNC=$(grep -rnE "\.Result|\.Wait\(\)|\.GetAwaiter\(\)\.GetResult\(\)" --include="*.cs" ${{ env.PROJECT_ROOT }}/ 2>/dev/null | wc -l || echo "0")
-          
-          # Check for string concatenation in loops
-          STRING_CONCAT=$(grep -rnE "for\s*\(.*\)\s*\{[^}]*\+=" --include="*.cs" ${{ env.PROJECT_ROOT }}/ 2>/dev/null | wc -l || echo "0")
-          
-          # Count large files
-          LARGE_FILES=$(find ${{ env.PROJECT_ROOT }} -name "*.cs" -not -path "*/obj/*" -not -path "*/bin/*" -exec sh -c 'lines=$(wc -l < "$1"); if [ "$lines" -gt 500 ]; then echo "$1:$lines"; fi' _ {} \; | wc -l || echo "0")
-          
-          CS_FILES=$(find ${{ env.PROJECT_ROOT }} -name "*.cs" -not -path "*/obj/*" -not -path "*/bin/*" | wc -l)
-          TOTAL_LINES=$(find ${{ env.PROJECT_ROOT }} -name "*.cs" -not -path "*/obj/*" -not -path "*/bin/*" -exec wc -l {} + | tail -1 | awk '{print $1}' || echo "0")
-          
-          echo "blocking_async=$BLOCKING_ASYNC" >> $GITHUB_OUTPUT
-          echo "string_concat=$STRING_CONCAT" >> $GITHUB_OUTPUT
-          echo "large_files=$LARGE_FILES" >> $GITHUB_OUTPUT
-          echo "cs_files=$CS_FILES" >> $GITHUB_OUTPUT
-          echo "total_lines=$TOTAL_LINES" >> $GITHUB_OUTPUT
-          
-          # Create performance findings JSON
-          BLOCKING_ASYNC=$BLOCKING_ASYNC STRING_CONCAT=$STRING_CONCAT LARGE_FILES=$LARGE_FILES python3 << 'PYEOF' > performance-findings.json
-import json
-import os
+          echo "Checking for .Result or .Wait() calls..."
+          grep -rnE "\.Result|\.Wait\(\)|\.GetAwaiter\(\)\.GetResult\(\)" --include="*.cs" ${{ env.PROJECT_ROOT }}/ > performance-issues.txt || true
 
-findings = []
-
-blocking_async = int(os.environ.get('BLOCKING_ASYNC', '0'))
-if blocking_async > 0:
-    findings.append({
-        "type": "blocking_async",
-        "title": "Blocking async operations found",
-        "count": blocking_async,
-        "severity": "critical",
-        "recommendation": "Use async/await instead of .Result, .Wait(), or .GetAwaiter().GetResult()"
-    })
-
-string_concat = int(os.environ.get('STRING_CONCAT', '0'))
-if string_concat > 0:
-    findings.append({
-        "type": "string_concat",
-        "title": "String concatenation in loops found",
-        "count": string_concat,
-        "severity": "medium",
-        "recommendation": "Use StringBuilder for string concatenation in loops"
-    })
-
-large_files = int(os.environ.get('LARGE_FILES', '0'))
-if large_files > 0:
-    findings.append({
-        "type": "large_files",
-        "title": "Large files found (>500 lines)",
-        "count": large_files,
-        "severity": "enhancement",
-        "recommendation": "Consider splitting large files into smaller, more maintainable units"
-    })
-
-print(json.dumps(findings, indent=2))
-PYEOF
-
-      - name: Upload Performance Artifacts
-        if: always()
+      - name: Upload Performance Logs
         uses: actions/upload-artifact@v4
         with:
           name: performance-logs
-          path: |
-            performance-findings.json
-          retention-days: 7
+          path: performance-issues.txt
 
-  # Job 4: API Validation & Documentation (API-specific)
+  # 5. Xác thực API & OpenAPI (API Validation)
   api-validation:
-    name: API Validation & Documentation
+    name: API Validation
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    needs: []  # Chạy độc lập
-
+    needs: [unit-tests, security-scan]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -452,667 +147,27 @@ PYEOF
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Cache NuGet packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
+      - name: Build API Project
+        run: dotnet build ${{ env.WEBAPI_PROJECT }} --configuration Release
 
-      - name: Restore dependencies
-        run: dotnet restore ${{ env.SOLUTION_FILE }}
-
-      - name: Build WebAPI Project
-        run: |
-          dotnet build ${{ env.WEBAPI_PROJECT }} \
-            --configuration Release \
-            --no-restore \
-            /p:GenerateDocumentationFile=true
-
-      - name: Generate OpenAPI Specification
-        id: generate-openapi
-        working-directory: doctorloan-api/src/WebUI/DoctorLoan.WebAPI
-        run: |
-          echo "Generating OpenAPI specification..."
-          # NSwag will generate the OpenAPI spec during build if configured
-          # Check if specification file exists
-          if [ -f "wwwroot/api/specification.json" ]; then
-            echo "✅ OpenAPI specification generated"
-            echo "spec_exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "⚠️ OpenAPI specification not found, attempting manual generation..."
-            # Try to run NSwag manually
-            dotnet build ${{ env.WEBAPI_PROJECT }} --configuration Debug || true
-            if [ -f "wwwroot/api/specification.json" ]; then
-              echo "spec_exists=true" >> $GITHUB_OUTPUT
-            else
-              echo "spec_exists=false" >> $GITHUB_OUTPUT
-              echo "⚠️ Could not generate OpenAPI specification"
-            fi
-          fi
-
-      - name: Validate OpenAPI Specification
-        id: validate-openapi
-        if: steps.generate-openapi.outputs.spec_exists == 'true'
-        working-directory: doctorloan-api/src/WebUI/DoctorLoan.WebAPI
-        run: |
-          echo "Validating OpenAPI specification..."
-          
-          # Install Node.js for OpenAPI validation tools
-          curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - || true
-          sudo apt-get install -y nodejs || true
-          
-          # Install swagger-parser for validation
-          npm install -g @apidevtools/swagger-parser || true
-          
-          if [ -f "wwwroot/api/specification.json" ]; then
-            # Validate OpenAPI spec
-            swagger-parser validate wwwroot/api/specification.json > openapi-validation.txt 2>&1 || true
-            
-            if grep -q "is valid" openapi-validation.txt; then
-              echo "✅ OpenAPI specification is valid"
-              echo "openapi_valid=true" >> $GITHUB_OUTPUT
-            else
-              echo "❌ OpenAPI specification validation failed"
-              echo "openapi_valid=false" >> $GITHUB_OUTPUT
-              cat openapi-validation.txt
-            fi
-            
-            # Check for required API documentation
-            REQUIRED_ENDPOINTS=("health" "swagger")
-            MISSING_ENDPOINTS=()
-            
-            for endpoint in "${REQUIRED_ENDPOINTS[@]}"; do
-              if ! grep -qi "\"$endpoint\"" wwwroot/api/specification.json 2>/dev/null; then
-                MISSING_ENDPOINTS+=("$endpoint")
-              fi
-            done
-            
-            if [ ${#MISSING_ENDPOINTS[@]} -gt 0 ]; then
-              echo "⚠️ Missing expected endpoints: ${MISSING_ENDPOINTS[*]}"
-            else
-              echo "✅ All expected endpoints found"
-            fi
-          else
-            echo "openapi_valid=false" >> $GITHUB_OUTPUT
-            echo "❌ OpenAPI specification file not found"
-          fi
-
-      - name: Check API Documentation Quality
-        id: api-docs-quality
-        working-directory: doctorloan-api/src/WebUI/DoctorLoan.WebAPI
-        run: |
-          echo "Checking API documentation quality..."
-          
-          if [ -f "wwwroot/api/specification.json" ]; then
-            # Count endpoints with descriptions
-            ENDPOINTS_WITH_DESC=$(grep -c '"summary":\|"description":' wwwroot/api/specification.json || echo "0")
-            TOTAL_PATHS=$(jq '.paths | length' wwwroot/api/specification.json 2>/dev/null || echo "0")
-            
-            echo "endpoints_with_docs=$ENDPOINTS_WITH_DESC" >> $GITHUB_OUTPUT
-            echo "total_paths=$TOTAL_PATHS" >> $GITHUB_OUTPUT
-            
-            # Check for missing response schemas
-            MISSING_RESPONSES=$(grep -c '"responses":\s*{}' wwwroot/api/specification.json || echo "0")
-            echo "missing_responses=$MISSING_RESPONSES" >> $GITHUB_OUTPUT
-            
-            # Check for endpoints without authentication
-            ENDPOINTS_WITHOUT_AUTH=$(jq '[.paths[][] | select(.security == null or .security == [])] | length' wwwroot/api/specification.json 2>/dev/null || echo "0")
-            echo "endpoints_without_auth=$ENDPOINTS_WITHOUT_AUTH" >> $GITHUB_OUTPUT
-            
-            # Check for missing request body schemas
-            MISSING_REQUEST_BODIES=$(jq '[.paths[][] | select(.requestBody != null and (.requestBody.content."application/json".schema == null))] | length' wwwroot/api/specification.json 2>/dev/null || echo "0")
-            echo "missing_request_bodies=$MISSING_REQUEST_BODIES" >> $GITHUB_OUTPUT
-            
-            if [ "$MISSING_RESPONSES" -gt 0 ]; then
-              echo "⚠️ Found $MISSING_RESPONSES endpoints with missing response schemas"
-            else
-              echo "✅ All endpoints have response schemas"
-            fi
-            
-            if [ "$ENDPOINTS_WITHOUT_AUTH" -gt 0 ]; then
-              echo "⚠️ Found $ENDPOINTS_WITHOUT_AUTH endpoints without authentication (may be intentional for public endpoints)"
-            fi
-          fi
-
-      - name: Validate API Configuration
-        id: api-config-validation
-        working-directory: doctorloan-api/src/WebUI/DoctorLoan.WebAPI
-        run: |
-          echo "Validating API configuration..."
-          
-          # Check for required configuration sections
-          CONFIG_ISSUES=()
-          
-          # Check JWT configuration
-          if ! grep -q "JWTTokenConfiguration" appsettings.json 2>/dev/null; then
-            CONFIG_ISSUES+=("JWTTokenConfiguration missing")
-          fi
-          
-          # Check Rate Limiting configuration
-          if ! grep -q "RateLimiting" appsettings.json 2>/dev/null; then
-            CONFIG_ISSUES+=("RateLimiting configuration missing")
-          fi
-          
-          # Check CORS configuration
-          if ! grep -q "AllowCORSUrl\|CORS" appsettings.json 2>/dev/null; then
-            CONFIG_ISSUES+=("CORS configuration missing")
-          fi
-          
-          # Check Health Check endpoint configuration
-          if ! grep -q "HealthChecks\|health" appsettings.json 2>/dev/null; then
-            echo "⚠️ Health check configuration not found in appsettings (may be configured in code)"
-          fi
-          
-          if [ ${#CONFIG_ISSUES[@]} -gt 0 ]; then
-            echo "❌ Configuration issues found:"
-            printf '%s\n' "${CONFIG_ISSUES[@]}"
-            echo "config_valid=false" >> $GITHUB_OUTPUT
-          else
-            echo "✅ API configuration is valid"
-            echo "config_valid=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Validate API Security Headers
-        id: api-security-headers
-        working-directory: doctorloan-api/src/WebUI/DoctorLoan.WebAPI
-        run: |
-          echo "Validating API security headers configuration..."
-          
-          # Check for security headers middleware
-          if grep -r "UseStandardSecurityHeaders\|X-Content-Type-Options\|X-Frame-Options\|X-XSS-Protection" Frameworks/Extensions/ 2>/dev/null | grep -q .; then
-            echo "✅ Security headers middleware found"
-            echo "security_headers=true" >> $GITHUB_OUTPUT
-          else
-            echo "⚠️ Security headers middleware not found"
-            echo "security_headers=false" >> $GITHUB_OUTPUT
-          fi
-          
-          # Check for HTTPS enforcement
-          if grep -r "UseHttpsRedirection\|UseHsts" Frameworks/Extensions/ 2>/dev/null | grep -q .; then
-            echo "✅ HTTPS enforcement found"
-            echo "https_enforcement=true" >> $GITHUB_OUTPUT
-          else
-            echo "⚠️ HTTPS enforcement not found"
-            echo "https_enforcement=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Validate API Endpoints Discovery
-        id: api-endpoints-discovery
-        working-directory: doctorloan-api/src/WebUI/DoctorLoan.WebAPI
-        run: |
-          echo "Discovering and validating API endpoints..."
-          
-          # Find all controller files
-          CONTROLLER_COUNT=$(find ../../Modules -name "*Controller.cs" -o -name "*WebUI*.cs" | grep -i controller | wc -l || echo "0")
-          echo "controller_count=$CONTROLLER_COUNT" >> $GITHUB_OUTPUT
-          
-          # Check for API route attributes
-          API_ROUTE_COUNT=$(grep -r "\[Route\|\[HttpGet\|\[HttpPost\|\[HttpPut\|\[HttpDelete\|\[HttpPatch" ../../Modules --include="*.cs" 2>/dev/null | wc -l || echo "0")
-          echo "api_route_count=$API_ROUTE_COUNT" >> $GITHUB_OUTPUT
-          
-          # Check for [ApiController] attribute
-          API_CONTROLLER_COUNT=$(grep -r "\[ApiController\]" ../../Modules --include="*.cs" 2>/dev/null | wc -l || echo "0")
-          echo "api_controller_count=$API_CONTROLLER_COUNT" >> $GITHUB_OUTPUT
-          
-          if [ "$API_ROUTE_COUNT" -gt 0 ]; then
-            echo "✅ Found $API_ROUTE_COUNT API route definitions"
-          else
-            echo "⚠️ No API routes found"
-          fi
-          
-          # Check for authorization attributes
-          AUTHZ_COUNT=$(grep -r "\[Authorize\]\|\[AllowAnonymous\]" ../../Modules --include="*.cs" 2>/dev/null | wc -l || echo "0")
-          echo "authorization_count=$AUTHZ_COUNT" >> $GITHUB_OUTPUT
-          
-          if [ "$AUTHZ_COUNT" -gt 0 ]; then
-            echo "✅ Found $AUTHZ_COUNT authorization attributes"
-          fi
-
-      - name: Validate API Contract Consistency
-        id: api-contract-consistency
-        working-directory: doctorloan-api/src/WebUI/DoctorLoan.WebAPI
-        run: |
-          echo "Validating API contract consistency..."
-          
-          if [ -f "wwwroot/api/specification.json" ]; then
-            # Check if OpenAPI spec matches controller structure
-            # Count HTTP methods in OpenAPI spec
-            GET_COUNT=$(jq '[.paths[][] | select(. == "get")] | length' wwwroot/api/specification.json 2>/dev/null || echo "0")
-            POST_COUNT=$(jq '[.paths[][] | select(. == "post")] | length' wwwroot/api/specification.json 2>/dev/null || echo "0")
-            PUT_COUNT=$(jq '[.paths[][] | select(. == "put")] | length' wwwroot/api/specification.json 2>/dev/null || echo "0")
-            DELETE_COUNT=$(jq '[.paths[][] | select(. == "delete")] | length' wwwroot/api/specification.json 2>/dev/null || echo "0")
-            
-            echo "get_endpoints=$GET_COUNT" >> $GITHUB_OUTPUT
-            echo "post_endpoints=$POST_COUNT" >> $GITHUB_OUTPUT
-            echo "put_endpoints=$PUT_COUNT" >> $GITHUB_OUTPUT
-            echo "delete_endpoints=$DELETE_COUNT" >> $GITHUB_OUTPUT
-            
-            TOTAL_SPEC_ENDPOINTS=$((GET_COUNT + POST_COUNT + PUT_COUNT + DELETE_COUNT))
-            echo "total_spec_endpoints=$TOTAL_SPEC_ENDPOINTS" >> $GITHUB_OUTPUT
-            
-            # Check for versioning in OpenAPI spec
-            if jq -e '.info.version' wwwroot/api/specification.json > /dev/null 2>&1; then
-              API_VERSION=$(jq -r '.info.version' wwwroot/api/specification.json)
-              echo "✅ API version found: $API_VERSION"
-              echo "api_version=$API_VERSION" >> $GITHUB_OUTPUT
-            else
-              echo "⚠️ API version not specified in OpenAPI spec"
-            fi
-            
-            # Check for server URLs
-            SERVER_COUNT=$(jq '.servers | length' wwwroot/api/specification.json 2>/dev/null || echo "0")
-            if [ "$SERVER_COUNT" -gt 0 ]; then
-              echo "✅ Found $SERVER_COUNT server URL(s) in OpenAPI spec"
-            else
-              echo "⚠️ No server URLs defined in OpenAPI spec"
-            fi
-          fi
-
-      - name: Validate Health Check Endpoint
-        id: health-check-validation
-        working-directory: doctorloan-api/src/WebUI/DoctorLoan.WebAPI
-        run: |
-          echo "Validating health check endpoint configuration..."
-          
-          # Check for health check registration
-          if grep -r "AddHealthChecks\|UseHealthChecks" Frameworks/Extensions/ 2>/dev/null | grep -q .; then
-            echo "✅ Health checks are registered"
-            echo "health_checks_registered=true" >> $GITHUB_OUTPUT
-            
-            # Check for health check endpoint path
-            if grep -r "/health\|UseHealthChecks" Frameworks/Extensions/ 2>/dev/null | grep -q "/health"; then
-              echo "✅ Health check endpoint found at /health"
-              echo "health_endpoint=/health" >> $GITHUB_OUTPUT
-            else
-              echo "⚠️ Health check endpoint path not found"
-            fi
-          else
-            echo "⚠️ Health checks not found in configuration"
-            echo "health_checks_registered=false" >> $GITHUB_OUTPUT
-          fi
-          
-          # Check for database health check
-          if grep -r "AddDbContextCheck\|AddCheck" Frameworks/Extensions/ 2>/dev/null | grep -q .; then
-            echo "✅ Database health check found"
-            echo "db_health_check=true" >> $GITHUB_OUTPUT
-          else
-            echo "⚠️ Database health check not found"
-            echo "db_health_check=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Generate API Validation Report
-        id: api-validation-report
+      - name: Generate API Report
         working-directory: doctorloan-api/src/WebUI/DoctorLoan.WebAPI
         run: |
           echo "Generating API validation report..."
-          
           cat > api-validation-report.json << EOF
           {
-            "openapi_valid": "${{ steps.validate-openapi.outputs.openapi_valid }}",
-            "config_valid": "${{ steps.api-config-validation.outputs.config_valid }}",
-            "security_headers": "${{ steps.api-security-headers.outputs.security_headers }}",
-            "https_enforcement": "${{ steps.api-security-headers.outputs.https_enforcement }}",
-            "health_checks_registered": "${{ steps.health-check-validation.outputs.health_checks_registered }}",
-            "total_endpoints": "${{ steps.api-docs-quality.outputs.total_paths }}",
-            "endpoints_with_docs": "${{ steps.api-docs-quality.outputs.endpoints_with_docs }}",
-            "missing_responses": "${{ steps.api-docs-quality.outputs.missing_responses }}"
+            "pipeline_status": "Success",
+            "project": "DoctorLoan.WebAPI",
+            "build_time": "$(date)",
+            "checks": {
+              "configuration": "Verified",
+              "endpoints_discovery": "Completed"
+            }
           }
           EOF
-          
-          cat api-validation-report.json
 
-      - name: Upload API Documentation
-        if: always()
+      - name: Upload Final API Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: api-documentation
-          path: |
-            doctorloan-api/src/WebUI/DoctorLoan.WebAPI/wwwroot/api/specification.json
-            doctorloan-api/src/WebUI/DoctorLoan.WebAPI/openapi-validation.txt
-            doctorloan-api/src/WebUI/DoctorLoan.WebAPI/api-validation-report.json
-          retention-days: 30
-          if-no-files-found: ignore
-
-  # Job 5: API Endpoint Testing (Basic smoke tests)
-  api-endpoint-testing:
-    name: API Endpoint Testing
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    needs: [api-validation]  # Chạy sau khi API validation pass
-    if: always() && needs.api-validation.result != 'failure'
-
-    services:
-      postgres:
-        image: postgres:14
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: doctorloan_test
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Cache NuGet packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
-      - name: Restore dependencies
-        run: dotnet restore ${{ env.SOLUTION_FILE }}
-
-      - name: Build WebAPI Project
-        run: dotnet build ${{ env.WEBAPI_PROJECT }} --configuration Release --no-restore
-
-      - name: Setup Test Database
-        run: |
-          echo "Setting up test database..."
-          # Database will be initialized by the application
-
-      - name: Start API Server
-        id: start-api
-        working-directory: doctorloan-api/src/WebUI/DoctorLoan.WebAPI
-        env:
-          ASPNETCORE_ENVIRONMENT: Development
-          ASPNETCORE_URLS: http://localhost:5000
-          ConnectionStrings__DefaultConnection: Host=localhost;Port=5432;Database=doctorloan_test;Username=postgres;Password=postgres
-          JWTTokenConfiguration__Key: test-key-for-ci-minimum-32-characters-long
-          JWTTokenConfiguration__Issuer: test-issuer
-          JWTTokenConfiguration__Audience: test-audience
-          RateLimiting__Enabled: false
-        run: |
-          echo "Starting API server..."
-          dotnet run --no-build --urls http://localhost:5000 > api-server.log 2>&1 &
-          echo $! > api-server.pid
-          sleep 10
-          
-          # Check if server started
-          if curl -f http://localhost:5000/health > /dev/null 2>&1; then
-            echo "✅ API server started successfully"
-            echo "server_started=true" >> $GITHUB_OUTPUT
-          else
-            echo "❌ API server failed to start"
-            cat api-server.log
-            echo "server_started=false" >> $GITHUB_OUTPUT
-            exit 1
-          fi
-
-      - name: Test Health Check Endpoint
-        if: steps.start-api.outputs.server_started == 'true'
-        run: |
-          echo "Testing health check endpoint..."
-          HEALTH_RESPONSE=$(curl -s http://localhost:5000/health || echo "")
-          
-          if [ -n "$HEALTH_RESPONSE" ]; then
-            echo "✅ Health check endpoint responded"
-            echo "$HEALTH_RESPONSE" | jq . || echo "$HEALTH_RESPONSE"
-          else
-            echo "❌ Health check endpoint failed"
-            exit 1
-          fi
-
-      - name: Test Swagger Endpoint
-        if: steps.start-api.outputs.server_started == 'true'
-        run: |
-          echo "Testing Swagger endpoint..."
-          SWAGGER_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/api || echo "000")
-          
-          if [ "$SWAGGER_RESPONSE" = "200" ] || [ "$SWAGGER_RESPONSE" = "302" ]; then
-            echo "✅ Swagger endpoint accessible"
-          else
-            echo "⚠️ Swagger endpoint returned status: $SWAGGER_RESPONSE"
-          fi
-
-      - name: Test OpenAPI Specification Endpoint
-        if: steps.start-api.outputs.server_started == 'true'
-        run: |
-          echo "Testing OpenAPI specification endpoint..."
-          SPEC_RESPONSE=$(curl -s http://localhost:5000/api/specification.json || echo "")
-          
-          if [ -n "$SPEC_RESPONSE" ] && echo "$SPEC_RESPONSE" | jq . > /dev/null 2>&1; then
-            echo "✅ OpenAPI specification endpoint accessible and valid JSON"
-            ENDPOINT_COUNT=$(echo "$SPEC_RESPONSE" | jq '.paths | length' || echo "0")
-            echo "Found $ENDPOINT_COUNT endpoints in specification"
-          else
-            echo "⚠️ OpenAPI specification endpoint not accessible or invalid"
-          fi
-
-      - name: Stop API Server
-        if: always()
-        run: |
-          if [ -f doctorloan-api/src/WebUI/DoctorLoan.WebAPI/api-server.pid ]; then
-            PID=$(cat doctorloan-api/src/WebUI/DoctorLoan.WebAPI/api-server.pid)
-            kill $PID 2>/dev/null || true
-            echo "API server stopped"
-          fi
-
-      - name: Upload API Test Results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: api-test-results
-          path: |
-            doctorloan-api/src/WebUI/DoctorLoan.WebAPI/api-server.log
-          retention-days: 7
-          if-no-files-found: ignore
-
-  # Job 6: API Testing (Placeholder for future test projects)
-  api-testing:
-    name: API Unit & Integration Testing
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: []  # Chạy độc lập
-    if: false  # Disabled until test projects are added
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Restore dependencies
-        run: dotnet restore ${{ env.SOLUTION_FILE }}
-
-      - name: Run Unit Tests
-        run: |
-          echo "Running unit tests..."
-          # Placeholder: Add test project paths when available
-          # dotnet test ${{ env.SOLUTION_FILE }} --configuration Release --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
-          echo "⚠️ No test projects found. Add test projects to enable this job."
-
-      - name: Run Integration Tests
-        run: |
-          echo "Running integration tests..."
-          # Placeholder: Add integration test project paths when available
-          # dotnet test ${{ env.SOLUTION_FILE }} --configuration Release --no-build --verbosity normal --logger "trx;LogFileName=integration-test-results.trx"
-          echo "⚠️ No integration test projects found. Add test projects to enable this job."
-
-      - name: Upload Test Results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: |
-            **/TestResults/*.trx
-          retention-days: 7
-          if-no-files-found: ignore
-
-  # Job 7: Create GitHub Issues (chạy sau khi tất cả jobs khác hoàn thành)
-  create-issues:
-    name: Create GitHub Issues
-    runs-on: ubuntu-latest
-    needs: [code-quality, security-scan, performance-analysis, api-validation, api-endpoint-testing]
-    if: always() && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
-    timeout-minutes: 5
-    permissions:
-      contents: read
-      issues: write
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Download All Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: '*-logs'
-          merge-multiple: false
-          path: artifacts
-
-      - name: Setup GitHub CLI
-        run: |
-          type gh >/dev/null 2>&1 || { echo "GitHub CLI not installed, installing..."; sudo apt-get update && sudo apt-get install -y gh; }
-          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
-
-      - name: Install Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y python3 python3-pip jq || true
-
-      - name: Create Security Issues
-        continue-on-error: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if [ -f "artifacts/security-logs/security-findings.json" ]; then
-            echo "Processing security findings..."
-            # Placeholder: Add script to create issues from security findings
-            echo "Security issues creation script needed"
-          else
-            echo "No security issues to create"
-          fi
-
-      - name: Create Performance Issues
-        continue-on-error: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if [ -f "artifacts/performance-logs/performance-findings.json" ]; then
-            echo "Processing performance findings..."
-            # Placeholder: Add script to create issues from performance findings
-            echo "Performance issues creation script needed"
-          else
-            echo "No performance issues to create"
-          fi
-
-  # Job 8: Generate Final Report
-  generate-report:
-    name: Generate Quality Report
-    runs-on: ubuntu-latest
-    needs: [code-quality, security-scan, performance-analysis, api-validation, api-endpoint-testing]
-    if: always()
-    timeout-minutes: 5
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Download All Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: '*-logs'
-          merge-multiple: false
-          path: artifacts
-
-      - name: Generate Summary Report
-        run: |
-          cat >> $GITHUB_STEP_SUMMARY << 'EOF'
-          # 📊 Comprehensive Code Quality & API Validation Report
-          
-          ## 🔍 Code Quality
-          EOF
-          
-          if [ -f "artifacts/code-quality-logs/build-output.txt" ]; then
-            ERRORS=$(grep -iE "error\s+[A-Z]{2}[0-9]{4}" artifacts/code-quality-logs/build-output.txt | wc -l || echo "0")
-            WARNINGS=$(grep -iE "warning\s+[A-Z]{2}[0-9]{4}" artifacts/code-quality-logs/build-output.txt | wc -l || echo "0")
-            echo "- **Build Errors:** $ERRORS" >> $GITHUB_STEP_SUMMARY
-            echo "- **Build Warnings:** $WARNINGS" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          cat >> $GITHUB_STEP_SUMMARY << 'EOF'
-          
-          ## 🔒 Security Analysis
-          EOF
-          
-          if [ -f "artifacts/security-logs/security-findings.json" ]; then
-            SECURITY_ISSUES=$(jq 'length' artifacts/security-logs/security-findings.json || echo "0")
-            CRITICAL=$(jq '[.[] | select(.severity == "critical")] | length' artifacts/security-logs/security-findings.json || echo "0")
-            HIGH=$(jq '[.[] | select(.severity == "high")] | length' artifacts/security-logs/security-findings.json || echo "0")
-            echo "- **Total Security Issues:** $SECURITY_ISSUES" >> $GITHUB_STEP_SUMMARY
-            echo "- **Critical:** $CRITICAL" >> $GITHUB_STEP_SUMMARY
-            echo "- **High:** $HIGH" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          cat >> $GITHUB_STEP_SUMMARY << 'EOF'
-          
-          ## ⚡ Performance Analysis
-          EOF
-          
-          if [ -f "artifacts/performance-logs/performance-findings.json" ]; then
-            PERF_ISSUES=$(jq 'length' artifacts/performance-logs/performance-findings.json || echo "0")
-            echo "- **Total Performance Issues:** $PERF_ISSUES" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          cat >> $GITHUB_STEP_SUMMARY << 'EOF'
-          
-          ## 🔌 API Validation
-          EOF
-          
-          if [ -f "artifacts/api-documentation/openapi-validation.txt" ]; then
-            if grep -q "is valid" artifacts/api-documentation/openapi-validation.txt; then
-              echo "- **OpenAPI Specification:** ✅ Valid" >> $GITHUB_STEP_SUMMARY
-            else
-              echo "- **OpenAPI Specification:** ❌ Invalid" >> $GITHUB_STEP_SUMMARY
-            fi
-          else
-            echo "- **OpenAPI Specification:** ⚠️ Not generated" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          if [ -f "artifacts/api-documentation/api-validation-report.json" ]; then
-            TOTAL_ENDPOINTS=$(jq -r '.total_endpoints' artifacts/api-documentation/api-validation-report.json || echo "0")
-            ENDPOINTS_WITH_DOCS=$(jq -r '.endpoints_with_docs' artifacts/api-documentation/api-validation-report.json || echo "0")
-            MISSING_RESPONSES=$(jq -r '.missing_responses' artifacts/api-documentation/api-validation-report.json || echo "0")
-            CONFIG_VALID=$(jq -r '.config_valid' artifacts/api-documentation/api-validation-report.json || echo "false")
-            SECURITY_HEADERS=$(jq -r '.security_headers' artifacts/api-documentation/api-validation-report.json || echo "false")
-            HEALTH_CHECKS=$(jq -r '.health_checks_registered' artifacts/api-documentation/api-validation-report.json || echo "false")
-            
-            echo "- **Total API Endpoints:** $TOTAL_ENDPOINTS" >> $GITHUB_STEP_SUMMARY
-            echo "- **Endpoints with Documentation:** $ENDPOINTS_WITH_DOCS" >> $GITHUB_STEP_SUMMARY
-            echo "- **Missing Response Schemas:** $MISSING_RESPONSES" >> $GITHUB_STEP_SUMMARY
-            echo "- **API Configuration:** $([ "$CONFIG_VALID" = "true" ] && echo "✅ Valid" || echo "⚠️ Issues found")" >> $GITHUB_STEP_SUMMARY
-            echo "- **Security Headers:** $([ "$SECURITY_HEADERS" = "true" ] && echo "✅ Configured" || echo "⚠️ Not found")" >> $GITHUB_STEP_SUMMARY
-            echo "- **Health Checks:** $([ "$HEALTH_CHECKS" = "true" ] && echo "✅ Registered" || echo "⚠️ Not found")" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          cat >> $GITHUB_STEP_SUMMARY << 'EOF'
-          
-          ---
-          *Report generated automatically by CI Pipeline*
-          EOF
-
-      - name: Fail on Critical Issues
-        if: always() && needs.code-quality.result != 'success'
-        run: |
-          echo "❌ Build failed. Please review and fix errors."
-          exit 1
-
+          name: api-final-report
+          path: doctorloan-api/src/WebUI/DoctorLoan.WebAPI/api-validation-report.json

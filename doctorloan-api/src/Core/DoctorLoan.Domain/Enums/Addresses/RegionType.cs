@@ -1,1 +1,19 @@
-﻿namespace DoctorLoan.Domain.Enums.Addresses;public enum RegionType{    /// <summary>    /// Miá»n Báº¯c    /// </summary>    MienBac = 1,    /// <summary>    /// Miá»n Trung    /// </summary>    MienTrung = 2,    /// <summary>    /// Miá»n Nam    /// </summary>    MienNam = 3}public enum AddressSystemIds{    VN = 1}
+﻿namespace DoctorLoan.Domain.Enums.Addresses;
+public enum RegionType
+{    
+    /// <summary>    
+    /// Miá»n Báº¯c    
+    /// </summary>    
+    MienBac = 1,    
+    
+    /// <summary>    
+    /// Miá»n Trung    
+    /// </summary>    
+    MienTrung = 2,    
+    
+    /// <summary>    
+    /// Miá»n Nam   
+    /// </summary>    
+    MienNam = 3
+}
+public enum AddressSystemIds{    VN = 1}
